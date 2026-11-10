@@ -1,0 +1,401 @@
+/* Badge — generated from badge.contract.json.
+ * Re-run: npm run specs:render -- --slug=badge --target=milo --system=spectrum */
+
+.badge [hidden],
+.badge[hidden] {
+  display: none !important;
+}
+
+.badge {
+  box-sizing: border-box;
+  border: 0;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  display: inline-flex;
+  align-items: center;
+  min-block-size: var(--s2-component-height-75);
+  font-size: var(--s2-font-size-75);
+  line-height: var(--s2-line-height-font-size-75);
+  padding-inline: var(--s2-base-padding-horizontal-small);
+  padding-block: var(--s2-base-padding-vertical-small);
+  gap: var(--s2-base-gap-small);
+  --badge-bw: var(--s2-border-width-200);
+  --badge-bc: transparent;
+  border-radius: var(--s2-corner-radius-medium-size-small);
+  background-color: var(--s2-neutral-subdued-background-color-default);
+  color: var(--s2-transparent-static-white-1000);
+  cursor: default;
+  font-weight: var(--s2-medium-font-weight);
+  font-family: var(--s2-sans-font-family-stack);
+  box-shadow: inset 0 0 0 var(--badge-bw, 0) var(--badge-bc, transparent);
+}
+
+.badge.s {
+  min-block-size: var(--s2-component-height-75);
+  font-size: var(--s2-font-size-75);
+  line-height: var(--s2-line-height-font-size-75);
+  padding-inline: var(--s2-base-padding-horizontal-small);
+  padding-block: var(--s2-base-padding-vertical-small);
+  gap: var(--s2-base-gap-small);
+  border-radius: var(--s2-corner-radius-medium-size-small);
+}
+
+.badge.m {
+  min-block-size: var(--s2-component-height-100);
+  font-size: var(--s2-font-size-100);
+  line-height: var(--s2-line-height-font-size-100);
+  padding-inline: var(--s2-base-padding-horizontal-medium);
+  padding-block: var(--s2-base-padding-vertical-medium);
+  gap: var(--s2-base-gap-medium);
+  border-radius: var(--s2-corner-radius-medium-size-medium);
+}
+
+.badge.l {
+  min-block-size: var(--s2-component-height-200);
+  font-size: var(--s2-font-size-200);
+  line-height: var(--s2-line-height-font-size-200);
+  padding-inline: var(--s2-base-padding-horizontal-large);
+  padding-block: var(--s2-base-padding-vertical-large);
+  gap: var(--s2-base-gap-large);
+  border-radius: var(--s2-corner-radius-medium-size-large);
+}
+
+.badge.xl {
+  min-block-size: var(--s2-component-height-300);
+  font-size: var(--s2-font-size-300);
+  line-height: var(--s2-line-height-font-size-300);
+  padding-inline: var(--s2-base-padding-horizontal-extra-large);
+  padding-block: var(--s2-base-padding-vertical-extra-large);
+  gap: var(--s2-base-gap-extra-large);
+  border-radius: var(--s2-corner-radius-medium-size-extra-large);
+}
+
+.badge.accent {
+  background-color: var(--s2-accent-background-color-default);
+}
+
+.badge.informative {
+  background-color: var(--s2-informative-background-color-default);
+}
+
+.badge.neutral {
+  background-color: var(--s2-neutral-subdued-background-color-default);
+}
+
+.badge.positive {
+  background-color: var(--s2-positive-background-color-default);
+}
+
+.badge.notice {
+  background-color: var(--s2-notice-background-color-default);
+  color: var(--s2-transparent-static-black-1000);
+}
+
+.badge.negative {
+  background-color: var(--s2-negative-background-color-default);
+}
+
+.badge.fuchsia {
+  background-color: var(--s2-fuchsia-background-color-default);
+}
+
+.badge.indigo {
+  background-color: var(--s2-indigo-background-color-default);
+}
+
+.badge.magenta {
+  background-color: var(--s2-magenta-background-color-default);
+}
+
+.badge.purple {
+  background-color: var(--s2-purple-background-color-default);
+}
+
+.badge.seafoam {
+  background-color: var(--s2-seafoam-background-color-default);
+}
+
+.badge.yellow {
+  background-color: var(--s2-yellow-background-color-default);
+  color: var(--s2-transparent-static-black-1000);
+}
+
+.badge.gray {
+  background-color: var(--s2-gray-background-color-default);
+}
+
+.badge.red {
+  background-color: var(--s2-red-background-color-default);
+}
+
+.badge.orange {
+  background-color: var(--s2-orange-background-color-default);
+  color: var(--s2-transparent-static-black-1000);
+}
+
+.badge.chartreuse {
+  background-color: var(--s2-chartreuse-background-color-default);
+  color: var(--s2-transparent-static-black-1000);
+}
+
+.badge.celery {
+  background-color: var(--s2-celery-background-color-default);
+  color: var(--s2-transparent-static-black-1000);
+}
+
+.badge.green {
+  background-color: var(--s2-green-background-color-default);
+}
+
+.badge.cyan {
+  background-color: var(--s2-cyan-background-color-default);
+}
+
+.badge.blue {
+  background-color: var(--s2-blue-background-color-default);
+}
+
+.badge.pink {
+  background-color: var(--s2-pink-background-color-default);
+}
+
+.badge.turquoise {
+  background-color: var(--s2-turquoise-background-color-default);
+}
+
+.badge.brown {
+  background-color: var(--s2-brown-background-color-default);
+}
+
+.badge.cinnamon {
+  background-color: var(--s2-cinnamon-background-color-default);
+}
+
+.badge.silver {
+  background-color: var(--s2-silver-background-color-default);
+}
+
+.badge.subtle {
+  color: var(--s2-gray-1000);
+}
+
+.badge.inline-start {
+  border-start-start-radius: 0;
+  border-end-start-radius: 0;
+}
+
+.badge.inline-end {
+  border-start-end-radius: 0;
+  border-end-end-radius: 0;
+}
+
+.badge.block-start {
+  border-start-start-radius: 0;
+  border-start-end-radius: 0;
+}
+
+.badge.block-end {
+  border-end-start-radius: 0;
+  border-end-end-radius: 0;
+}
+
+.badge.subtle.accent {
+  background-color: var(--s2-accent-subtle-background-color-default);
+  color: var(--s2-gray-1000);
+}
+
+.badge.subtle.informative {
+  background-color: var(--s2-informative-subtle-background-color-default);
+  color: var(--s2-gray-1000);
+}
+
+.badge.subtle.neutral {
+  background-color: var(--s2-neutral-subtle-background-color-default);
+  color: var(--s2-gray-1000);
+}
+
+.badge.subtle.positive {
+  background-color: var(--s2-positive-subtle-background-color-default);
+  color: var(--s2-gray-1000);
+}
+
+.badge.subtle.notice {
+  background-color: var(--s2-notice-subtle-background-color-default);
+  color: var(--s2-gray-1000);
+}
+
+.badge.subtle.negative {
+  background-color: var(--s2-negative-subtle-background-color-default);
+  color: var(--s2-gray-1000);
+}
+
+.badge.subtle.gray {
+  background-color: var(--s2-gray-subtle-background-color-default);
+  color: var(--s2-gray-1000);
+}
+
+.badge.subtle.red {
+  background-color: var(--s2-red-subtle-background-color-default);
+  color: var(--s2-gray-1000);
+}
+
+.badge.subtle.orange {
+  background-color: var(--s2-orange-subtle-background-color-default);
+  color: var(--s2-gray-1000);
+}
+
+.badge.subtle.yellow {
+  background-color: var(--s2-yellow-subtle-background-color-default);
+  color: var(--s2-gray-1000);
+}
+
+.badge.subtle.chartreuse {
+  background-color: var(--s2-chartreuse-subtle-background-color-default);
+  color: var(--s2-gray-1000);
+}
+
+.badge.subtle.celery {
+  background-color: var(--s2-celery-subtle-background-color-default);
+  color: var(--s2-gray-1000);
+}
+
+.badge.subtle.green {
+  background-color: var(--s2-green-subtle-background-color-default);
+  color: var(--s2-gray-1000);
+}
+
+.badge.subtle.seafoam {
+  background-color: var(--s2-seafoam-subtle-background-color-default);
+  color: var(--s2-gray-1000);
+}
+
+.badge.subtle.cyan {
+  background-color: var(--s2-cyan-subtle-background-color-default);
+  color: var(--s2-gray-1000);
+}
+
+.badge.subtle.blue {
+  background-color: var(--s2-blue-subtle-background-color-default);
+  color: var(--s2-gray-1000);
+}
+
+.badge.subtle.indigo {
+  background-color: var(--s2-indigo-subtle-background-color-default);
+  color: var(--s2-gray-1000);
+}
+
+.badge.subtle.purple {
+  background-color: var(--s2-purple-subtle-background-color-default);
+  color: var(--s2-gray-1000);
+}
+
+.badge.subtle.fuchsia {
+  background-color: var(--s2-fuchsia-subtle-background-color-default);
+  color: var(--s2-gray-1000);
+}
+
+.badge.subtle.magenta {
+  background-color: var(--s2-magenta-subtle-background-color-default);
+  color: var(--s2-gray-1000);
+}
+
+.badge.subtle.pink {
+  background-color: var(--s2-pink-subtle-background-color-default);
+  color: var(--s2-gray-1000);
+}
+
+.badge.subtle.turquoise {
+  background-color: var(--s2-turquoise-subtle-background-color-default);
+  color: var(--s2-gray-1000);
+}
+
+.badge.subtle.brown {
+  background-color: var(--s2-brown-subtle-background-color-default);
+  color: var(--s2-gray-1000);
+}
+
+.badge.subtle.cinnamon {
+  background-color: var(--s2-cinnamon-subtle-background-color-default);
+  color: var(--s2-gray-1000);
+}
+
+.badge.subtle.silver {
+  background-color: var(--s2-silver-subtle-background-color-default);
+  color: var(--s2-gray-1000);
+}
+
+.badge.outline.accent {
+  background-color: var(--s2-background-layer-2-color);
+  color: var(--s2-gray-1000);
+  --badge-bc: var(--s2-accent-visual-color);
+}
+
+.badge.outline.informative {
+  background-color: var(--s2-background-layer-2-color);
+  color: var(--s2-gray-1000);
+  --badge-bc: var(--s2-informative-visual-color);
+}
+
+.badge.outline.neutral {
+  background-color: var(--s2-background-layer-2-color);
+  color: var(--s2-gray-1000);
+  --badge-bc: var(--s2-neutral-visual-color);
+}
+
+.badge.outline.positive {
+  background-color: var(--s2-background-layer-2-color);
+  color: var(--s2-gray-1000);
+  --badge-bc: var(--s2-positive-visual-color);
+}
+
+.badge.outline.notice {
+  background-color: var(--s2-background-layer-2-color);
+  color: var(--s2-gray-1000);
+  --badge-bc: var(--s2-notice-visual-color);
+}
+
+.badge.outline.negative {
+  background-color: var(--s2-background-layer-2-color);
+  color: var(--s2-gray-1000);
+  --badge-bc: var(--s2-negative-visual-color);
+}
+
+.badge .icon {
+  inline-size: var(--s2-workflow-icon-small);
+  block-size: var(--s2-workflow-icon-small);
+  --iconPrimary: currentColor;
+}
+
+.badge .icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.badge .icon > svg,
+.badge .icon > [data-open-state] > svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.badge.s .icon {
+  inline-size: var(--s2-workflow-icon-small);
+  block-size: var(--s2-workflow-icon-small);
+}
+
+.badge.m .icon {
+  inline-size: var(--s2-workflow-icon-medium);
+  block-size: var(--s2-workflow-icon-medium);
+}
+
+.badge.l .icon {
+  inline-size: var(--s2-workflow-icon-large);
+  block-size: var(--s2-workflow-icon-large);
+}
+
+.badge.xl .icon {
+  inline-size: var(--s2-workflow-icon-extra-large);
+  block-size: var(--s2-workflow-icon-extra-large);
+}

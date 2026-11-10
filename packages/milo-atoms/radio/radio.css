@@ -64,7 +64,7 @@
   background-color: var(--s2a-color-content-subtle);
 }
 
-.s2a-radio.true .dot {
+.s2a-radio.selected .dot {
   display: block;
 }
 
@@ -76,11 +76,11 @@
   line-height: var(--s2a-typography-line-height-label);
 }
 
-.s2a-radio.false .label {
+.s2a-radio:not(.selected) .label {
   color: var(--s2a-color-content-subtle);
 }
 
-.s2a-radio.true .label {
+.s2a-radio.selected .label {
   color: var(--s2a-color-content-default);
 }
 

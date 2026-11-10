@@ -14,11 +14,11 @@
   width: 100%;
 }
 
-.collapsible.false {
+.collapsible:not(.open) {
   gap: var(--s2a-spacing-2xs);
 }
 
-.collapsible.true {
+.collapsible.open {
   gap: var(--s2a-spacing-sm);
 }
 

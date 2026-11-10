@@ -23,10 +23,12 @@ export default function decorateControlButton(scope, options = {}) {
     const cue = el.parentElement?.nodeName;
     // Unwrap the cue, as Milo does: <strong><a> becomes <a>.
     if (cue === 'STRONG' || cue === 'EM') el.parentElement.replaceWith(el);
+    // A composition can give each cue its own look: options.cues.EM.
+    const chosen = { ...options, ...options.cues?.[cue] };
     el.classList.add('s2a-control-button');
 
-    if (options.size) el.classList.add(options.size);
-    if (options.forceState) el.classList.add(options.forceState);
+    if (chosen.size) el.classList.add(chosen.size);
+    if (chosen.forceState) el.classList.add(chosen.forceState);
 
     el.classList.add('s2a-control-button--ready');
   }

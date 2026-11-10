@@ -67,14 +67,16 @@
   ],
   "anatomy": {
     "root": {
+      "tokens": {
+        "background-color": "{swc.gray.200}"
+      },
       "literals": {
         "display": "block",
         "box-sizing": "border-box",
         "inline-size": "100%",
         "block-size": "2px",
-        "background-color": "CanvasText",
         "border-radius": "2px",
-        "min-inline-size": "min(100%,200px)"
+        "border-style": "none"
       },
       "tokensByProp": [
         {
@@ -84,17 +86,30 @@
               "background-color": "{swc.gray.800}"
             }
           }
-        }
-      ],
-      "literalsByProp": [
+        },
         {
           "prop": "staticColor",
           "map": {
             "white": {
-              "background-color": "rgba(255, 255, 255, .16)"
+              "background-color": "{swc.transparent.static.white.300}"
             },
             "black": {
-              "background-color": "rgba(0, 0, 0, .12)"
+              "background-color": "{swc.transparent.static.black.200}"
+            }
+          }
+        }
+      ],
+      "literalsByProp": [
+        {
+          "prop": "size",
+          "map": {
+            "l": {
+              "block-size": "4px",
+              "border-radius": "4px"
+            },
+            "s": {
+              "block-size": "1px",
+              "border-radius": "1px"
             }
           }
         },
@@ -106,8 +121,39 @@
               "inline-size": "2px",
               "block-size": "100%",
               "min-block-size": "min(100%,200px)"
+            },
+            "false": {
+              "min-inline-size": "min(100%,200px)"
             }
           }
+        }
+      ],
+      "tokensByCombination": [
+        {
+          "props": [
+            "size",
+            "staticColor"
+          ],
+          "rows": [
+            {
+              "values": [
+                "l",
+                "white"
+              ],
+              "tokens": {
+                "background-color": "{swc.transparent.static.white.900}"
+              }
+            },
+            {
+              "values": [
+                "l",
+                "black"
+              ],
+              "tokens": {
+                "background-color": "{swc.transparent.static.black.900}"
+              }
+            }
+          ]
         }
       ]
     }
@@ -131,7 +177,7 @@
   },
   "provenance": {
     "version": 1,
-    "canonicalRevision": "sha256:9f74751484e3281e81931010325b024b5f626edacef5335234bb843e5326f229",
+    "canonicalRevision": "sha256:08612fc09529017c55e51df425fd87bb457a8a5057c9b0496b58bdfffef676a0",
     "source": {
       "kind": "code",
       "adapter": "s2a-spec-transform@1",

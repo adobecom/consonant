@@ -1,0 +1,117 @@
+{
+  "$comment": "Shared Divider bindings, used by every theme. Divider binds its colour to the palette and its thickness as raw pixels; these make both reachable. Defaults are Spectrum's own values.",
+  "component": "divider",
+  "bindings": [
+    {
+      "where": {},
+      "prop": "background-color",
+      "token": "theme-divider-color",
+      "reason": "Spectrum binds gray-200, used far beyond Divider."
+    },
+    {
+      "where": {
+        "size": "l"
+      },
+      "prop": "background-color",
+      "token": "theme-divider-color-strong",
+      "reason": "Spectrum binds gray-800 at size L."
+    },
+    {
+      "where": {},
+      "prop": "block-size",
+      "token": "theme-divider-thickness-m",
+      "reason": "Thickness at size M; shipped code has no token for it."
+    },
+    {
+      "where": {},
+      "prop": "border-radius",
+      "token": "theme-divider-thickness-m",
+      "reason": "Spectrum rounds the ends by the thickness."
+    },
+    {
+      "where": {
+        "size": "s"
+      },
+      "prop": "block-size",
+      "token": "theme-divider-thickness-s",
+      "reason": "Thickness at size S; shipped code has no token for it."
+    },
+    {
+      "where": {
+        "size": "s"
+      },
+      "prop": "border-radius",
+      "token": "theme-divider-thickness-s",
+      "reason": "Spectrum rounds the ends by the thickness."
+    },
+    {
+      "where": {
+        "size": "l"
+      },
+      "prop": "block-size",
+      "token": "theme-divider-thickness-l",
+      "reason": "Thickness at size L; shipped code has no token for it."
+    },
+    {
+      "where": {
+        "size": "l"
+      },
+      "prop": "border-radius",
+      "token": "theme-divider-thickness-l",
+      "reason": "Spectrum rounds the ends by the thickness."
+    },
+    {
+      "where": {
+        "vertical": "true"
+      },
+      "prop": "inline-size",
+      "token": "theme-divider-thickness-m",
+      "reason": "Vertical thickness at size M."
+    },
+    {
+      "where": {
+        "size": "s",
+        "vertical": "true"
+      },
+      "prop": "inline-size",
+      "token": "theme-divider-thickness-s",
+      "reason": "Vertical thickness at size S."
+    },
+    {
+      "where": {
+        "size": "l",
+        "vertical": "true"
+      },
+      "prop": "inline-size",
+      "token": "theme-divider-thickness-l",
+      "reason": "Vertical thickness at size L."
+    }
+  ],
+  "defaults": [
+    {
+      "name": "theme-divider-color",
+      "ref": "gray-200",
+      "reason": "Spectrum's divider. Default; a theme overrides it to change this."
+    },
+    {
+      "name": "theme-divider-color-strong",
+      "ref": "gray-800",
+      "reason": "Spectrum's size L divider. Default; a theme overrides it to change this."
+    },
+    {
+      "name": "theme-divider-thickness-s",
+      "value": "1px",
+      "reason": "Spectrum's size S. Default; a theme overrides it to change this."
+    },
+    {
+      "name": "theme-divider-thickness-m",
+      "value": "2px",
+      "reason": "Spectrum's size M. Default; a theme overrides it to change this."
+    },
+    {
+      "name": "theme-divider-thickness-l",
+      "value": "4px",
+      "reason": "Spectrum's size L. Default; a theme overrides it to change this."
+    }
+  ]
+}

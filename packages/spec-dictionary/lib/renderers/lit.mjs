@@ -101,6 +101,7 @@ function template(ir, slug, { contractFor } = {}) {
     for (const e of part?.tokensByProp ?? []) conditioned.add(e.prop);
     for (const e of part?.statesByProp ?? []) conditioned.add(e.prop);
     for (const e of part?.tokensByCombination ?? []) for (const prop of e.props ?? []) conditioned.add(prop);
+    for (const r of part?.["x-compound"] ?? []) for (const prop of Object.keys(r.when)) conditioned.add(prop);
     for (const kid of Object.values(part?.parts ?? {})) collect(kid);
   })(ir.anatomy.root);
 

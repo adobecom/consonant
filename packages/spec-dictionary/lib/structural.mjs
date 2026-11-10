@@ -78,6 +78,11 @@ export function isStructural(prop, ref) {
   if (!value) return false;
   if (KEYWORD_PROPS.has(prop)) return true;
   if (KEYWORD_VALUES.has(value)) return true;
+  // Zero is a reset, not a size: it clears what the browser or the page gave this
+  // element, and no token holds "nothing".
+  if (value === "0" && /^(margin|padding|border|inset)(-|$)/.test(prop)) return true;
+  // Inline art: the glyph itself, which is an asset rather than a value.
+  if (["mask", "mask-image", "background-image"].includes(prop) && value.startsWith("url(")) return true;
   // A shape, not a radius anyone tokenises: a circle, a pill, or a squared-off
   // corner. Matches the logical corner properties too — border-start-start-radius
   // and its three siblings, which is how a component sits flush against an edge.
@@ -100,6 +105,6 @@ export function rawValueAdvice(system = "s2a") {
   const label = system === "s2a" ? "S2A" : system === "spectrum" ? "Spectrum" : system;
   const fix = system === "s2a"
     ? "Bind one in Figma and re-extract, or keep the raw: value with the reason in a decision"
-    : `Upstream has no ${label} token for it; keep the raw: value with the reason in a decision`;
+    : `Bind the token if one fits, or keep the raw: value with the reason in a decision`;
   return { label, fix };
 }

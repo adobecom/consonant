@@ -1,0 +1,45 @@
+/* Card — generated from card.contract.json.
+ * Re-run: npm run specs:render -- --slug=card --target=milo --system=spectrum */
+
+.card [hidden],
+.card[hidden] {
+  display: none !important;
+}
+
+.card {
+  position: relative;
+  grid-area: media;
+  box-sizing: border-box;
+  inline-size: 100%;
+  pointer-events: none;
+  aspect-ratio: 1;
+  object-fit: cover;
+  display: none;
+}
+
+.card .media {
+  grid-template-areas: "preview" "collection";
+  grid-template-rows: repeat(2,auto);
+  transition-property: outline,box-shadow;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-column-gap: 4px; /* hardcoded: contract value, not a token */
+  column-gap: 4px; /* hardcoded: contract value, not a token */
+}
+
+.card .collection {
+  display: none;
+  grid-area: collection;
+  grid-template-columns: subgrid;
+  margin-block-start: 0;
+  column-gap: 4px; /* hardcoded: contract value, not a token */
+  grid-row: -1 / 1;
+  grid-column: 2 / -1;
+}
+
+.card .content {
+  padding-top: 0;
+  padding-right: 0;
+  padding-bottom: 0;
+  padding-left: 0;
+}

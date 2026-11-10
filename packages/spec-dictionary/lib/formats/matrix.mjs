@@ -93,18 +93,35 @@ export function matrixSpec(ir) {
   const propsFor = (axis) => ir.props.filter((x) => x.bindings?.figma?.property === axis);
   const propValue = (p, value) => {
     const map = p?.bindings?.figma?.valueMap;
-    if (!map) return value;
-    const hit = Object.entries(map).find(([, v]) => v === value)?.[0];
-    if (p.type === "boolean") return hit === "true";
-    return hit;
+    const hit = map ? Object.entries(map).find(([, v]) => v === value)?.[0] : undefined;
+    if (p?.type === "boolean") return map ? hit === "true" : value;
+    if (hit !== undefined) return hit;
+    // A design can fold two props into one axis: Button's Variant holds
+    // "Secondary - Static white", which is variant=secondary and
+    // staticColor=white. Each enum prop takes the word it recognises, and a
+    // prop with no word in the value stays unset.
+    if (Array.isArray(p?.enum) && p.enum.length) {
+      const text = String(value).toLowerCase();
+      const words = text.split(/[^a-z0-9]+/);
+      return p.enum.find((option) => String(option).toLowerCase() === text)
+        ?? p.enum.find((option) => words.includes(String(option).toLowerCase()));
+    }
+    return map ? undefined : value;
   };
 
   // Index the artwork by its axis values.
   const nodeByKey = new Map();
   const axesOf = (all) => (stateAxis ? [...rowAxes.map(([a]) => a), stateAxis] : rowAxes.map(([a]) => a));
+  // An axis the contract does not model collapses several nodes onto one cell.
+  // The set's default value for that axis wins: Button's Show label is not a
+  // prop, and taking whichever node came last filled the sheet with icon-only
+  // artwork while the build drew a labelled button.
+  const unmodelled = (fe.axes ?? []).filter((a) => a.type === "VARIANT" && !(a.name in ir.variants));
   for (const v of fe.variantNodes) {
     const parsed = parseVariantName(v.name);
-    nodeByKey.set(keyOf(parsed, axesOf(parsed)), v.id);
+    const key = keyOf(parsed, axesOf(parsed));
+    const isDefault = unmodelled.every((a) => parsed[a.name] === undefined || parsed[a.name] === a.defaultValue);
+    if (isDefault || !nodeByKey.has(key)) nodeByKey.set(key, v.id);
   }
 
   const cells = [];

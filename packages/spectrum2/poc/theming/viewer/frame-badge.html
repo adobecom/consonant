@@ -1,0 +1,55 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<script>
+  const q = new URLSearchParams(location.search);
+  const build = /^[a-z]+$/.test(q.get('build') ?? '') ? q.get('build') : 'faithful';
+  document.documentElement.style.colorScheme = q.get('mode') === 'dark' ? 'dark' : 'light';
+  if (q.get('scale') === 'mobile') document.documentElement.dataset.s2Scale = 'mobile';
+  for (const f of ['badge.tokens.css', 'badge.css']) document.write(`<link rel="stylesheet" href="../out/badge-${build}/${f}">`);
+</script>
+<style>
+  body { margin: 0; padding: 20px 16px; font: 13px/1.4 system-ui, sans-serif; background: Canvas; color: CanvasText; }
+  html { overflow-x: auto; }
+  table { border-collapse: collapse; }
+  th { font-weight: 600; text-align: left; padding: 0 8px 10px; opacity: .7; }
+  td { padding: 4px 8px; white-space: nowrap; }
+  td:first-child { padding-left: 0; opacity: .75; }
+  h3 { font-size: 13px; margin: 26px 0 10px; opacity: .7; font-weight: 600; }
+  .sizes { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
+</style>
+</head>
+<body>
+<table><thead><tr><th></th><th>fill</th><th>subtle</th><th>outline</th></tr></thead><tbody id="rows"></tbody></table>
+<h3>Sizes, neutral</h3>
+<div class="sizes" id="sizes"></div>
+<script type="module">
+  const q = new URLSearchParams(location.search);
+  const build = /^[a-z]+$/.test(q.get('build') ?? '') ? q.get('build') : 'faithful';
+  const { default: init } = await import(`../out/badge-${build}/badge.js`);
+  const variants = ['neutral', 'accent', 'informative', 'negative', 'positive', 'notice', 'gray', 'red', 'orange', 'yellow', 'chartreuse', 'celery', 'green', 'seafoam', 'cyan', 'blue', 'indigo', 'purple', 'fuchsia', 'magenta', 'pink', 'turquoise', 'brown', 'cinnamon', 'silver'];
+  const semantic = new Set(variants.slice(0, 6));
+  const badge = (classes, text) => { const el = document.createElement('div'); el.className = ['badge', ...classes].join(' '); el.innerHTML = `<div></div><div>${text}</div>`; init(el); return el; };
+  const tbody = document.getElementById('rows');
+  for (const v of variants) {
+    const tr = document.createElement('tr');
+    const label = document.createElement('td'); label.textContent = v; tr.append(label);
+    for (const style of ['fill', 'subtle', 'outline']) {
+      const td = document.createElement('td');
+      if (style !== 'outline' || semantic.has(v)) td.append(badge([v, style === 'fill' ? '' : style].filter(Boolean), 'Label'));
+      tr.append(td);
+    }
+    tbody.append(tr);
+  }
+  const sizes = document.getElementById('sizes');
+  for (const size of ['s', 'm', 'l', 'xl']) sizes.append(badge(['neutral', size], `Size ${size.toUpperCase()}`));
+  window.addEventListener('message', (e) => {
+    if (e.data?.type !== 'token') return;
+    if (e.data.value) document.documentElement.style.setProperty(e.data.name, e.data.value); else document.documentElement.style.removeProperty(e.data.name);
+  });
+  const post = () => parent.postMessage({ type: 'height', build, h: document.body.scrollHeight }, '*');
+  post(); document.fonts.ready.then(post);
+</script>
+</body>
+</html>

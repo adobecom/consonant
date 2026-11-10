@@ -1,0 +1,423 @@
+{
+  "$comment": "Shared Button bindings, used by every theme. Each points a contract row at a role token (theme-button-*) or a Spectrum semantic token, never a palette step. Each theme sets the values of the theme-button-* tokens it uses. Defaults: each role token starts at Spectrum's own value, so a theme lists only what it changes.",
+  "component": "button",
+  "bindings": [
+    {
+      "where": {
+        "variant": "primary"
+      },
+      "prop": "background-color",
+      "token": "neutral-background-color-default",
+      "reason": "Spectrum binds Button straight to the gray palette. gray-800 is used far beyond Button, so it cannot be changed. Pointing this row at the semantic token lets the theme reach it."
+    },
+    {
+      "where": {
+        "variant": "primary"
+      },
+      "state": "hover",
+      "prop": "background-color",
+      "token": "neutral-background-color-hover",
+      "reason": "Spectrum binds Button straight to the gray palette. gray-800 is used far beyond Button, so it cannot be changed. Pointing this row at the semantic token lets the theme reach it."
+    },
+    {
+      "where": {
+        "variant": "primary"
+      },
+      "state": "active",
+      "prop": "background-color",
+      "token": "neutral-background-color-down",
+      "reason": "Spectrum binds Button straight to the gray palette. gray-800 is used far beyond Button, so it cannot be changed. Pointing this row at the semantic token lets the theme reach it."
+    },
+    {
+      "where": {
+        "variant": "primary"
+      },
+      "state": "focus-visible",
+      "prop": "background-color",
+      "token": "neutral-background-color-default",
+      "reason": "Spectrum binds Button straight to the gray palette. gray-800 is used far beyond Button, so it cannot be changed. Pointing this row at the semantic token lets the theme reach it."
+    },
+    {
+      "where": {
+        "size": "m"
+      },
+      "prop": "padding-inline",
+      "token": "theme-button-padding-inline",
+      "reason": "Changing base-padding would reach every component using it."
+    },
+    {
+      "where": {
+        "size": "m"
+      },
+      "prop": "padding-block",
+      "token": "theme-button-padding-block",
+      "reason": "Same reach problem."
+    },
+    {
+      "where": {
+        "size": "m"
+      },
+      "prop": "gap",
+      "token": "theme-button-gap",
+      "reason": "Same reach problem."
+    },
+    {
+      "where": {
+        "variant": "primary",
+        "fillStyle": "outline"
+      },
+      "state": "hover",
+      "prop": "background-color",
+      "token": "theme-button-outline-hover",
+      "reason": "gray-100 is used far beyond Button, so it cannot be re-aliased."
+    },
+    {
+      "where": {
+        "variant": "primary",
+        "fillStyle": "outline"
+      },
+      "prop": "border-color",
+      "token": "theme-button-outline-border",
+      "reason": "Spectrum binds this border to the gray palette. Points at a role token so each theme sets its own colour; the palette is used far beyond Button."
+    },
+    {
+      "where": {
+        "variant": "primary",
+        "fillStyle": "outline"
+      },
+      "state": "hover",
+      "prop": "border-color",
+      "token": "theme-button-outline-border-hover",
+      "reason": "Spectrum darkens the outline border on hover. Its own role, so a theme can keep or drop that."
+    },
+    {
+      "where": {
+        "size": "m"
+      },
+      "prop": "border-radius",
+      "token": "theme-button-radius",
+      "reason": "Found by looking at the render: the padding overrides made medium taller than the height token, so Spectrum's derived radius stopped being a pill. The override cost one more override."
+    },
+    {
+      "where": {
+        "size": "s"
+      },
+      "prop": "padding-inline",
+      "token": "theme-button-padding-inline-s",
+      "reason": "Every size bound, not only M, so a theme can restyle all of them."
+    },
+    {
+      "where": {
+        "size": "s"
+      },
+      "prop": "padding-block",
+      "token": "theme-button-padding-block-s",
+      "reason": "Every size bound, not only M, so a theme can restyle all of them."
+    },
+    {
+      "where": {
+        "size": "s"
+      },
+      "prop": "gap",
+      "token": "theme-button-gap-s",
+      "reason": "Every size bound, not only M, so a theme can restyle all of them."
+    },
+    {
+      "where": {
+        "size": "s"
+      },
+      "prop": "border-radius",
+      "token": "theme-button-radius",
+      "reason": "One radius for every size, so a pill stays a pill and a square theme is square at every size."
+    },
+    {
+      "where": {
+        "size": "l"
+      },
+      "prop": "padding-inline",
+      "token": "theme-button-padding-inline-l",
+      "reason": "Every size bound, not only M, so a theme can restyle all of them."
+    },
+    {
+      "where": {
+        "size": "l"
+      },
+      "prop": "padding-block",
+      "token": "theme-button-padding-block-l",
+      "reason": "Every size bound, not only M, so a theme can restyle all of them."
+    },
+    {
+      "where": {
+        "size": "l"
+      },
+      "prop": "gap",
+      "token": "theme-button-gap-l",
+      "reason": "Every size bound, not only M, so a theme can restyle all of them."
+    },
+    {
+      "where": {
+        "size": "l"
+      },
+      "prop": "border-radius",
+      "token": "theme-button-radius",
+      "reason": "One radius for every size, so a pill stays a pill and a square theme is square at every size."
+    },
+    {
+      "where": {
+        "size": "xl"
+      },
+      "prop": "padding-inline",
+      "token": "theme-button-padding-inline-xl",
+      "reason": "Every size bound, not only M, so a theme can restyle all of them."
+    },
+    {
+      "where": {
+        "size": "xl"
+      },
+      "prop": "padding-block",
+      "token": "theme-button-padding-block-xl",
+      "reason": "Every size bound, not only M, so a theme can restyle all of them."
+    },
+    {
+      "where": {
+        "size": "xl"
+      },
+      "prop": "gap",
+      "token": "theme-button-gap-xl",
+      "reason": "Every size bound, not only M, so a theme can restyle all of them."
+    },
+    {
+      "where": {
+        "size": "xl"
+      },
+      "prop": "border-radius",
+      "token": "theme-button-radius",
+      "reason": "One radius for every size, so a pill stays a pill and a square theme is square at every size."
+    },
+    {
+      "where": {},
+      "prop": "font-family",
+      "token": "default-font-family",
+      "reason": "Spectrum binds sans-font-family-stack, used by every component. Moved here from a hard-coded step so all of Button's bindings live in one file."
+    },
+    {
+      "where": {},
+      "prop": "font-weight",
+      "token": "theme-button-font-weight",
+      "reason": "Type stress test: lets a theme set weight. Spectrum binds a weight token used far beyond this component."
+    },
+    {
+      "where": {},
+      "prop": "letter-spacing",
+      "token": "theme-button-letter-spacing",
+      "reason": "Type stress test: Spectrum sets no letter spacing here, so this adds the property."
+    },
+    {
+      "where": {},
+      "prop": "text-transform",
+      "token": "theme-button-text-transform",
+      "reason": "Type stress test: Spectrum sets no text transform here, so this adds the property."
+    },
+    {
+      "where": {
+        "size": "s"
+      },
+      "prop": "font-size",
+      "token": "theme-button-font-size-s",
+      "reason": "Type stress test: font size at S. Spectrum's font-size scale is used by every component."
+    },
+    {
+      "where": {
+        "size": "s"
+      },
+      "prop": "line-height",
+      "token": "theme-button-line-height-s",
+      "reason": "Type stress test: line height at S, so a bigger font does not clip."
+    },
+    {
+      "where": {
+        "size": "m"
+      },
+      "prop": "font-size",
+      "token": "theme-button-font-size-m",
+      "reason": "Type stress test: font size at M. Spectrum's font-size scale is used by every component."
+    },
+    {
+      "where": {
+        "size": "m"
+      },
+      "prop": "line-height",
+      "token": "theme-button-line-height-m",
+      "reason": "Type stress test: line height at M, so a bigger font does not clip."
+    },
+    {
+      "where": {
+        "size": "l"
+      },
+      "prop": "font-size",
+      "token": "theme-button-font-size-l",
+      "reason": "Type stress test: font size at L. Spectrum's font-size scale is used by every component."
+    },
+    {
+      "where": {
+        "size": "l"
+      },
+      "prop": "line-height",
+      "token": "theme-button-line-height-l",
+      "reason": "Type stress test: line height at L, so a bigger font does not clip."
+    },
+    {
+      "where": {
+        "size": "xl"
+      },
+      "prop": "font-size",
+      "token": "theme-button-font-size-xl",
+      "reason": "Type stress test: font size at XL. Spectrum's font-size scale is used by every component."
+    },
+    {
+      "where": {
+        "size": "xl"
+      },
+      "prop": "line-height",
+      "token": "theme-button-line-height-xl",
+      "reason": "Type stress test: line height at XL, so a bigger font does not clip."
+    }
+  ],
+  "defaults": [
+    {
+      "name": "theme-button-padding-inline-s",
+      "ref": "base-padding-horizontal-small",
+      "reason": "Size S keeps Spectrum's padding-inline. Default; a theme overrides it to change this."
+    },
+    {
+      "name": "theme-button-padding-block-s",
+      "ref": "base-padding-vertical-small",
+      "reason": "Size S keeps Spectrum's padding-block. Default; a theme overrides it to change this."
+    },
+    {
+      "name": "theme-button-gap-s",
+      "ref": "base-gap-small",
+      "reason": "Size S keeps Spectrum's gap. Default; a theme overrides it to change this."
+    },
+    {
+      "name": "theme-button-padding-inline-l",
+      "ref": "base-padding-horizontal-large",
+      "reason": "Size L keeps Spectrum's padding-inline. Default; a theme overrides it to change this."
+    },
+    {
+      "name": "theme-button-padding-block-l",
+      "ref": "base-padding-vertical-large",
+      "reason": "Size L keeps Spectrum's padding-block. Default; a theme overrides it to change this."
+    },
+    {
+      "name": "theme-button-gap-l",
+      "ref": "base-gap-large",
+      "reason": "Size L keeps Spectrum's gap. Default; a theme overrides it to change this."
+    },
+    {
+      "name": "theme-button-padding-inline-xl",
+      "ref": "base-padding-horizontal-extra-large",
+      "reason": "Size XL keeps Spectrum's padding-inline. Default; a theme overrides it to change this."
+    },
+    {
+      "name": "theme-button-padding-block-xl",
+      "ref": "base-padding-vertical-extra-large",
+      "reason": "Size XL keeps Spectrum's padding-block. Default; a theme overrides it to change this."
+    },
+    {
+      "name": "theme-button-gap-xl",
+      "ref": "base-gap-extra-large",
+      "reason": "Size XL keeps Spectrum's gap. Default; a theme overrides it to change this."
+    },
+    {
+      "name": "theme-button-font-weight",
+      "ref": "bold-font-weight",
+      "reason": "Spectrum's Spectrum's weight."
+    },
+    {
+      "name": "theme-button-letter-spacing",
+      "value": "normal",
+      "reason": "Spectrum sets none."
+    },
+    {
+      "name": "theme-button-text-transform",
+      "value": "none",
+      "reason": "Spectrum sets none."
+    },
+    {
+      "name": "theme-button-font-size-s",
+      "ref": "font-size-75",
+      "reason": "Spectrum's Spectrum's size S."
+    },
+    {
+      "name": "theme-button-line-height-s",
+      "ref": "line-height-font-size-75",
+      "reason": "Spectrum's Spectrum's line height S."
+    },
+    {
+      "name": "theme-button-font-size-m",
+      "ref": "font-size-100",
+      "reason": "Spectrum's Spectrum's size M."
+    },
+    {
+      "name": "theme-button-line-height-m",
+      "ref": "line-height-font-size-100",
+      "reason": "Spectrum's Spectrum's line height M."
+    },
+    {
+      "name": "theme-button-font-size-l",
+      "ref": "font-size-200",
+      "reason": "Spectrum's Spectrum's size L."
+    },
+    {
+      "name": "theme-button-line-height-l",
+      "ref": "line-height-font-size-200",
+      "reason": "Spectrum's Spectrum's line height L."
+    },
+    {
+      "name": "theme-button-font-size-xl",
+      "ref": "font-size-300",
+      "reason": "Spectrum's Spectrum's size XL."
+    },
+    {
+      "name": "theme-button-line-height-xl",
+      "ref": "line-height-font-size-300",
+      "reason": "Spectrum's Spectrum's line height XL."
+    },
+    {
+      "name": "theme-button-padding-inline",
+      "ref": "base-padding-horizontal-medium",
+      "reason": "Spectrum's size M padding-inline. Default; a theme overrides it to change this."
+    },
+    {
+      "name": "theme-button-padding-block",
+      "ref": "base-padding-vertical-medium",
+      "reason": "Spectrum's size M padding-block. Default."
+    },
+    {
+      "name": "theme-button-gap",
+      "ref": "base-gap-medium",
+      "reason": "Spectrum's size M gap. Default."
+    },
+    {
+      "name": "theme-button-radius",
+      "value": "999px",
+      "reason": "Spectrum's button is a pill at every size; it derives the radius from the height. Default."
+    },
+    {
+      "name": "theme-button-outline-hover",
+      "ref": "gray-100",
+      "reason": "Spectrum's outline hover fill. Default."
+    },
+    {
+      "name": "theme-button-outline-border",
+      "ref": "gray-800",
+      "reason": "Spectrum's outline border. Default."
+    },
+    {
+      "name": "theme-button-outline-border-hover",
+      "ref": "gray-900",
+      "reason": "Spectrum's outline border on hover. Default."
+    }
+  ]
+}

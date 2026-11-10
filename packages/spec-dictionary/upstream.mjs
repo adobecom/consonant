@@ -96,6 +96,11 @@ if (!goldenResult.ok) {
 // (must be all of them), and of our components, how many emit one at all (the
 // coverage backlog). Collapsing them into a single percentage would hide which
 // of the two is actually blocked.
+// x- keys are our extensions, outside the Southleft shape; the vendored schema
+// stays unedited, so they are removed before it judges a contract.
+const withoutExtensions = (v) => Array.isArray(v) ? v.map(withoutExtensions)
+  : v && typeof v === "object" ? Object.fromEntries(Object.entries(v).filter(([k]) => !k.startsWith("x-")).map(([k, c]) => [k, withoutExtensions(c)]))
+  : v;
 const slugs = existsSync(SRC) ? readdirSync(SRC).filter((d) => existsSync(join(SRC, d, `${d}.spec.json`))) : [];
 const withContract = slugs.filter((d) => existsSync(join(SRC, d, `${d}.contract.json`)));
 const missingReq = new Map(), extraProp = new Map();
@@ -103,7 +108,7 @@ let conform = 0;
 const per = [];
 for (const slug of withContract) {
   const contract = readJson(join(SRC, slug, `${slug}.contract.json`));
-  const { ok, violations: errs } = validate(contract);
+  const { ok, violations: errs } = validate(withoutExtensions(contract));
   if (ok) conform++;
   // Root-level only: a missing field on a nested part is a different problem
   // from one the contract itself omits, and ranking them together misleads.

@@ -1,0 +1,24 @@
+{
+  "$comment": "Judgment, not evidence: which S2A token plays the same role as a Spectrum token. token-map.mjs reads this; it never writes it. Equal colour values do not imply equal roles, so a colour only aliases through a row here. A row aliases when the light values match, or when `decided` says whose value wins ('ours' takes the S2A token; 'theirs' keeps Spectrum's literal). Seeded from docs/references/s2-vs-s2a-tokens.md.",
+  "roles": {
+    "--swc-background-base-color": { "target": "--s2a-color-background-default", "why": "Application canvas." },
+    "--swc-background-layer-1-color": { "target": "--s2a-color-surface-subtle", "why": "First raised layer." },
+    "--swc-background-layer-2-color": { "target": "--s2a-color-surface-default", "why": "Second layer; white in both systems." },
+    "--swc-disabled-content-color": { "target": "--s2a-color-content-disabled", "why": "Disabled text." },
+    "--swc-disabled-border-color": { "target": "--s2a-color-border-disabled", "why": "Disabled border; one ramp step apart." },
+    "--swc-disabled-background-color": { "target": "--s2a-color-background-disabled", "why": "Disabled fill; two ramp steps apart." },
+    "--swc-focus-indicator-color": { "target": "--s2a-color-focus-ring-default", "why": "Focus ring; one ramp step apart." },
+    "--swc-neutral-content-color-default": { "target": "--s2a-color-content-default", "why": "Default text: gray-800 there, black here. On the board as the text colour decision." },
+    "--swc-neutral-subdued-content-color-default": { "target": "--s2a-color-content-subtle", "why": "Secondary text." },
+    "--swc-neutral-background-color-default": { "target": "--s2a-color-button-background-solid-default", "why": "The neutral fill is what a primary action wears here." },
+    "--swc-neutral-background-color-hover": { "target": "--s2a-color-button-background-solid-hover", "why": "Same, hover." },
+    "--swc-neutral-background-color-down": { "target": "--s2a-color-button-background-solid-active", "why": "Same, pressed." },
+    "--swc-negative-background-color-default": { "target": "--s2a-color-background-utility-error", "why": "Error fill." },
+    "--swc-opacity-disabled": { "target": "--s2a-opacity-disabled", "why": "0.3 there, 0.48 here. On the board as the disabled decision." },
+    "--swc-avatar-opacity-disabled": { "target": "--s2a-opacity-disabled", "why": "Same decision as the global disabled opacity." },
+    "--swc-overlay-opacity-light": { "target": "--s2a-opacity-scrim-subtle", "why": "Scrim, light. On the board as the scrim decision." },
+    "--swc-overlay-opacity-dark": { "target": "--s2a-opacity-scrim-strong", "why": "Scrim, dark. Same decision." },
+    "--swc-sans-font-family-stack": { "target": "--s2a-font-family-default", "why": "Body family: Adobe Clean Spectrum VF there, Adobe Clean here." },
+    "--swc-corner-radius-full": { "target": "--s2a-border-radius-round", "why": "The pill: 50% there draws an ellipse on anything not square, 999px here does not." }
+  }
+}

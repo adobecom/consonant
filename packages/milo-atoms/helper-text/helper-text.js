@@ -22,9 +22,11 @@ export default function decorateHelperText(scope, options = {}) {
     const cue = el.parentElement?.nodeName;
     // Unwrap the cue, as Milo does: <strong><a> becomes <a>.
     if (cue === 'STRONG' || cue === 'EM') el.parentElement.replaceWith(el);
+    // A composition can give each cue its own look: options.cues.EM.
+    const chosen = { ...options, ...options.cues?.[cue] };
     el.classList.add('s2a-helper-text');
 
-    if (options.intent) el.classList.add(options.intent);
+    if (chosen.intent) el.classList.add(chosen.intent);
     // Parts: the text is the text; anything the author placed before or
     // after it is an icon.
     const label = document.createElement('span');

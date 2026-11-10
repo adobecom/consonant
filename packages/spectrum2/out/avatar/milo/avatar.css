@@ -1,0 +1,145 @@
+/* Avatar — generated from avatar.contract.json.
+ * Re-run: npm run specs:render -- --slug=avatar --target=milo --system=spectrum */
+
+.avatar [hidden],
+.avatar[hidden] {
+  display: none !important;
+}
+
+.avatar {
+  display: inline-block;
+  box-sizing: border-box;
+  inline-size: var(--s2-avatar-size-500);
+  block-size: var(--s2-avatar-size-500);
+  border-radius: 50%;
+  user-select: none;
+}
+
+.avatar:disabled,
+.avatar[data-state="disabled"] {
+  opacity: var(--s2-avatar-opacity-disabled);
+  pointer-events: none;
+}
+
+.avatar.size-50 {
+  inline-size: var(--s2-avatar-size-50);
+  block-size: var(--s2-avatar-size-50);
+}
+
+.avatar.size-75 {
+  inline-size: var(--s2-avatar-size-75);
+  block-size: var(--s2-avatar-size-75);
+}
+
+.avatar.size-100 {
+  inline-size: var(--s2-avatar-size-100);
+  block-size: var(--s2-avatar-size-100);
+}
+
+.avatar.size-200 {
+  inline-size: var(--s2-avatar-size-200);
+  block-size: var(--s2-avatar-size-200);
+}
+
+.avatar.size-300 {
+  inline-size: var(--s2-avatar-size-300);
+  block-size: var(--s2-avatar-size-300);
+}
+
+.avatar.size-400 {
+  inline-size: var(--s2-avatar-size-400);
+  block-size: var(--s2-avatar-size-400);
+}
+
+.avatar.size-500 {
+  inline-size: var(--s2-avatar-size-500);
+  block-size: var(--s2-avatar-size-500);
+}
+
+.avatar.size-600 {
+  inline-size: var(--s2-avatar-size-600);
+  block-size: var(--s2-avatar-size-600);
+}
+
+.avatar.size-700 {
+  inline-size: var(--s2-avatar-size-700);
+  block-size: var(--s2-avatar-size-700);
+}
+
+.avatar.size-800 {
+  inline-size: var(--s2-avatar-size-800);
+  block-size: var(--s2-avatar-size-800);
+}
+
+.avatar.size-900 {
+  inline-size: var(--s2-avatar-size-900);
+  block-size: var(--s2-avatar-size-900);
+}
+
+.avatar.size-1000 {
+  inline-size: var(--s2-avatar-size-1000);
+  block-size: var(--s2-avatar-size-1000);
+}
+
+.avatar.size-1100 {
+  inline-size: var(--s2-avatar-size-1100);
+  block-size: var(--s2-avatar-size-1100);
+}
+
+.avatar.size-1200 {
+  inline-size: var(--s2-avatar-size-1200);
+  block-size: var(--s2-avatar-size-1200);
+}
+
+.avatar.size-1300 {
+  inline-size: var(--s2-avatar-size-1300);
+  block-size: var(--s2-avatar-size-1300);
+}
+
+.avatar.size-1400 {
+  inline-size: var(--s2-avatar-size-1400);
+  block-size: var(--s2-avatar-size-1400);
+}
+
+.avatar.size-1500 {
+  inline-size: var(--s2-avatar-size-1500);
+  block-size: var(--s2-avatar-size-1500);
+}
+
+.avatar .image {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.avatar.outline .image {
+  outline-style: solid;
+  outline-width: var(--s2-border-width-100);
+  outline-color: var(--s2-gray-25);
+}
+
+.avatar.outline.size-1000 .image {
+  outline-width: 2px; /* hardcoded: contract value, not a token */
+}
+
+.avatar.outline.size-1100 .image {
+  outline-width: 2px; /* hardcoded: contract value, not a token */
+}
+
+.avatar.outline.size-1200 .image {
+  outline-width: 2px; /* hardcoded: contract value, not a token */
+}
+
+.avatar.outline.size-1300 .image {
+  outline-width: 2px; /* hardcoded: contract value, not a token */
+}
+
+.avatar.outline.size-1400 .image {
+  outline-width: 2px; /* hardcoded: contract value, not a token */
+}
+
+.avatar.outline.size-1500 .image {
+  outline-width: 2px; /* hardcoded: contract value, not a token */
+}

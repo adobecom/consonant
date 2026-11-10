@@ -1,0 +1,45 @@
+/* ButtonGroup — generated from button-group.contract.json.
+ * Re-run: npm run specs:render -- --slug=button-group --target=milo --system=spectrum */
+
+.button-group [hidden],
+.button-group[hidden] {
+  display: none !important;
+}
+
+.button-group {
+  display: flex;
+  box-sizing: border-box;
+  flex-direction: row;
+  flex-wrap: wrap;
+  row-gap: 12px; /* hardcoded: contract value, not a token */
+  column-gap: 12px; /* hardcoded: contract value, not a token */
+  justify-content: normal;
+  inline-size: 100%;
+}
+
+.button-group.s {
+  row-gap: 8px; /* hardcoded: contract value, not a token */
+  column-gap: 8px; /* hardcoded: contract value, not a token */
+}
+
+.button-group.center {
+  justify-content: center;
+}
+
+.button-group.end {
+  justify-content: flex-end;
+}
+
+.button-group.vertical {
+  flex-direction: column;
+}
+
+.button-group.center.vertical {
+  align-items: center;
+  justify-content: normal;
+}
+
+.button-group.end.vertical {
+  align-items: flex-end;
+  justify-content: normal;
+}

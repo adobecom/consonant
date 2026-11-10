@@ -55,9 +55,12 @@ Status: **curated-draft** · root `swc-Button` · import `@adobe/spectrum-wc/com
   - padding-block: `--swc-base-padding-vertical-medium` = 7px
   - gap: `--swc-base-gap-medium` = 6px
   - border-width: `--swc-border-width-200` = 2px
-  - border-radius: raw `16px`
+  - border-radius: `--swc-button-corner-radius-m` = calc(var(--swc-theme--sizeM, 32px)
+    var(--swc-theme--sizeL, 40px) / 2)
   - background-color: `--swc-neutral-background-color-default` = light-dark(rgb(41, 41, 41), rgb(219, 219, 219))
   - color: `--swc-gray-25` = light-dark(rgb(255, 255, 255), rgb(17, 17, 17))
+  - line-height: `--swc-line-height-font-size-100` = var(--swc-theme--sizeM, 18px)
+    var(--swc-theme--sizeL, 22px)
   - **icon** `.swc-Button-icon` · slot `icon` accepts `kind:icon` (prefer)
     - --iconPrimary: raw `currentColor`
   - **label** `.swc-Button-label`
@@ -79,18 +82,12 @@ Status: **curated-draft** · root `swc-Button` · import `@adobe/spectrum-wc/com
 - ⏳ **open** `bt-variant-colour` `medium confidence` (Matt): Spectrum writes the per-variant colours as nested rules in index.css rather than in its theme file, and composes intent with style (accent+outline is its own rule). The contract carries the four intents and treats outline as a separate axis that clears the fill. _Evidence: @spectrum-css/button 14.2.0 index.css, nested &.spectrum-Button--* blocks with nested rules excluded from the parent_
   - The draft chose: variant -> background and content; border comes from the outline style, not the intent
   - If wrong: If a variant and style pair ever disagrees with this, move it to tokensByCombination.
-- ⏳ **open** `bt-line-height` `high confidence` (Matt): The design file and the implementation disagree about line height at two sizes. _Evidence: Figma Line height/Font size 75 = 16 vs computed 15; /300 = 22 vs computed 23._
-  - The draft chose: Follow the implementation, which computes round(down, 1.3em, 1px)
-  - If wrong: Ask the Spectrum team which is canonical: the file's explicit per-size values give 16 and 22 at S and XL, the CSS gives 15 and 23. Medium and large agree.
 - ⏳ **open** `bt-global-reset` `high confidence` (Matt): Upstream's global-button.css ends with `all: revert-layer !important` on .swc-Button and .swc-Button-label, which erases every author declaration on those classes. _Evidence: @adobe/spectrum-wc@2.0.0-beta.6 dist/global-button.css:360, shipped in the npm package. With it loaded, accent rendered #292929 instead of #3b63fb; without it, all four variants match the design file._
   - The draft chose: The generated component carries its own geometry and colour and does not load that stylesheet
   - If wrong: Ask the Spectrum team whether that reset is intended. It makes the light-DOM 'global' stylesheet un-themeable: an !important `all` reset outranks any layer and any specificity, so a consumer cannot restyle the class at all.
 - ⏳ **open** `bt-design-code-gap` `high confidence` (Matt): The design file and the implementation do not describe the same component. _Evidence: Figma has a trailing icon (Show trailing icon, Trailing icon); the code has one icon slot and no trailing position. Figma has Show label; the code derives label presence from whether the default slot has content. The code has truncate and justified; the design has neither. Figma's State axis carries Hover, which is a rendering state rather than an API. Every value is spelled differently: Small against s, Primary against primary._
   - The draft chose: Record the translation in the value maps above and list what has no counterpart on either side
   - If wrong: Take the list to the Spectrum team. Each item is either a design the code has not built or a capability the design has not drawn.
-- ⏳ **open** `bt-geometry` `high confidence` (Matt): Upstream computes the radius as half the height with calc(), which the contract cannot express. _Evidence: Figma Button radius is 12/16/20/24 across the four sizes and global-button.css computes calc(min-block-size / 2), which gives the same four._
-  - The draft chose: Record the four values the calc produces: 12, 16, 20 and 24
-  - If wrong: Add arithmetic to the token map, or ask for per-size radius tokens. A pill value renders identically but reports a number neither the design nor the implementation uses, which is worse in a contract than a literal.
 - ⏳ **open** `bt-pending-spinner` `high confidence` (Matt): The design builds the pending state from a progress circle the contract never mentioned. _Evidence: The design evidence reports an instance of ".In-field progress circle"; upstream renders .swc-PendingSpinner from PendingMixin. Only surfaced once design evidence existed — the code alone never showed it._
   - The draft chose: Declare it as internal and leave the pending visual out of the anatomy for now
   - If wrong: Contract the progress circle, then give Button a pending part that composes it. Until then a consumer driving `pending` gets a spinner this contract does not describe.
@@ -100,12 +97,16 @@ Status: **curated-draft** · root `swc-Button` · import `@adobe/spectrum-wc/com
 - ✅ decided `bt-prop-evidence` `high confidence` (Matt): A web component has no render function, so the prop extractor found nothing. → The prop surface is read from the shipped type declarations, which are part of the package's published contract and cannot drift from the implementation without a release. _Evidence: Button.d.ts, Button.base.d.ts, Button.types.d.ts and pending-mixin.d.ts are vendored and hashed; the enums come from the .types.d.ts consts so the contract cannot invent a value._
   - The draft chose: Read the prop surface from the shipped .d.ts, including base classes and mixin interfaces
   - If wrong: none
+- ✅ decided `bt-line-height` `high confidence` (Matt): The design file and the implementation disagree about line height at two sizes. → Bind the line height tokens Figma binds, 16, 18, 20 and 22 by size. Adobe's CSS computes 15 and 23 at S and XL, but we do not load its code and the tokens exist. This also makes XL 48 tall, as in Figma. _Evidence: Figma Line height/Font size 75 = 16 vs computed 15; /300 = 22 vs computed 23._
+  - The draft chose: Bind Figma's per-size line height tokens
 - ✅ decided `bt-border-box` `high confidence` (Matt): Upstream pads inside a real 2px border; our renderer draws borders as an inset shadow, which takes no box space. → Padding is bound to the full token value because the renderer draws the border as an inset shadow, which consumes no box space. Measured: every size reproduces upstream's outer box exactly. _Evidence: measured: every size reproduces upstream's outer box exactly — 44x24, 51x32, 62x40, 70x48._
   - The draft chose: Bind padding to the full token value and let the shadow border overlay it
   - If wrong: If the renderer ever emits real borders, subtract the border width here.
 - ✅ decided `bt-colour-tier` `high confidence` (Matt): Colour was bound to the palette (gray-800, blue-800, red-800) rather than the alias tier the design file uses. → Figma's Alias/background/semantic/accent/default is --swc-accent-background-color-default. The two names differ in shape — the variant moves to the front, 'color' is inserted, 'semantic' is dropped — so a path-to-dash transform silently lands on the palette instead. _Evidence: blue-800 is #4b75ff; the accent alias is #3b63fb. The accent and negative buttons were rendering the wrong blue and red._
   - The draft chose: Bind the alias tier, matching what Dev Mode reports on the node
   - If wrong: none
+- ✅ decided `bt-geometry` `high confidence` (Matt): Upstream computes the radius as half the height with calc(), which the contract cannot express. → Radius is half the height, the rule Adobe's code calculates and S2's Figma types in. It lives once in tokens/tokens.layer.css, and eval:visual:milo compares the result with Figma's numbers. Icon-only buttons are not modelled yet. _Evidence: Figma Button radius is 12/16/20/24 across the four sizes and global-button.css computes calc(min-block-size / 2), which gives the same four._
+  - The draft chose: A component token per size, derived from the height
 - ✅ decided `bt-filled-content` `high confidence` (Matt): Which white does the label on a filled button use? → gray-25 is a palette rung that flips with the theme, white in light and near-black in dark. That is right for the neutral button, which inverts with the page, and wrong for accent and negative, whose fill stays a saturated colour in both themes. _Evidence: Bound to gray-25 the accent button rendered #111111 text on #4069fd in dark mode. Upstream writes a literal rgb(255,255,255) for those two variants; the static token is the same colour with a name._
   - The draft chose: transparent-static-white-1000 for accent and negative; gray-25 for primary and secondary
   - If wrong: none
@@ -244,7 +245,7 @@ States are rendered by setting `data-state`, not by pointing at the component, s
 
 ## Provenance
 
-- defs: sha256:cda9100188d908c971c79baa9385fce216acca9f7e64b5ab8d256a8d50e67f7e
+- defs: sha256:c66a784068e5cd57c1b6a6643a9c578272c8e3deccc088fd4c3da8951d682267
 - code evidence: sha256:be2dcdae83a47514d51409b3d378d59db043363a38edb50abc3ca652db692d81
 - figma evidence: sha256:6c73ea63aabb980e51e9b8b5a812d741aaf68f3b8b6ccfa7ef21f5dbcb142c8d
 

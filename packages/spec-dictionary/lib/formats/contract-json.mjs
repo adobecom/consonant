@@ -204,6 +204,14 @@ const mapNode = (node) => {
     }
     if (combos.length) out.tokensByCombination = combos;
   }
+  // Extension: outside the Southleft shape, so it carries the x- prefix and
+  // upstream.mjs removes it before validating against their schema.
+  if (Array.isArray(node["x-compound"]) && node["x-compound"].length) {
+    out["x-compound"] = node["x-compound"].map((r) => {
+      const { tokens: t, literals: l } = splitTokens(r.tokens);
+      return { when: r.when, ...(r.state ? { state: r.state } : {}), ...(Object.keys(t).length ? { tokens: t } : {}), ...(Object.keys(l).length ? { literals: l } : {}) };
+    });
+  }
   if (node.parts && Object.keys(node.parts).length) {
     out.parts = Object.fromEntries(Object.entries(node.parts).map(([n, c]) => [n, mapNode(c)]));
   }

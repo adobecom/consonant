@@ -1,0 +1,15 @@
+/*
+ * The thin layer: tokens S2 does not have, written by us, not pulled from Adobe.
+ * Add one only for a value that is derived or gets reskinned; everything else
+ * uses S2's own tokens directly. Read after S2's tokens, so it cannot shadow one.
+ *
+ * A pill is half its height. Adobe's code calculates that and S2's Figma types the
+ * numbers in, so the rule lives here once, and eval:visual:milo compares the result
+ * with Figma's numbers and fails if they drift.
+ */
+:root {
+  --swc-button-corner-radius-s: calc(var(--swc-component-height-75) / 2);
+  --swc-button-corner-radius-m: calc(var(--swc-component-height-100) / 2);
+  --swc-button-corner-radius-l: calc(var(--swc-component-height-200) / 2);
+  --swc-button-corner-radius-xl: calc(var(--swc-component-height-300) / 2);
+}

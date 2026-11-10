@@ -27,9 +27,9 @@ Status: **curated-draft** · root `swc-Divider` · import `@adobe/spectrum-wc/co
   - box-sizing: raw `border-box`
   - inline-size: raw `100%`
   - block-size: raw `2px`
-  - background-color: raw `CanvasText`
+  - background-color: `--swc-gray-200` = light-dark(rgb(225, 225, 225), rgb(50, 50, 50))
   - border-radius: raw `2px`
-  - min-inline-size: raw `min(100%,200px)`
+  - border-style: raw `none`
 
 ## Decisions
 
@@ -37,6 +37,12 @@ Status: **curated-draft** · root `swc-Divider` · import `@adobe/spectrum-wc/co
   - If wrong: Set element on each part.
 - ✅ decided `d-rebuilt-from-code` `high confidence` (scaffold): Drafted from the implementation (@adobe/spectrum-wc/components/divider): 13 rules, 3 declared props, 0 parts. The design file was not consulted. → For a shipped library the stylesheet and the type declarations are the contract. Every token, condition and state here is read from a rule; nothing is transcribed from the design file's layer tree. _Evidence: packages/spectrum2/src/divider/divider.js, packages/spectrum2/src/divider/divider.css, packages/spectrum2/src/divider/divider.d.ts_
   - The draft chose: code is the source; design is the check
+- ✅ decided `d-colour-and-thickness` `high confidence` (Matt): Divider read CanvasText as its colour and 2px as its thickness at every size. Were those right? → No. CanvasText came from the forced-colours block, which the drafter now sets aside. Shipped code uses gray-200, and sets thickness through --swc-divider-thickness: 1px at S, 2px at M, 4px at L, for width when vertical. Raw px because shipped code has no token for thickness. Also: the 200px minimum width applies only to horizontal dividers in shipped code (.swc-Divider:not(.swc-Divider--vertical)); it was on the base, which made a vertical divider 200px wide. _Evidence: .swc-Divider{background-color:var(--swc-divider-background-color, var(--swc-gray-200))} :host([size=s]){--swc-divider-thickness:1px} :host([size=l]){--swc-divider-thickness:4px} .swc-Divider:not(.swc-Divider--vertical){min-inline-size:min(100%,200px)}_
+  - The draft chose: gray-200; 1px, 2px and 4px by size
+  - If wrong: none
+- ✅ decided `d-hr-border` `high confidence` (Matt): On a Milo page Divider is authored as <hr>, which browsers draw with an inset border. Shipped code draws a div. Reset it? → Yes. Without it the browser's 1px inset border shows around the fill. Margin is left to the page. _Evidence: x-authored.selector is hr; the theming viewer showed the inset border around a 4px fill._
+  - The draft chose: border-style: none
+  - If wrong: none
 
 ## Stories
 
@@ -60,7 +66,7 @@ No Figma evidence published yet, so there is no state matrix. Extract the set an
 
 ## Provenance
 
-- defs: sha256:9f74751484e3281e81931010325b024b5f626edacef5335234bb843e5326f229
+- defs: sha256:08612fc09529017c55e51df425fd87bb457a8a5057c9b0496b58bdfffef676a0
 - code evidence: sha256:fb76fe5cfc531f2d984741b980fdb1cce7c6a63710a36401b64c4e3455eaba78
 - figma evidence: not published
 

@@ -115,6 +115,15 @@
       },
       "literalsByProp": [
         {
+          "prop": "size",
+          "map": {
+            "s": {
+              "row-gap": "8px",
+              "column-gap": "8px"
+            }
+          }
+        },
+        {
           "prop": "align",
           "map": {
             "center": {
@@ -155,7 +164,7 @@
   },
   "provenance": {
     "version": 1,
-    "canonicalRevision": "sha256:a3846872db6db4669ea8ef44c6d5103ed5dcb368906e64ba2ed8591004e22cef",
+    "canonicalRevision": "sha256:f8da13307c1eec4826800e144fc9e7ced4bbeb7880ce4a557c422b6a60ec975b",
     "source": {
       "kind": "code",
       "adapter": "s2a-spec-transform@1",

@@ -101,6 +101,9 @@ Status: **curated-draft** · root `swc-Badge` · import `@adobe/spectrum-wc/comp
 - ✅ decided `i-glyph-fill` `high confidence` (Matt): Every glyph rendered in its own colour instead of the component's. → Spectrum's workflow SVGs paint with fill="var(--iconPrimary, #222)" rather than currentColor, so with nothing defining that property every glyph fell back to #222 regardless of the colour around it. Setting --iconPrimary to currentColor on the icon part makes a glyph follow its component, and leaves the property available to anyone who wants a different colour. _Evidence: All 396 entries in spectrum-icons.json carry var(--iconPrimary, #222); all 26 in our own s2a-icons.json use currentColor. Measured: the badge's text was #ffffff while its glyph painted #222222._
   - The draft chose: Map the artwork's own hook to currentColor on the part that holds the glyph
   - If wrong: none. The alternative was rewriting 396 vendored SVGs, which would mean editing artwork we do not own.
+- ✅ decided `b-subtle-colour-rows` `high confidence` (Matt): The 19 colour variants have subtle backgrounds in shipped code, set in a nested block. Were they missing from the defs? → Yes. The defs were curated on 2026-10-27, before nested rules were read. The 19 rows are added as a fresh draft reads them, in this file's token form. The 6 semantic rows are unchanged. _Evidence: .swc-Badge--subtle{&:where(.swc-Badge--<colour>){--swc-badge-background-color: var(--swc-<colour>-subtle-background-color-default)}} in the css`` template_
+  - The draft chose: add the 19 rows
+  - If wrong: none
 
 ## Accessibility
 
@@ -203,7 +206,7 @@ States are rendered by setting `data-state`, not by pointing at the component, s
 
 ## Provenance
 
-- defs: sha256:4fa6c42f751c8632abfdf9d72f6544d99f6e7fd52ce59497402c369263f6a70e
+- defs: sha256:7d3916e437d9be3d22e554186b065131825757d72d4d0f59b579284ce9048f4d
 - code evidence: sha256:8d08c7df63831f0e6efd53283268fea1b5296c8a4be61631eff67f03f86145e1
 - figma evidence: sha256:a373c5c6ad51965b9181ccbb29c46155723a8911ce95421aa608d16a5ae9eaa6
 

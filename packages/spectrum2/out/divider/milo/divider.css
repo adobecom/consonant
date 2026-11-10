@@ -1,0 +1,64 @@
+/* Divider — atom, generated from divider.contract.json.
+ * Applied by decorateDivider() to the element the author wrote.
+ * Re-run: npm run specs:render -- --slug=divider --target=milo --system=spectrum */
+
+.s2a-divider [hidden],
+.s2a-divider[hidden] {
+  display: none !important;
+}
+
+.s2a-divider {
+  display: block;
+  box-sizing: border-box;
+  inline-size: 100%;
+  block-size: 2px; /* hardcoded: contract value, not a token */
+  background-color: var(--s2-gray-200);
+  border-radius: 2px; /* hardcoded: contract value, not a token */
+  border-style: none;
+}
+
+.s2a-divider.l {
+  background-color: var(--s2-gray-800);
+  block-size: 4px; /* hardcoded: contract value, not a token */
+  border-radius: 4px; /* hardcoded: contract value, not a token */
+}
+
+.s2a-divider.s {
+  block-size: 1px; /* hardcoded: contract value, not a token */
+  border-radius: 1px; /* hardcoded: contract value, not a token */
+}
+
+.s2a-divider.white {
+  background-color: var(--s2-transparent-static-white-300);
+}
+
+.s2a-divider.black {
+  background-color: var(--s2-transparent-static-black-200);
+}
+
+.s2a-divider.vertical {
+  align-self: stretch;
+  inline-size: 2px; /* hardcoded: contract value, not a token */
+  block-size: 100%;
+  min-block-size: min(100%,200px); /* hardcoded: contract value, not a token */
+}
+
+.s2a-divider:not(.vertical) {
+  min-inline-size: min(100%,200px); /* hardcoded: contract value, not a token */
+}
+
+.s2a-divider.l.white {
+  background-color: var(--s2-transparent-static-white-900);
+}
+
+.s2a-divider.l.black {
+  background-color: var(--s2-transparent-static-black-900);
+}
+
+.s2a-divider.s.vertical {
+  inline-size: 1px; /* hardcoded: contract value, not a token */
+}
+
+.s2a-divider.l.vertical {
+  inline-size: 4px; /* hardcoded: contract value, not a token */
+}

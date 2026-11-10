@@ -7,7 +7,7 @@
  *   row 1  ->  .img
  *
  * Variants are classes on the block element:
- *   size: 16 | 18 | 24 | 32 | 48 | 80
+ *   size: size-16 | size-18 | size-24 | size-32 | size-48 | size-80
  */
 export default function init(el) {
   const rows = [...el.querySelectorAll(':scope > div')];

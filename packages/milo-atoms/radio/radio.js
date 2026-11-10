@@ -10,7 +10,9 @@
  * Authored markup this upgrades:  .radio
  * Classes it adds to that element:
  *   .s2a-radio
- *   (no variants)
+ * Variants are classes on the element (pass them in options, or let the
+ * authoring cue choose):
+ *   selected: add the class to turn it on
  */
 export const AUTHORED = '.radio';
 
@@ -20,9 +22,12 @@ export default function decorateRadio(scope, options = {}) {
     const cue = el.parentElement?.nodeName;
     // Unwrap the cue, as Milo does: <strong><a> becomes <a>.
     if (cue === 'STRONG' || cue === 'EM') el.parentElement.replaceWith(el);
+    // A composition can give each cue its own look: options.cues.EM.
+    const chosen = { ...options, ...options.cues?.[cue] };
     el.classList.add('s2a-radio');
 
 
+    if (chosen.selected) el.classList.add('selected');
     // Parts: the text is the label; anything the author placed before or
     // after it is an icon.
     const label = document.createElement('span');

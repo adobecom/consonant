@@ -149,7 +149,14 @@ export function fromImplementation(code, { slug, name, tokens, figma = null, tem
   const stateProps = new Set(codeProps.filter((p) => p.type === "boolean" && STATE_NAMES.has(p.name)).map((p) => p.name));
 
   // ---- rules ----------------------------------------------------------------
-  const rules = code.stylesheet?.rules ?? [];
+  // A rule under a conditional block (forced colours, a container query, a scope)
+  // only applies when that condition holds. Reading it as unconditional let
+  // Divider's high-contrast CanvasText replace its real colour, and put Card's
+  // media rules on the card itself. Set them aside and say so; @layer is not a
+  // condition, so it stays.
+  const CONDITIONAL = /^@(media|container|supports|scope)\b/;
+  const conditional = (code.stylesheet?.rules ?? []).filter((r) => (r.context ?? []).some((c) => CONDITIONAL.test(c)));
+  const rules = (code.stylesheet?.rules ?? []).filter((r) => !conditional.includes(r));
   // A class on the root's naming convention is a part, whether or not the
   // template names it: Button's icon is slotted, its class only ever appears in
   // the stylesheet.
@@ -317,6 +324,11 @@ export function fromImplementation(code, { slug, name, tokens, figma = null, tem
       undrafted.push({ part: part.selector, conditions, states, map });
     }
   }
+  if (conditional.length) D("conditional-rules", {
+    question: `${conditional.length} rule${conditional.length === 1 ? " applies" : "s apply"} only under a condition the contract does not model (${[...new Set(conditional.flatMap((r) => r.context.filter((c) => CONDITIONAL.test(c))))].join("; ")}). They are not in the draft.`,
+    confidence: "high", fix: "If one carries a real variant, add the prop it keys on; forced-colours and reduced-motion rules are platform behaviour and stay out.",
+    evidence: conditional.slice(0, 6).map((r) => `${r.context.join(" ")} ${r.selector}`).join("; "),
+  });
   if (undrafted.length) D("undrafted-rules", {
     question: `${undrafted.length} rule${undrafted.length === 1 ? "" : "s"} condition on more than the schema can place (three props, a state on a combination, or a state the schema does not name) and are not in the draft: ${undrafted.map((u) => `${u.part} when ${u.conditions.map((c) => `${c.prop}=${c.value}`).concat(u.states).join(" & ")}`).join("; ")}.`,
     confidence: "high", fix: "Either the schema grows a shape for them or the contract records them as decisions.",

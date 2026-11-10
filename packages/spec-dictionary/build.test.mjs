@@ -494,3 +494,75 @@ test("every state rule can also be forced with an attribute", () => {
   assert.equal(FORCED.focused, FORCED["focus-visible"]);
   assert.equal(FORCED.pressed, FORCED.active);
 });
+
+// A sheet is only worth scoring if each cell holds the artwork the story draws.
+test("matrix: an axis the contract does not model resolves to the set's default", async () => {
+  const { matrixSpec } = await import("./lib/formats/matrix.mjs");
+  const name = (label, state) => `Size=Small, Show label=${label}, State=${state}`;
+  const ids = { [name("True", "Default")]: "labelled", [name("False", "Default")]: "icon-only" };
+  const ir = {
+    variants: { Size: ["Small"], State: ["Default"] },
+    props: [],
+    figmaEvidence: {
+      axes: [{ name: "Size", type: "VARIANT" }, { name: "Show label", type: "VARIANT", defaultValue: "True" }, { name: "State", type: "VARIANT" }],
+      variantNodes: Object.entries(ids).map(([n, id]) => ({ id, name: n })),
+      variantBox: { w: 10, h: 10 },
+    },
+  };
+  assert.equal(matrixSpec(ir).cells[0].nodeId, "labelled");
+});
+
+test("matrix: an axis folding two props sets each from the word it recognises", async () => {
+  const { matrixSpec } = await import("./lib/formats/matrix.mjs");
+  const ir = {
+    variants: { Variant: ["Secondary - Static white", "outline-inverse"], State: ["Default"] },
+    props: [
+      { name: "variant", enum: ["primary", "secondary", "outline-inverse"], bindings: { figma: { property: "Variant", valueMap: { primary: "Primary", secondary: "Secondary" } } } },
+      { name: "staticColor", enum: ["white", "black"], bindings: { figma: { property: "Variant" } } },
+    ],
+    figmaEvidence: {
+      axes: [],
+      variantNodes: [
+        { id: "a", name: "Variant=Secondary - Static white, State=Default" },
+        { id: "b", name: "Variant=outline-inverse, State=Default" },
+      ],
+      variantBox: { w: 10, h: 10 },
+    },
+  };
+  const [folded, exact] = matrixSpec(ir).cells;
+  assert.deepEqual(folded.args, { variant: "secondary", staticColor: "white" });
+  assert.equal(exact.args.variant, "outline-inverse", "an exact value is not split on its hyphen");
+  assert.equal(exact.args.staticColor, undefined);
+});
+
+// Adobe's button compounds variant, fill, static colour and state. These rules
+// have to out-rank each other in that order, whatever order the defs list them.
+test("x-compound: resting before stateful, narrower looks after broader ones", async () => {
+  const { rulesForPart } = await import("./lib/renderers/css.mjs");
+  const token = (value) => ({ value: `raw:${value}`, raw: true, tokens: [] });
+  const part = {
+    name: "root",
+    "x-compound": [
+      { when: { variant: "secondary", staticColor: "white" }, state: "disabled", tokens: { color: token("red") } },
+      { when: { variant: "secondary", staticColor: "white" }, tokens: { color: token("blue") } },
+      { when: { variant: "secondary" }, state: "hover", tokens: { color: token("green") } },
+      { when: { variant: "secondary" }, tokens: { color: token("black") } },
+    ],
+  };
+  const variant = (sel, prop, value) => `${sel}.${value}`;
+  const css = rulesForPart(part, ".b", variant, ".b", null, "spectrum").join("\n");
+  const at = (text) => css.indexOf(text);
+  assert.ok(at(".b.secondary {") < at(".b.secondary.white {"), "a narrower look follows a broader one");
+  assert.ok(at(".b.secondary.white {") < at(".b.secondary:hover"), "resting rules precede stateful ones");
+  assert.ok(at(".b.secondary:hover") < at(".b.secondary.white:disabled"), "narrower stateful rules come last");
+  assert.match(css, /\.b\.secondary\.white\[data-state="disabled"\]/, "a state can be forced for a matrix");
+});
+
+test("x-compound: the contract keeps it under the x- key, and the Southleft shape stays valid", () => {
+  const contract = JSON.parse(readFileSync(join(import.meta.dirname, "../spectrum2/src/button/button.contract.json"), "utf8"));
+  assert.ok(contract.anatomy.root["x-compound"]?.length, "the extension reaches the contract");
+  assert.equal(contract.anatomy.root.tokensByCombination, undefined, "the Southleft key is not repurposed");
+  const literal = contract.anatomy.root["x-compound"].find((r) => r.literals);
+  assert.ok(literal, "literal values are split out, as the base shape does");
+  assert.ok(!JSON.stringify(literal.tokens ?? {}).includes("raw:"));
+});

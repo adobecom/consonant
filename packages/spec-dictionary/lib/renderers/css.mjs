@@ -54,8 +54,31 @@ const STATE_ATTR = "data-state";
  * Exact non-color aliases replace primitive bindings. Contract-only geometry
  * remains explicit when the token set has no matching semantic role.
  */
-export function declaration(cssProp, node, system = "s2a") {
+export function declaration(cssProp, node, system = "s2a", adapt = null) {
   if (!node) return null;
+  // Rendering one system's contract for another platform: every variable goes
+  // through the token map, so nothing the platform never loads reaches the CSS.
+  if (adapt) {
+    // A contract also sets the custom properties Adobe's own element reads. Milo
+    // renders our markup, so nothing would ever read them; the real properties
+    // beside them carry the value.
+    if (cssProp.startsWith(adapt.source)) return null;
+    if (node.raw) {
+      const reasons = [];
+      const raw = String(node.value).replace(/^raw:/, "").replace(/var\((--[a-z][a-z0-9_-]*)[^)]*\)/g, (_, name) => {
+        const { css, reason } = adapt(name);
+        if (reason) reasons.push(reason);
+        return css;
+      });
+      const bare = raw.replace(/var\([^)]*\)/g, "");
+      const why = reasons.length ? reasons.join("; ") : /\d+(?:\.\d+)?px|#[a-f\d]{3,8}|rgba?\(/i.test(bare) ? "hardcoded: contract value, not a token" : null;
+      return `${cssProp}: ${raw};${why ? ` /* ${why} */` : ""}`;
+    }
+    if (!node.tokens?.length) return null;
+    const adapted = node.tokens.map((t) => adapt(t.cssVar));
+    const reasons = adapted.map((a) => a.reason).filter(Boolean);
+    return `${cssProp}: ${adapted.map((a) => a.css).join(" ")};${reasons.length ? ` /* ${reasons.join("; ")} */` : ""}`;
+  }
   if (node.raw) {
     // semanticLiteral rewrites a bare 8px into var(--s2a-border-radius-xs).
     // That is our scale, so it is only ever right for our own components. On a
@@ -99,8 +122,8 @@ const block = (selector, decls) => {
 const STROKE_VAR = { "border-width": "bw", "border-color": "bc" };
 const nsOf = (sel) => sel.replace(/^\./, "").replace(/[^\w-]+/g, "-");
 
-const declsOf = (map, ns = null, system = "s2a") => Object.entries(map ?? {}).map(([p, n]) =>
-  declaration(ns && STROKE_VAR[p] ? `--${ns}-${STROKE_VAR[p]}` : p, n, system));
+const declsOf = (map, ns = null, system = "s2a", adapt = null) => Object.entries(map ?? {}).map(([p, n]) =>
+  declaration(ns && STROKE_VAR[p] ? `--${ns}-${STROKE_VAR[p]}` : p, n, system, adapt));
 
 /** Every token map a part can carry, flattened — for "does it stroke at all?". */
 const allMaps = (part) => [
@@ -109,6 +132,7 @@ const allMaps = (part) => [
   ...(part.tokensByProp ?? []).flatMap((e) => Object.values(e.map)),
   ...(part.statesByProp ?? []).flatMap((e) => Object.values(e.map)),
   ...(part.tokensByCombination ?? []).flatMap((e) => e.rows.map((r) => r.tokens)),
+  ...(part["x-compound"] ?? []).map((r) => r.tokens),
 ].filter(Boolean);
 
 const strokes = (part) => allMaps(part).some((m) => "border-width" in m || "border-color" in m);
@@ -179,7 +203,7 @@ function statePseudo(sel, rootSel, state, archetype = null) {
   let pseudo = PSEUDO[state];
   // A <label> around a native input: the input holds the focus and the
   // disabled flag, and the label reads them through :has().
-  if (archetype === "checkbox / radio" && (pseudo === ":focus-visible" || pseudo === ":disabled")) pseudo = `:has(${pseudo})`;
+  if ((archetype === "checkbox / radio" || archetype === "select / dropdown") && (pseudo === ":focus-visible" || pseudo === ":disabled")) pseudo = `:has(${pseudo})`;
   const forced = FORCED[state] ? `[${STATE_ATTR}="${FORCED[state]}"]` : null;
   const one = (suffix) => {
     if (!rootSel || sel === rootSel) return `${sel}${suffix}`;
@@ -189,12 +213,12 @@ function statePseudo(sel, rootSel, state, archetype = null) {
   return [one(pseudo), forced && one(forced)].filter(Boolean).join(",\n");
 }
 
-export function rulesForPart(part, sel, variant, rootSel = sel, archetype = null, system = "s2a") {
+export function rulesForPart(part, sel, variant, rootSel = sel, archetype = null, system = "s2a", adapt = null) {
   const rules = [];
   // Archetype floor, then layout, then tokens: what this KIND of thing always
   // needs, how it sits, what it looks like. The contract always wins a conflict.
   const ns = strokes(part) && !ownsShadow(part) ? nsOf(sel) : null;
-  const stated = [...layoutDecls(part.layout), ...declsOf(part.tokens, ns, system)].filter(Boolean);
+  const stated = [...layoutDecls(part.layout), ...declsOf(part.tokens, ns, system, adapt)].filter(Boolean);
   // One shorthand, composed from whatever the cascade has resolved. The
   // fallbacks are the resting truth: no width, and a stroke with no paint
   // renders nothing in Figma, so transparent rather than currentColor.
@@ -214,17 +238,17 @@ export function rulesForPart(part, sel, variant, rootSel = sel, archetype = null
   }
 
   for (const [state, map] of Object.entries(part.states ?? {})) {
-    if (PSEUDO[state]) rules.push(block(statePseudo(sel, rootSel, state, archetype), declsOf(map, ns, system)));
+    if (PSEUDO[state]) rules.push(block(statePseudo(sel, rootSel, state, archetype), declsOf(map, ns, system, adapt)));
   }
   for (const entry of part.tokensByProp ?? []) {
     for (const [value, map] of Object.entries(entry.map)) {
-      rules.push(block(scoped(sel, rootSel, variant, entry.prop, value), declsOf(map, ns, system)));
+      rules.push(block(scoped(sel, rootSel, variant, entry.prop, value), declsOf(map, ns, system, adapt)));
     }
   }
   for (const entry of part.statesByProp ?? []) {
     if (!PSEUDO[entry.state]) continue;
     for (const [value, map] of Object.entries(entry.map)) {
-      rules.push(block(statePseudo(scoped(sel, rootSel, variant, entry.prop, value), variant(rootSel, entry.prop, value), entry.state, archetype), declsOf(map, ns, system)));
+      rules.push(block(statePseudo(scoped(sel, rootSel, variant, entry.prop, value), variant(rootSel, entry.prop, value), entry.state, archetype), declsOf(map, ns, system, adapt)));
     }
   }
   for (const entry of part.tokensByCombination ?? []) {
@@ -242,14 +266,26 @@ export function rulesForPart(part, sel, variant, rootSel = sel, archetype = null
       const s = (!rootSel || sel === rootSel) ? narrowed
         : sel.startsWith(`${rootSel} `) ? `${narrowed}${sel.slice(rootSel.length)}`
         : `${narrowed} ${sel}`;
-      rules.push(block(s, declsOf(row.tokens, ns, system)));
+      rules.push(block(s, declsOf(row.tokens, ns, system, adapt)));
     }
+  }
+  // Compound rules come last. Resting before stateful, and fewer conditions
+  // before more, so a state beats its own resting look and a narrower look beats
+  // a broader one, whatever order the defs list them in.
+  const compound = [...(part["x-compound"] ?? [])].sort((a, b) =>
+    (a.state ? 1 : 0) - (b.state ? 1 : 0) || Object.keys(a.when).length - Object.keys(b.when).length);
+  for (const row of compound) {
+    const root = rootSel ?? sel;
+    const narrowed = Object.entries(row.when).reduce((s, [prop, value]) => variant(s, prop, value), root);
+    const target = sel === root ? narrowed : sel.startsWith(`${root} `) ? `${narrowed}${sel.slice(root.length)}` : `${narrowed} ${sel}`;
+    const selector = row.state ? statePseudo(target, narrowed, row.state, archetype) : target;
+    rules.push(block(selector, declsOf(row.tokens, ns, system, adapt)));
   }
   return rules.filter(Boolean);
 }
 
 /** Walk the flattened IR parts and emit every rule, in document order. */
-export function stylesheet(ir, { selectorFor, variant, header = [] }) {
+export function stylesheet(ir, { selectorFor, variant, header = [], adapt = null }) {
   const out = [...header];
   const rootPart = ir.anatomy.parts.find((p) => p.name === "root");
   const rootSelector = rootPart ? selectorFor(rootPart) : null;
@@ -263,7 +299,7 @@ ${rootSelector}[hidden] {
   for (const part of ir.anatomy.parts) {
     const sel = selectorFor(part);
     if (!sel) continue;
-    const rules = rulesForPart(part, sel, variant, rootSelector, ir.component?.archetype ?? null, ir.component?.system ?? "s2a");
+    const rules = rulesForPart(part, sel, variant, rootSelector, ir.component?.archetype ?? null, ir.component?.system ?? "s2a", adapt);
     if (rules.length) out.push(rules.join("\n\n"));
   }
   // A disclosure's region opens and closes by animating its grid row from 0fr

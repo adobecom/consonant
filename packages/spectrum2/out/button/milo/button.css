@@ -1,0 +1,654 @@
+/* Button — atom, generated from button.contract.json.
+ * Applied by decorateButton() to the element the author wrote.
+ * Re-run: npm run specs:render -- --slug=button --target=milo --system=spectrum */
+
+.s2a-button [hidden],
+.s2a-button[hidden] {
+  display: none !important;
+}
+
+.s2a-button {
+  box-sizing: border-box;
+  border: 0;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  white-space: nowrap;
+  position: relative;
+  min-width: 0;
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-block-size: var(--s2-component-height-100);
+  font-size: var(--s2-font-size-100);
+  font-weight: var(--s2-bold-font-weight);
+  font-family: var(--s2-sans-font-family-stack);
+  padding-inline: var(--s2-base-padding-horizontal-medium);
+  padding-block: var(--s2-base-padding-vertical-medium);
+  gap: var(--s2-base-gap-medium);
+  --s2a-button-bw: var(--s2-border-width-200);
+  border-radius: var(--s2-button-corner-radius-m);
+  background-color: var(--s2-neutral-background-color-default);
+  color: var(--s2-gray-25);
+  line-height: var(--s2-line-height-font-size-100);
+  box-shadow: inset 0 0 0 var(--s2a-button-bw, 0) var(--s2a-button-bc, transparent);
+}
+
+.s2a-button:hover,
+.s2a-button[data-state="hover"] {
+  background-color: var(--s2-neutral-background-color-hover);
+  color: var(--s2-gray-25);
+}
+
+.s2a-button:active,
+.s2a-button[data-state="active"] {
+  background-color: var(--s2-neutral-background-color-down);
+  color: var(--s2-gray-25);
+}
+
+.s2a-button:focus-visible,
+.s2a-button[data-state="focus"] {
+  outline-color: var(--s2-focus-indicator-color);
+  outline-width: var(--s2-focus-indicator-thickness);
+  outline-style: solid;
+  outline-offset: var(--s2-border-width-200);
+}
+
+.s2a-button:disabled,
+.s2a-button[data-state="disabled"] {
+  background-color: var(--s2-disabled-background-color);
+  color: var(--s2-disabled-content-color);
+}
+
+.s2a-button.s {
+  min-block-size: var(--s2-component-height-75);
+  font-size: var(--s2-font-size-75);
+  padding-inline: var(--s2-base-padding-horizontal-small);
+  padding-block: var(--s2-base-padding-vertical-small);
+  gap: var(--s2-base-gap-small);
+  border-radius: var(--s2-button-corner-radius-s);
+  line-height: var(--s2-line-height-font-size-75);
+}
+
+.s2a-button.m {
+  min-block-size: var(--s2-component-height-100);
+  font-size: var(--s2-font-size-100);
+  padding-inline: var(--s2-base-padding-horizontal-medium);
+  padding-block: var(--s2-base-padding-vertical-medium);
+  gap: var(--s2-base-gap-medium);
+  border-radius: var(--s2-button-corner-radius-m);
+  line-height: var(--s2-line-height-font-size-100);
+}
+
+.s2a-button.l {
+  min-block-size: var(--s2-component-height-200);
+  font-size: var(--s2-font-size-200);
+  padding-inline: var(--s2-base-padding-horizontal-large);
+  padding-block: var(--s2-base-padding-vertical-large);
+  gap: var(--s2-base-gap-large);
+  border-radius: var(--s2-button-corner-radius-l);
+  line-height: var(--s2-line-height-font-size-200);
+}
+
+.s2a-button.xl {
+  min-block-size: var(--s2-component-height-300);
+  font-size: var(--s2-font-size-300);
+  padding-inline: var(--s2-base-padding-horizontal-extra-large);
+  padding-block: var(--s2-base-padding-vertical-extra-large);
+  gap: var(--s2-base-gap-extra-large);
+  border-radius: var(--s2-button-corner-radius-xl);
+  line-height: var(--s2-line-height-font-size-300);
+}
+
+.s2a-button.accent {
+  background-color: var(--s2-accent-background-color-default);
+  color: var(--s2-transparent-static-white-1000);
+}
+
+.s2a-button.negative {
+  background-color: var(--s2-negative-background-color-default);
+  color: var(--s2-transparent-static-white-1000);
+}
+
+.s2a-button.primary {
+  background-color: var(--s2-neutral-background-color-default);
+  color: var(--s2-gray-25);
+}
+
+.s2a-button.secondary {
+  background-color: var(--s2-gray-100);
+  color: var(--s2-gray-800);
+}
+
+.s2a-button.outline {
+  background-color: transparent;
+  --s2a-button-bc: var(--s2-gray-800);
+}
+
+.s2a-button.accent:hover,
+.s2a-button.accent[data-state="hover"] {
+  color: var(--s2-transparent-static-white-1000);
+}
+
+.s2a-button.negative:hover,
+.s2a-button.negative[data-state="hover"] {
+  color: var(--s2-transparent-static-white-1000);
+}
+
+.s2a-button.accent:active,
+.s2a-button.accent[data-state="active"] {
+  color: var(--s2-transparent-static-white-1000);
+}
+
+.s2a-button.negative:active,
+.s2a-button.negative[data-state="active"] {
+  color: var(--s2-transparent-static-white-1000);
+}
+
+.s2a-button.primary {
+  background-color: var(--s2-gray-800);
+  color: var(--s2-gray-25);
+  --s2a-button-bc: transparent;
+}
+
+.s2a-button.secondary {
+  background-color: var(--s2-gray-100);
+  color: var(--s2-gray-800);
+  --s2a-button-bc: transparent;
+}
+
+.s2a-button.accent {
+  background-color: var(--s2-accent-background-color-default);
+  color: var(--s2-transparent-static-white-1000);
+  --s2a-button-bc: transparent;
+}
+
+.s2a-button.negative {
+  background-color: var(--s2-negative-background-color-default);
+  color: var(--s2-transparent-static-white-1000);
+  --s2a-button-bc: transparent;
+}
+
+.s2a-button.primary.outline {
+  background-color: transparent;
+  color: var(--s2-gray-800);
+  --s2a-button-bc: var(--s2-gray-800);
+}
+
+.s2a-button.primary.white {
+  background-color: var(--s2-transparent-static-white-900);
+  color: var(--s2-transparent-static-black-1000);
+  --s2a-button-bc: transparent;
+}
+
+.s2a-button.primary.black {
+  background-color: var(--s2-transparent-static-black-900);
+  color: var(--s2-transparent-static-white-1000);
+  --s2a-button-bc: transparent;
+}
+
+.s2a-button.secondary.outline {
+  background-color: transparent;
+  color: var(--s2-gray-800);
+  --s2a-button-bc: var(--s2-gray-300);
+}
+
+.s2a-button.secondary.white {
+  background-color: var(--s2-transparent-static-white-200);
+  color: var(--s2-transparent-static-white-900);
+  --s2a-button-bc: transparent;
+}
+
+.s2a-button.secondary.black {
+  background-color: var(--s2-transparent-static-black-150);
+  color: var(--s2-transparent-static-black-900);
+  --s2a-button-bc: transparent;
+}
+
+.s2a-button.primary.outline.white {
+  background-color: var(--s2-transparent-static-white-0);
+  color: var(--s2-transparent-static-white-900);
+  --s2a-button-bc: var(--s2-transparent-static-white-900);
+}
+
+.s2a-button.primary.outline.black {
+  background-color: var(--s2-transparent-static-black-0);
+  color: var(--s2-transparent-static-black-900);
+  --s2a-button-bc: var(--s2-transparent-static-black-900);
+}
+
+.s2a-button.secondary.outline.white {
+  background-color: var(--s2-transparent-static-white-0);
+  color: var(--s2-transparent-static-white-900);
+  --s2a-button-bc: var(--s2-transparent-static-white-300);
+}
+
+.s2a-button.secondary.outline.black {
+  background-color: var(--s2-transparent-static-black-0);
+  color: var(--s2-transparent-static-black-900);
+  --s2a-button-bc: var(--s2-transparent-static-black-300);
+}
+
+.s2a-button.primary:hover,
+.s2a-button.primary[data-state="hover"] {
+  background-color: var(--s2-gray-900);
+  color: var(--s2-gray-25);
+  --s2a-button-bc: transparent;
+}
+
+.s2a-button.primary:active,
+.s2a-button.primary[data-state="active"] {
+  background-color: var(--s2-gray-900);
+  color: var(--s2-gray-25);
+  --s2a-button-bc: transparent;
+}
+
+.s2a-button.primary:focus-visible,
+.s2a-button.primary[data-state="focus"] {
+  background-color: var(--s2-gray-900);
+  color: var(--s2-gray-25);
+  --s2a-button-bc: transparent;
+}
+
+.s2a-button.primary:disabled,
+.s2a-button.primary[data-state="disabled"] {
+  background-color: var(--s2-gray-100);
+  color: var(--s2-gray-400);
+  --s2a-button-bc: transparent;
+}
+
+.s2a-button.secondary:hover,
+.s2a-button.secondary[data-state="hover"] {
+  background-color: var(--s2-gray-200);
+  color: var(--s2-gray-900);
+  --s2a-button-bc: transparent;
+}
+
+.s2a-button.secondary:active,
+.s2a-button.secondary[data-state="active"] {
+  background-color: var(--s2-gray-200);
+  color: var(--s2-gray-900);
+  --s2a-button-bc: transparent;
+}
+
+.s2a-button.secondary:focus-visible,
+.s2a-button.secondary[data-state="focus"] {
+  background-color: var(--s2-gray-200);
+  color: var(--s2-gray-900);
+  --s2a-button-bc: transparent;
+}
+
+.s2a-button.secondary:disabled,
+.s2a-button.secondary[data-state="disabled"] {
+  background-color: var(--s2-gray-100);
+  color: var(--s2-gray-400);
+  --s2a-button-bc: transparent;
+}
+
+.s2a-button.accent:hover,
+.s2a-button.accent[data-state="hover"] {
+  background-color: var(--s2-accent-background-color-hover);
+  color: var(--s2-transparent-static-white-1000);
+  --s2a-button-bc: transparent;
+}
+
+.s2a-button.accent:active,
+.s2a-button.accent[data-state="active"] {
+  background-color: var(--s2-accent-background-color-down);
+  color: var(--s2-transparent-static-white-1000);
+  --s2a-button-bc: transparent;
+}
+
+.s2a-button.accent:focus-visible,
+.s2a-button.accent[data-state="focus"] {
+  background-color: var(--s2-accent-background-color-key-focus);
+  color: var(--s2-transparent-static-white-1000);
+  --s2a-button-bc: transparent;
+}
+
+.s2a-button.accent:disabled,
+.s2a-button.accent[data-state="disabled"] {
+  background-color: var(--s2-gray-100);
+  color: var(--s2-gray-400);
+  --s2a-button-bc: transparent;
+}
+
+.s2a-button.negative:hover,
+.s2a-button.negative[data-state="hover"] {
+  background-color: var(--s2-negative-background-color-hover);
+  color: var(--s2-transparent-static-white-1000);
+  --s2a-button-bc: transparent;
+}
+
+.s2a-button.negative:active,
+.s2a-button.negative[data-state="active"] {
+  background-color: var(--s2-negative-background-color-down);
+  color: var(--s2-transparent-static-white-1000);
+  --s2a-button-bc: transparent;
+}
+
+.s2a-button.negative:focus-visible,
+.s2a-button.negative[data-state="focus"] {
+  background-color: var(--s2-negative-background-color-key-focus);
+  color: var(--s2-transparent-static-white-1000);
+  --s2a-button-bc: transparent;
+}
+
+.s2a-button.negative:disabled,
+.s2a-button.negative[data-state="disabled"] {
+  background-color: var(--s2-gray-100);
+  color: var(--s2-gray-400);
+  --s2a-button-bc: transparent;
+}
+
+.s2a-button.primary.outline:hover,
+.s2a-button.primary.outline[data-state="hover"] {
+  background-color: var(--s2-gray-100);
+  color: var(--s2-gray-900);
+  --s2a-button-bc: var(--s2-gray-900);
+}
+
+.s2a-button.primary.outline:active,
+.s2a-button.primary.outline[data-state="active"] {
+  background-color: var(--s2-gray-100);
+  color: var(--s2-gray-900);
+  --s2a-button-bc: var(--s2-gray-900);
+}
+
+.s2a-button.primary.outline:focus-visible,
+.s2a-button.primary.outline[data-state="focus"] {
+  background-color: var(--s2-gray-100);
+  color: var(--s2-gray-900);
+  --s2a-button-bc: var(--s2-gray-900);
+}
+
+.s2a-button.primary.outline:disabled,
+.s2a-button.primary.outline[data-state="disabled"] {
+  background-color: transparent;
+  color: var(--s2-gray-400);
+  --s2a-button-bc: var(--s2-gray-300);
+}
+
+.s2a-button.primary.white:hover,
+.s2a-button.primary.white[data-state="hover"] {
+  background-color: var(--s2-transparent-static-white-950);
+  color: var(--s2-transparent-static-black-1000);
+  --s2a-button-bc: transparent;
+}
+
+.s2a-button.primary.white:active,
+.s2a-button.primary.white[data-state="active"] {
+  background-color: var(--s2-transparent-static-white-950);
+  color: var(--s2-transparent-static-black-1000);
+  --s2a-button-bc: transparent;
+}
+
+.s2a-button.primary.white:focus-visible,
+.s2a-button.primary.white[data-state="focus"] {
+  background-color: var(--s2-transparent-static-white-950);
+  color: var(--s2-transparent-static-black-1000);
+  --s2a-button-bc: transparent;
+  outline-color: var(--s2-transparent-static-white-1000);
+}
+
+.s2a-button.primary.white:disabled,
+.s2a-button.primary.white[data-state="disabled"] {
+  background-color: var(--s2-transparent-static-white-200);
+  color: var(--s2-transparent-static-white-350);
+  --s2a-button-bc: transparent;
+}
+
+.s2a-button.primary.black:hover,
+.s2a-button.primary.black[data-state="hover"] {
+  background-color: var(--s2-transparent-static-black-950);
+  color: var(--s2-transparent-static-white-1000);
+  --s2a-button-bc: transparent;
+}
+
+.s2a-button.primary.black:active,
+.s2a-button.primary.black[data-state="active"] {
+  background-color: var(--s2-transparent-static-black-950);
+  color: var(--s2-transparent-static-white-1000);
+  --s2a-button-bc: transparent;
+}
+
+.s2a-button.primary.black:focus-visible,
+.s2a-button.primary.black[data-state="focus"] {
+  background-color: var(--s2-transparent-static-black-950);
+  color: var(--s2-transparent-static-white-1000);
+  --s2a-button-bc: transparent;
+  outline-color: var(--s2-transparent-static-black-1000);
+}
+
+.s2a-button.primary.black:disabled,
+.s2a-button.primary.black[data-state="disabled"] {
+  background-color: var(--s2-transparent-static-black-150);
+  color: var(--s2-transparent-static-black-400);
+  --s2a-button-bc: transparent;
+}
+
+.s2a-button.secondary.outline:hover,
+.s2a-button.secondary.outline[data-state="hover"] {
+  background-color: var(--s2-gray-100);
+  color: var(--s2-gray-900);
+  --s2a-button-bc: var(--s2-gray-400);
+}
+
+.s2a-button.secondary.outline:active,
+.s2a-button.secondary.outline[data-state="active"] {
+  background-color: var(--s2-gray-100);
+  color: var(--s2-gray-900);
+  --s2a-button-bc: var(--s2-gray-400);
+}
+
+.s2a-button.secondary.outline:focus-visible,
+.s2a-button.secondary.outline[data-state="focus"] {
+  background-color: var(--s2-gray-100);
+  color: var(--s2-gray-900);
+  --s2a-button-bc: var(--s2-gray-400);
+}
+
+.s2a-button.secondary.outline:disabled,
+.s2a-button.secondary.outline[data-state="disabled"] {
+  background-color: transparent;
+  color: var(--s2-gray-400);
+  --s2a-button-bc: var(--s2-gray-300);
+}
+
+.s2a-button.secondary.white:hover,
+.s2a-button.secondary.white[data-state="hover"] {
+  background-color: var(--s2-transparent-static-white-300);
+  color: var(--s2-transparent-static-white-950);
+  --s2a-button-bc: transparent;
+}
+
+.s2a-button.secondary.white:active,
+.s2a-button.secondary.white[data-state="active"] {
+  background-color: var(--s2-transparent-static-white-300);
+  color: var(--s2-transparent-static-white-950);
+  --s2a-button-bc: transparent;
+}
+
+.s2a-button.secondary.white:focus-visible,
+.s2a-button.secondary.white[data-state="focus"] {
+  background-color: var(--s2-transparent-static-white-300);
+  color: var(--s2-transparent-static-white-950);
+  --s2a-button-bc: transparent;
+  outline-color: var(--s2-transparent-static-white-1000);
+}
+
+.s2a-button.secondary.white:disabled,
+.s2a-button.secondary.white[data-state="disabled"] {
+  background-color: var(--s2-transparent-static-white-200);
+  color: var(--s2-transparent-static-white-350);
+  --s2a-button-bc: transparent;
+}
+
+.s2a-button.secondary.black:hover,
+.s2a-button.secondary.black[data-state="hover"] {
+  background-color: var(--s2-transparent-static-black-200);
+  color: var(--s2-transparent-static-black-950);
+  --s2a-button-bc: transparent;
+}
+
+.s2a-button.secondary.black:active,
+.s2a-button.secondary.black[data-state="active"] {
+  background-color: var(--s2-transparent-static-black-200);
+  color: var(--s2-transparent-static-black-950);
+  --s2a-button-bc: transparent;
+}
+
+.s2a-button.secondary.black:focus-visible,
+.s2a-button.secondary.black[data-state="focus"] {
+  background-color: var(--s2-transparent-static-black-200);
+  color: var(--s2-transparent-static-black-950);
+  --s2a-button-bc: transparent;
+  outline-color: var(--s2-transparent-static-black-1000);
+}
+
+.s2a-button.secondary.black:disabled,
+.s2a-button.secondary.black[data-state="disabled"] {
+  background-color: var(--s2-transparent-static-black-150);
+  color: var(--s2-transparent-static-black-400);
+  --s2a-button-bc: transparent;
+}
+
+.s2a-button.primary.outline.white:hover,
+.s2a-button.primary.outline.white[data-state="hover"] {
+  background-color: var(--s2-transparent-static-white-200);
+  color: var(--s2-transparent-static-white-950);
+  --s2a-button-bc: var(--s2-transparent-static-white-950);
+}
+
+.s2a-button.primary.outline.white:active,
+.s2a-button.primary.outline.white[data-state="active"] {
+  background-color: var(--s2-transparent-static-white-200);
+  color: var(--s2-transparent-static-white-950);
+  --s2a-button-bc: var(--s2-transparent-static-white-950);
+}
+
+.s2a-button.primary.outline.white:focus-visible,
+.s2a-button.primary.outline.white[data-state="focus"] {
+  background-color: var(--s2-transparent-static-white-200);
+  color: var(--s2-transparent-static-white-950);
+  --s2a-button-bc: var(--s2-transparent-static-white-950);
+  outline-color: var(--s2-transparent-static-white-1000);
+}
+
+.s2a-button.primary.outline.white:disabled,
+.s2a-button.primary.outline.white[data-state="disabled"] {
+  background-color: var(--s2-transparent-static-white-0);
+  color: var(--s2-transparent-static-white-350);
+  --s2a-button-bc: var(--s2-transparent-static-white-300);
+}
+
+.s2a-button.primary.outline.black:hover,
+.s2a-button.primary.outline.black[data-state="hover"] {
+  background-color: var(--s2-transparent-static-black-150);
+  color: var(--s2-transparent-static-black-950);
+  --s2a-button-bc: var(--s2-transparent-static-black-950);
+}
+
+.s2a-button.primary.outline.black:active,
+.s2a-button.primary.outline.black[data-state="active"] {
+  background-color: var(--s2-transparent-static-black-150);
+  color: var(--s2-transparent-static-black-950);
+  --s2a-button-bc: var(--s2-transparent-static-black-950);
+}
+
+.s2a-button.primary.outline.black:focus-visible,
+.s2a-button.primary.outline.black[data-state="focus"] {
+  background-color: var(--s2-transparent-static-black-150);
+  color: var(--s2-transparent-static-black-950);
+  --s2a-button-bc: var(--s2-transparent-static-black-950);
+  outline-color: var(--s2-transparent-static-black-1000);
+}
+
+.s2a-button.primary.outline.black:disabled,
+.s2a-button.primary.outline.black[data-state="disabled"] {
+  background-color: var(--s2-transparent-static-black-0);
+  color: var(--s2-transparent-static-black-400);
+  --s2a-button-bc: var(--s2-transparent-static-black-300);
+}
+
+.s2a-button.secondary.outline.white:hover,
+.s2a-button.secondary.outline.white[data-state="hover"] {
+  background-color: var(--s2-transparent-static-white-200);
+  color: var(--s2-transparent-static-white-950);
+  --s2a-button-bc: var(--s2-transparent-static-white-350);
+}
+
+.s2a-button.secondary.outline.white:active,
+.s2a-button.secondary.outline.white[data-state="active"] {
+  background-color: var(--s2-transparent-static-white-200);
+  color: var(--s2-transparent-static-white-950);
+  --s2a-button-bc: var(--s2-transparent-static-white-350);
+}
+
+.s2a-button.secondary.outline.white:focus-visible,
+.s2a-button.secondary.outline.white[data-state="focus"] {
+  background-color: var(--s2-transparent-static-white-200);
+  color: var(--s2-transparent-static-white-950);
+  --s2a-button-bc: var(--s2-transparent-static-white-350);
+  outline-color: var(--s2-transparent-static-white-1000);
+}
+
+.s2a-button.secondary.outline.white:disabled,
+.s2a-button.secondary.outline.white[data-state="disabled"] {
+  background-color: var(--s2-transparent-static-white-0);
+  color: var(--s2-transparent-static-white-350);
+  --s2a-button-bc: var(--s2-transparent-static-white-300);
+}
+
+.s2a-button.secondary.outline.black:hover,
+.s2a-button.secondary.outline.black[data-state="hover"] {
+  background-color: var(--s2-transparent-static-black-150);
+  color: var(--s2-transparent-static-black-950);
+  --s2a-button-bc: var(--s2-transparent-static-black-400);
+}
+
+.s2a-button.secondary.outline.black:active,
+.s2a-button.secondary.outline.black[data-state="active"] {
+  background-color: var(--s2-transparent-static-black-150);
+  color: var(--s2-transparent-static-black-950);
+  --s2a-button-bc: var(--s2-transparent-static-black-400);
+}
+
+.s2a-button.secondary.outline.black:focus-visible,
+.s2a-button.secondary.outline.black[data-state="focus"] {
+  background-color: var(--s2-transparent-static-black-150);
+  color: var(--s2-transparent-static-black-950);
+  --s2a-button-bc: var(--s2-transparent-static-black-400);
+  outline-color: var(--s2-transparent-static-black-1000);
+}
+
+.s2a-button.secondary.outline.black:disabled,
+.s2a-button.secondary.outline.black[data-state="disabled"] {
+  background-color: var(--s2-transparent-static-black-0);
+  color: var(--s2-transparent-static-black-400);
+  --s2a-button-bc: var(--s2-transparent-static-black-300);
+}
+
+.s2a-button .icon {
+  --iconPrimary: currentColor;
+}
+
+.s2a-button .icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.s2a-button .icon > svg,
+.s2a-button .icon > [data-open-state] > svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.s2a-button .label {
+  display: inline-flex;
+  align-items: center;
+  min-width: 0;
+}

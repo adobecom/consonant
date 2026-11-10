@@ -1,0 +1,46 @@
+{
+  "$comment": "Shared Button Group bindings, used by every theme. Button Group styles nothing but the gap between buttons, as raw pixels.",
+  "component": "button-group",
+  "bindings": [
+    {
+      "where": {},
+      "prop": "row-gap",
+      "token": "theme-button-group-gap",
+      "reason": "Shipped code has no token for the gap."
+    },
+    {
+      "where": {},
+      "prop": "column-gap",
+      "token": "theme-button-group-gap",
+      "reason": "Same gap both ways."
+    },
+    {
+      "where": {
+        "size": "s"
+      },
+      "prop": "row-gap",
+      "token": "theme-button-group-gap-s",
+      "reason": "Smaller gap at size S."
+    },
+    {
+      "where": {
+        "size": "s"
+      },
+      "prop": "column-gap",
+      "token": "theme-button-group-gap-s",
+      "reason": "Same gap both ways."
+    }
+  ],
+  "defaults": [
+    {
+      "name": "theme-button-group-gap",
+      "value": "12px",
+      "reason": "Spectrum's gap. Default; a theme overrides it to change this."
+    },
+    {
+      "name": "theme-button-group-gap-s",
+      "value": "8px",
+      "reason": "Spectrum's size S gap. Default; a theme overrides it to change this."
+    }
+  ]
+}

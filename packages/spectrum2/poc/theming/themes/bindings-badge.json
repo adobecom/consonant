@@ -1,0 +1,203 @@
+{
+  "$comment": "Shared Badge bindings, used by every theme. Badge's colours already bind to semantic tokens, so a theme's token overrides reach them with no binding. These cover what Badge binds outside the semantic layer: the font stack and the corner radius at each size. Defaults: each role token starts at Spectrum's own value, so a theme lists only what it changes.",
+  "component": "badge",
+  "bindings": [
+    {
+      "where": {},
+      "prop": "font-family",
+      "token": "default-font-family",
+      "reason": "Badge binds sans-font-family-stack, which a theme cannot change without changing every component. default-font-family is the role token Button already uses."
+    },
+    {
+      "where": {
+        "size": "s"
+      },
+      "prop": "border-radius",
+      "token": "theme-badge-radius-s",
+      "reason": "Spectrum binds corner-radius-medium-size-small, used far beyond Badge."
+    },
+    {
+      "where": {
+        "size": "m"
+      },
+      "prop": "border-radius",
+      "token": "theme-badge-radius-m",
+      "reason": "Same reach problem, size M."
+    },
+    {
+      "where": {
+        "size": "l"
+      },
+      "prop": "border-radius",
+      "token": "theme-badge-radius-l",
+      "reason": "Same reach problem, size L."
+    },
+    {
+      "where": {
+        "size": "xl"
+      },
+      "prop": "border-radius",
+      "token": "theme-badge-radius-xl",
+      "reason": "Same reach problem, size XL."
+    },
+    {
+      "where": {},
+      "prop": "font-weight",
+      "token": "theme-badge-font-weight",
+      "reason": "Type stress test: lets a theme set weight. Spectrum binds a weight token used far beyond this component."
+    },
+    {
+      "where": {},
+      "prop": "letter-spacing",
+      "token": "theme-badge-letter-spacing",
+      "reason": "Type stress test: Spectrum sets no letter spacing here, so this adds the property."
+    },
+    {
+      "where": {},
+      "prop": "text-transform",
+      "token": "theme-badge-text-transform",
+      "reason": "Type stress test: Spectrum sets no text transform here, so this adds the property."
+    },
+    {
+      "where": {
+        "size": "s"
+      },
+      "prop": "font-size",
+      "token": "theme-badge-font-size-s",
+      "reason": "Type stress test: font size at S. Spectrum's font-size scale is used by every component."
+    },
+    {
+      "where": {
+        "size": "s"
+      },
+      "prop": "line-height",
+      "token": "theme-badge-line-height-s",
+      "reason": "Type stress test: line height at S, so a bigger font does not clip."
+    },
+    {
+      "where": {
+        "size": "m"
+      },
+      "prop": "font-size",
+      "token": "theme-badge-font-size-m",
+      "reason": "Type stress test: font size at M. Spectrum's font-size scale is used by every component."
+    },
+    {
+      "where": {
+        "size": "m"
+      },
+      "prop": "line-height",
+      "token": "theme-badge-line-height-m",
+      "reason": "Type stress test: line height at M, so a bigger font does not clip."
+    },
+    {
+      "where": {
+        "size": "l"
+      },
+      "prop": "font-size",
+      "token": "theme-badge-font-size-l",
+      "reason": "Type stress test: font size at L. Spectrum's font-size scale is used by every component."
+    },
+    {
+      "where": {
+        "size": "l"
+      },
+      "prop": "line-height",
+      "token": "theme-badge-line-height-l",
+      "reason": "Type stress test: line height at L, so a bigger font does not clip."
+    },
+    {
+      "where": {
+        "size": "xl"
+      },
+      "prop": "font-size",
+      "token": "theme-badge-font-size-xl",
+      "reason": "Type stress test: font size at XL. Spectrum's font-size scale is used by every component."
+    },
+    {
+      "where": {
+        "size": "xl"
+      },
+      "prop": "line-height",
+      "token": "theme-badge-line-height-xl",
+      "reason": "Type stress test: line height at XL, so a bigger font does not clip."
+    }
+  ],
+  "defaults": [
+    {
+      "name": "theme-badge-radius-s",
+      "ref": "corner-radius-medium-size-small",
+      "reason": "Badge size S keeps Spectrum's radius. Default; a theme overrides it to change this."
+    },
+    {
+      "name": "theme-badge-radius-m",
+      "ref": "corner-radius-medium-size-medium",
+      "reason": "Badge size M keeps Spectrum's radius. Default; a theme overrides it to change this."
+    },
+    {
+      "name": "theme-badge-radius-l",
+      "ref": "corner-radius-medium-size-large",
+      "reason": "Badge size L keeps Spectrum's radius. Default; a theme overrides it to change this."
+    },
+    {
+      "name": "theme-badge-radius-xl",
+      "ref": "corner-radius-medium-size-extra-large",
+      "reason": "Badge size XL keeps Spectrum's radius. Default; a theme overrides it to change this."
+    },
+    {
+      "name": "theme-badge-font-weight",
+      "ref": "medium-font-weight",
+      "reason": "Spectrum's Spectrum's weight."
+    },
+    {
+      "name": "theme-badge-letter-spacing",
+      "value": "normal",
+      "reason": "Spectrum sets none."
+    },
+    {
+      "name": "theme-badge-text-transform",
+      "value": "none",
+      "reason": "Spectrum sets none."
+    },
+    {
+      "name": "theme-badge-font-size-s",
+      "ref": "font-size-75",
+      "reason": "Spectrum's Spectrum's size S."
+    },
+    {
+      "name": "theme-badge-line-height-s",
+      "ref": "line-height-font-size-75",
+      "reason": "Spectrum's Spectrum's line height S."
+    },
+    {
+      "name": "theme-badge-font-size-m",
+      "ref": "font-size-100",
+      "reason": "Spectrum's Spectrum's size M."
+    },
+    {
+      "name": "theme-badge-line-height-m",
+      "ref": "line-height-font-size-100",
+      "reason": "Spectrum's Spectrum's line height M."
+    },
+    {
+      "name": "theme-badge-font-size-l",
+      "ref": "font-size-200",
+      "reason": "Spectrum's Spectrum's size L."
+    },
+    {
+      "name": "theme-badge-line-height-l",
+      "ref": "line-height-font-size-200",
+      "reason": "Spectrum's Spectrum's line height L."
+    },
+    {
+      "name": "theme-badge-font-size-xl",
+      "ref": "font-size-300",
+      "reason": "Spectrum's Spectrum's size XL."
+    },
+    {
+      "name": "theme-badge-line-height-xl",
+      "ref": "line-height-font-size-300",
+      "reason": "Spectrum's Spectrum's line height XL."
+    }
+  ]
+}

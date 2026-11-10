@@ -56,6 +56,18 @@ const specByName = new Map([...specs.values()].map((s) => [String(s.name).toLowe
 const shipped = new Set();
 if (existsSync(TOKENS_DIR)) for (const f of readdirSync(TOKENS_DIR)) for (const m of readFileSync(join(TOKENS_DIR, f), "utf8").matchAll(new RegExp(`(--${NS}-[a-z0-9_-]+)\\s*:`, "g"))) shipped.add(m[1]);
 const toVar = (ref) => "--" + ref.slice(1, -1).replace(/\./g, "-");
+// Another system's stylesheet can flatten a token to its value, and copying that
+// into a contract loses the binding. Only those systems: our own literals have
+// their own rule, and the gate relies on it.
+const squash = (v) => String(v).replace(/\s+/g, "").replace(/,\./g, ",0.").toLowerCase();
+const valueIndex = new Map();
+if (NS !== "s2a" && existsSync(TOKENS_DIR)) for (const f of readdirSync(TOKENS_DIR)) {
+  for (const m of readFileSync(join(TOKENS_DIR, f), "utf8").matchAll(/(--[a-z][a-z0-9-]*)\s*:\s*([^;]+);/g)) {
+    const key = squash(m[2]);
+    if (!valueIndex.has(key)) valueIndex.set(key, m[1]);
+  }
+}
+const tokenWithValue = (value) => valueIndex.get(squash(value)) ?? null;
 
 function walkParts(part, path, out) {
   out.push({ path, part });
@@ -144,6 +156,7 @@ for (const slug of slugs) {
       for (const e of part.tokensByProp ?? []) for (const [val, m] of Object.entries(e.map ?? {})) maps.push([`@${e.prop}=${val}`, m]);
       for (const e of part.statesByProp ?? []) for (const [val, m] of Object.entries(e.map ?? {})) maps.push([`@${e.prop}=${val}:${e.state}`, m]);
       for (const e of part.tokensByCombination ?? []) for (const r of e.rows ?? []) maps.push([`@${(e.props ?? []).map((p, i) => `${p}=${r.values?.[i] ?? "*"}`).join(",")}`, r.tokens]);
+      for (const r of part["x-compound"] ?? []) maps.push([`@${Object.entries(r.when ?? {}).map(([k, v]) => `${k}=${v}`).join(",")}${r.state ? `:${r.state}` : ""}`, r.tokens]);
       for (const [where, map] of maps) {
         for (const [prop, ref] of Object.entries(map ?? {})) {
           for (const m of ref.matchAll(REF)) {
@@ -162,7 +175,10 @@ for (const slug of slugs) {
           // contracts are told to go bind one in Figma.
           if (ref.startsWith("raw:") && !structural) {
             const { label, fix } = rawValueAdvice(NS);
-            warnings.push(`anatomy ${path} ${prop}${where}: ${ref} is hardcoded — no ${label} variable behind it. ${fix}`);
+            // A colour with an exact token is a missed binding, not a token gap.
+            const match = /^raw:(rgb|#)/.test(ref) ? tokenWithValue(ref.slice(4)) : null;
+            if (match) problems.push(`anatomy ${path} ${prop}${where}: ${ref} is hardcoded, and ${match} has exactly that value. Bind the token.`);
+            else warnings.push(`anatomy ${path} ${prop}${where}: ${ref} is hardcoded, not bound to a ${label} token. ${fix}`);
           }
         }
       }
@@ -273,6 +289,9 @@ for (const slug of slugs) {
       const propNames = new Set((defs.props ?? []).map((p) => p.name));
       for (const e of [...(part.tokensByProp ?? []), ...(part.statesByProp ?? [])]) {
         if (!propNames.has(e.prop)) problems.push(`anatomy ${path}: tokens vary by prop "${e.prop}", which is not in props[]`);
+      }
+      for (const r of part["x-compound"] ?? []) for (const n of Object.keys(r.when ?? {})) {
+        if (!propNames.has(n)) problems.push(`anatomy ${path}: x-compound names prop "${n}" which is not declared`);
       }
       for (const e of part.tokensByCombination ?? []) for (const n of e.props ?? []) {
         if (!propNames.has(n)) problems.push(`anatomy ${path}: tokensByCombination names prop "${n}", which is not in props[]`);

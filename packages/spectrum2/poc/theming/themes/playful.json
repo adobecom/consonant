@@ -1,0 +1,436 @@
+{
+  "$comment": "Playful theme and type stress test, for evaluation only. Orange primary, purple accent, lime-green focus ring, a heavy display face set bigger, black weight, uppercase and tracked out, and lopsided corners. Values picked by eye, not from a brand guide. It uses the shared bindings files unchanged.",
+  "brand": "playful (evaluation)",
+  "themeVersion": "0.1.0",
+  "foundation": {
+    "npm": "@adobe/spectrum-design-data",
+    "version": "3.8.2"
+  },
+  "shipped": {
+    "npm": "@adobe/spectrum-wc",
+    "version": "2.0.0-beta.6"
+  },
+  "overrides": [
+    {
+      "kind": "alias",
+      "name": "neutral-background-color-default",
+      "to": "play-orange",
+      "reason": "Orange primary fill. The neutral tokens have no light and dark records, so the value lives in a new token that does."
+    },
+    {
+      "kind": "alias",
+      "name": "neutral-background-color-hover",
+      "to": "play-orange-hover",
+      "reason": "Orange hover."
+    },
+    {
+      "kind": "alias",
+      "name": "neutral-background-color-down",
+      "to": "play-orange-down",
+      "reason": "Orange active."
+    },
+    {
+      "kind": "value",
+      "name": "accent-background-color-default",
+      "mode": "light",
+      "value": "rgb(112, 48, 160)",
+      "reason": "Purple accent."
+    },
+    {
+      "kind": "value",
+      "name": "accent-background-color-hover",
+      "mode": "light",
+      "value": "rgb(92, 36, 135)",
+      "reason": "Purple hover."
+    },
+    {
+      "kind": "value",
+      "name": "accent-background-color-down",
+      "mode": "light",
+      "value": "rgb(72, 26, 108)",
+      "reason": "Purple active."
+    },
+    {
+      "kind": "value",
+      "name": "accent-background-color-key-focus",
+      "mode": "light",
+      "value": "rgb(92, 36, 135)",
+      "reason": "Purple focus."
+    },
+    {
+      "kind": "value",
+      "name": "accent-background-color-default",
+      "mode": "dark",
+      "value": "rgb(112, 48, 160)",
+      "reason": "Purple accent."
+    },
+    {
+      "kind": "value",
+      "name": "accent-background-color-hover",
+      "mode": "dark",
+      "value": "rgb(92, 36, 135)",
+      "reason": "Purple hover."
+    },
+    {
+      "kind": "value",
+      "name": "accent-background-color-down",
+      "mode": "dark",
+      "value": "rgb(72, 26, 108)",
+      "reason": "Purple active."
+    },
+    {
+      "kind": "value",
+      "name": "accent-background-color-key-focus",
+      "mode": "dark",
+      "value": "rgb(92, 36, 135)",
+      "reason": "Purple focus."
+    },
+    {
+      "kind": "value",
+      "name": "accent-subtle-background-color-default",
+      "mode": "light",
+      "value": "rgb(238, 226, 250)",
+      "reason": "Lavender for subtle accent surfaces."
+    },
+    {
+      "kind": "value",
+      "name": "accent-subtle-background-color-default",
+      "mode": "dark",
+      "value": "rgb(62, 30, 92)",
+      "reason": "Deep purple for subtle accent surfaces, dark."
+    },
+    {
+      "kind": "value",
+      "name": "accent-visual-color",
+      "mode": "light",
+      "value": "rgb(112, 48, 160)",
+      "reason": "Purple for accent outlines."
+    },
+    {
+      "kind": "value",
+      "name": "accent-visual-color",
+      "mode": "dark",
+      "value": "rgb(196, 160, 255)",
+      "reason": "Light purple for accent outlines, dark."
+    },
+    {
+      "kind": "alias",
+      "name": "focus-indicator-color",
+      "to": "play-lime",
+      "reason": "Lime-green focus ring."
+    },
+    {
+      "kind": "value",
+      "name": "focus-indicator-thickness",
+      "value": "3px",
+      "reason": "A chunkier ring than Spectrum's."
+    },
+    {
+      "kind": "value",
+      "name": "default-font-family",
+      "value": "\"Arial Black\", \"Chalkboard SE\", Impact, sans-serif",
+      "reason": "A loud, heavy display face, as far from Adobe Clean as a common installed font gets. Nothing is loaded."
+    }
+  ],
+  "newTokens": [
+    {
+      "name": "play-orange",
+      "light": "rgb(196, 74, 0)",
+      "dark": "rgb(255, 140, 40)",
+      "reason": "Primary fill. Light is a deeper orange than the bright brand orange so white labels pass 4.5:1."
+    },
+    {
+      "name": "play-orange-hover",
+      "light": "rgb(170, 62, 0)",
+      "dark": "rgb(255, 160, 80)",
+      "reason": "Primary hover."
+    },
+    {
+      "name": "play-orange-down",
+      "light": "rgb(146, 52, 0)",
+      "dark": "rgb(255, 180, 120)",
+      "reason": "Primary active."
+    },
+    {
+      "name": "play-lime",
+      "light": "rgb(64, 132, 0)",
+      "dark": "rgb(170, 232, 60)",
+      "reason": "Focus ring. Light is darkened so the ring passes 3:1 on white."
+    },
+    {
+      "name": "theme-button-padding-inline",
+      "value": "20px",
+      "reason": "Roomy."
+    },
+    {
+      "name": "theme-button-padding-block",
+      "value": "10px",
+      "reason": "Roomy."
+    },
+    {
+      "name": "theme-button-gap",
+      "value": "8px",
+      "reason": "Roomy."
+    },
+    {
+      "name": "theme-button-outline-hover",
+      "light": "rgba(196, 74, 0, 0.10)",
+      "dark": "rgba(255, 140, 40, 0.16)",
+      "reason": "Orange tint on outline hover."
+    },
+    {
+      "name": "theme-button-outline-border",
+      "light": "rgb(196, 74, 0)",
+      "dark": "rgb(255, 140, 40)",
+      "reason": "Orange outline border."
+    },
+    {
+      "name": "theme-button-padding-inline-s",
+      "value": "14px",
+      "reason": "Size S."
+    },
+    {
+      "name": "theme-button-padding-block-s",
+      "value": "6px",
+      "reason": "Size S."
+    },
+    {
+      "name": "theme-button-gap-s",
+      "value": "6px",
+      "reason": "Size S."
+    },
+    {
+      "name": "theme-button-padding-inline-l",
+      "value": "24px",
+      "reason": "Size L."
+    },
+    {
+      "name": "theme-button-padding-block-l",
+      "value": "12px",
+      "reason": "Size L."
+    },
+    {
+      "name": "theme-button-gap-l",
+      "value": "10px",
+      "reason": "Size L."
+    },
+    {
+      "name": "theme-button-padding-inline-xl",
+      "value": "28px",
+      "reason": "Size XL."
+    },
+    {
+      "name": "theme-button-padding-block-xl",
+      "value": "14px",
+      "reason": "Size XL."
+    },
+    {
+      "name": "theme-button-gap-xl",
+      "value": "12px",
+      "reason": "Size XL."
+    },
+    {
+      "name": "theme-button-radius",
+      "value": "22px 6px 22px 6px",
+      "reason": "Lopsided splat corners. Stress: a four-value radius through one token."
+    },
+    {
+      "name": "theme-button-font-weight",
+      "value": "900",
+      "reason": "Black weight."
+    },
+    {
+      "name": "theme-button-letter-spacing",
+      "value": "0.06em",
+      "reason": "Tracked out."
+    },
+    {
+      "name": "theme-button-text-transform",
+      "value": "uppercase",
+      "reason": "All caps."
+    },
+    {
+      "name": "theme-button-font-size-s",
+      "value": "15px",
+      "reason": "Bigger type at S."
+    },
+    {
+      "name": "theme-button-line-height-s",
+      "value": "18px",
+      "reason": "Line height for the bigger type at S."
+    },
+    {
+      "name": "theme-button-font-size-m",
+      "value": "18px",
+      "reason": "Bigger type at M."
+    },
+    {
+      "name": "theme-button-line-height-m",
+      "value": "22px",
+      "reason": "Line height for the bigger type at M."
+    },
+    {
+      "name": "theme-button-font-size-l",
+      "value": "21px",
+      "reason": "Bigger type at L."
+    },
+    {
+      "name": "theme-button-line-height-l",
+      "value": "26px",
+      "reason": "Line height for the bigger type at L."
+    },
+    {
+      "name": "theme-button-font-size-xl",
+      "value": "25px",
+      "reason": "Bigger type at XL."
+    },
+    {
+      "name": "theme-button-line-height-xl",
+      "value": "30px",
+      "reason": "Line height for the bigger type at XL."
+    },
+    {
+      "name": "theme-badge-radius-s",
+      "value": "10px 3px 10px 3px",
+      "reason": "Lopsided badge corners, size S."
+    },
+    {
+      "name": "theme-badge-radius-m",
+      "value": "10px 3px 10px 3px",
+      "reason": "Lopsided badge corners, size M."
+    },
+    {
+      "name": "theme-badge-radius-l",
+      "value": "10px 3px 10px 3px",
+      "reason": "Lopsided badge corners, size L."
+    },
+    {
+      "name": "theme-badge-radius-xl",
+      "value": "10px 3px 10px 3px",
+      "reason": "Lopsided badge corners, size XL."
+    },
+    {
+      "name": "theme-badge-font-weight",
+      "value": "900",
+      "reason": "Black weight."
+    },
+    {
+      "name": "theme-badge-letter-spacing",
+      "value": "0.08em",
+      "reason": "Tracked out."
+    },
+    {
+      "name": "theme-badge-text-transform",
+      "value": "uppercase",
+      "reason": "All caps."
+    },
+    {
+      "name": "theme-badge-font-size-s",
+      "value": "13px",
+      "reason": "Bigger badge type at S."
+    },
+    {
+      "name": "theme-badge-line-height-s",
+      "value": "16px",
+      "reason": "Line height at S."
+    },
+    {
+      "name": "theme-badge-font-size-m",
+      "value": "15px",
+      "reason": "Bigger badge type at M."
+    },
+    {
+      "name": "theme-badge-line-height-m",
+      "value": "18px",
+      "reason": "Line height at M."
+    },
+    {
+      "name": "theme-badge-font-size-l",
+      "value": "17px",
+      "reason": "Bigger badge type at L."
+    },
+    {
+      "name": "theme-badge-line-height-l",
+      "value": "21px",
+      "reason": "Line height at L."
+    },
+    {
+      "name": "theme-badge-font-size-xl",
+      "value": "19px",
+      "reason": "Bigger badge type at XL."
+    },
+    {
+      "name": "theme-badge-line-height-xl",
+      "value": "24px",
+      "reason": "Line height at XL."
+    },
+    {
+      "name": "theme-button-outline-border-hover",
+      "light": "rgb(196, 74, 0)",
+      "dark": "rgb(255, 140, 40)",
+      "reason": "Same orange on hover."
+    },
+    {
+      "name": "theme-avatar-radius",
+      "value": "40% 15% 40% 15%",
+      "reason": "Lopsided avatars to match the buttons."
+    },
+    {
+      "name": "theme-avatar-outline",
+      "light": "rgb(196, 74, 0)",
+      "dark": "rgb(255, 140, 40)",
+      "reason": "Orange ring."
+    },
+    {
+      "name": "theme-divider-color",
+      "light": "rgb(255, 200, 160)",
+      "dark": "rgb(110, 50, 10)",
+      "reason": "Orange-tinted rule."
+    },
+    {
+      "name": "theme-divider-color-strong",
+      "light": "rgb(112, 48, 160)",
+      "dark": "rgb(196, 160, 255)",
+      "reason": "Purple strong rule."
+    },
+    {
+      "name": "theme-divider-thickness-s",
+      "value": "2px",
+      "reason": "Chunkier."
+    },
+    {
+      "name": "theme-divider-thickness-m",
+      "value": "4px",
+      "reason": "Chunkier."
+    },
+    {
+      "name": "theme-divider-thickness-l",
+      "value": "8px",
+      "reason": "Chunkier."
+    },
+    {
+      "name": "theme-button-group-gap",
+      "value": "20px",
+      "reason": "Roomier."
+    },
+    {
+      "name": "theme-button-group-gap-s",
+      "value": "12px",
+      "reason": "Roomier at S."
+    }
+  ],
+  "notApplied": [
+    {
+      "what": "Disabled shown with opacity instead of grey tokens.",
+      "why": "A different mechanism, not a value. No binding can express it."
+    },
+    {
+      "what": "Mobile values.",
+      "why": "None defined. Colours fall through; padding and gap keep one value at every scale."
+    },
+    {
+      "what": "The brand's bright orange as a fill with white text.",
+      "why": "It fails 4.5:1. The light theme uses a deeper orange; the bright one would need a dark label, which needs a label binding."
+    }
+  ]
+}

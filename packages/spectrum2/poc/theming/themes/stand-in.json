@@ -1,0 +1,248 @@
+{
+  "$comment": "Stand-in brand theme: S2A's values under Spectrum's token names. Evaluation only. Every entry says why it exists. Use the first kind that does the job.",
+  "brand": "stand-in",
+  "themeVersion": "0.1.0",
+  "foundation": {
+    "npm": "@adobe/spectrum-design-data",
+    "version": "3.8.2"
+  },
+  "shipped": {
+    "npm": "@adobe/spectrum-wc",
+    "version": "2.0.0-beta.6"
+  },
+  "overrides": [
+    {
+      "kind": "alias",
+      "name": "neutral-background-color-default",
+      "to": "gray-1000",
+      "reason": "S2A's solid button is pure black, and gray-1000 flips to white in dark as S2A does."
+    },
+    {
+      "kind": "alias",
+      "name": "neutral-background-color-down",
+      "to": "gray-1000",
+      "reason": "S2A solid active."
+    },
+    {
+      "kind": "alias",
+      "name": "neutral-background-color-hover",
+      "to": "acom-solid-hover",
+      "reason": "S2A's solid hover is translucent, which no Spectrum step gives in both modes."
+    },
+    {
+      "kind": "value",
+      "name": "accent-background-color-default",
+      "mode": "dark",
+      "value": "rgb(59, 99, 251)",
+      "reason": "S2A keeps blue-900 in both modes."
+    },
+    {
+      "kind": "value",
+      "name": "accent-background-color-hover",
+      "mode": "dark",
+      "value": "rgb(39, 77, 234)",
+      "reason": "S2A keeps blue-1000 in both modes."
+    },
+    {
+      "kind": "alias",
+      "name": "accent-background-color-down",
+      "mode": "light",
+      "to": "acom-blue-1100",
+      "reason": "S2A accent active is a step Spectrum's ramp does not have."
+    },
+    {
+      "kind": "alias",
+      "name": "accent-background-color-down",
+      "mode": "dark",
+      "to": "acom-blue-1100",
+      "reason": "S2A accent active in dark."
+    },
+    {
+      "kind": "alias",
+      "name": "accent-background-color-key-focus",
+      "mode": "light",
+      "to": "acom-blue-1100",
+      "reason": "S2A accent focus uses blue-1100."
+    },
+    {
+      "kind": "alias",
+      "name": "accent-background-color-key-focus",
+      "mode": "dark",
+      "to": "acom-blue-1100",
+      "reason": "S2A accent focus uses blue-1100."
+    },
+    {
+      "kind": "alias",
+      "name": "focus-indicator-color",
+      "to": "acom-focus-ring",
+      "reason": "S2A's focus ring differs from Spectrum's in both modes."
+    },
+    {
+      "kind": "value",
+      "name": "default-font-family",
+      "value": "\"Adobe Clean\", sans-serif",
+      "reason": "adobe.com uses Adobe Clean, not Adobe Clean Spectrum VF. Ends in sans-serif so a device without Adobe Clean gets a sans-serif, not the browser default."
+    }
+  ],
+  "newTokens": [
+    {
+      "name": "acom-solid-hover",
+      "light": "rgba(0, 0, 0, 0.64)",
+      "dark": "rgba(255, 255, 255, 0.64)",
+      "reason": "color/button/background/solid/hover in S2A."
+    },
+    {
+      "name": "acom-blue-1100",
+      "value": "rgb(29, 62, 207)",
+      "reason": "color/blue/1100 in S2A."
+    },
+    {
+      "name": "acom-focus-ring",
+      "light": "rgb(59, 99, 251)",
+      "dark": "rgb(142, 185, 252)",
+      "reason": "color/focus-ring/default in S2A."
+    },
+    {
+      "name": "theme-button-padding-inline",
+      "value": "24px",
+      "reason": "S2A's button is wider than any Spectrum base padding."
+    },
+    {
+      "name": "theme-button-padding-block",
+      "value": "14px",
+      "reason": "S2A's button is taller than Spectrum's medium."
+    },
+    {
+      "name": "theme-button-gap",
+      "value": "8px",
+      "reason": "spacing/xs in S2A."
+    },
+    {
+      "name": "theme-button-outline-hover",
+      "light": "rgba(0, 0, 0, 0.08)",
+      "dark": "rgba(255, 255, 255, 0.12)",
+      "reason": "S2A's outlined hover is translucent and works on any ground."
+    },
+    {
+      "name": "theme-button-outline-border",
+      "ref": "gray-1000",
+      "reason": "S2A outlined border is pure black, white in dark. Role token so other themes can set their own."
+    },
+    {
+      "name": "theme-button-radius",
+      "value": "999px",
+      "reason": "border/radius/999 in S2A. Spectrum derives its pill from the height token, so wider padding breaks it."
+    },
+    {
+      "name": "theme-button-outline-border-hover",
+      "ref": "gray-1000",
+      "reason": "S2A does not change the border on hover."
+    }
+  ],
+  "notApplied": [
+    {
+      "what": "S2A dims a disabled button with opacity 48%. Spectrum swaps to disabled color tokens.",
+      "why": "A different mechanism, not a different value. Needs a design decision, so the stand-in keeps Spectrum's."
+    },
+    {
+      "what": "S2A's outlined active fills solid and flips the label.",
+      "why": "Needs a coordinated pair of bindings. Left out to keep the stand-in small; expressible with two more bindings."
+    },
+    {
+      "what": "S2A has no mobile values for its button.",
+      "why": "Mobile falls through to Spectrum, except the new padding tokens, which are desktop only."
+    }
+  ],
+  "styleMap": {
+    "decision": "Owner, 2026-11-06: map to staticColor for now, check with design.",
+    "map": [
+      {
+        "s2a": "knockout",
+        "spectrum": {
+          "variant": "primary",
+          "staticColor": "white"
+        }
+      },
+      {
+        "s2a": "outline-inverse",
+        "spectrum": {
+          "variant": "primary",
+          "fillStyle": "outline",
+          "staticColor": "white"
+        }
+      }
+    ],
+    "measuredGap": [
+      {
+        "style": "knockout",
+        "state": "default",
+        "prop": "background",
+        "s2a": "#fff",
+        "staticColorWhite": "rgba(255, 255, 255, 0.8)"
+      },
+      {
+        "style": "knockout",
+        "state": "default",
+        "prop": "border",
+        "s2a": "#fff",
+        "staticColorWhite": null
+      },
+      {
+        "style": "knockout",
+        "state": "default",
+        "prop": "label",
+        "s2a": "#000",
+        "staticColorWhite": "rgb(0, 0, 0)"
+      },
+      {
+        "style": "knockout",
+        "state": "hover",
+        "prop": "background",
+        "s2a": "#f8f8f8",
+        "staticColorWhite": null
+      },
+      {
+        "style": "knockout",
+        "state": "active",
+        "prop": "background",
+        "s2a": "#e9e9e9",
+        "staticColorWhite": null
+      },
+      {
+        "style": "outline-inverse",
+        "state": "default",
+        "prop": "background",
+        "s2a": "rgb(255 255 255 / 0)",
+        "staticColorWhite": "rgba(255, 255, 255, 0)"
+      },
+      {
+        "style": "outline-inverse",
+        "state": "default",
+        "prop": "border",
+        "s2a": "#fff",
+        "staticColorWhite": "rgba(255, 255, 255, 0.8)"
+      },
+      {
+        "style": "outline-inverse",
+        "state": "default",
+        "prop": "label",
+        "s2a": "#fff",
+        "staticColorWhite": "rgba(255, 255, 255, 0.8)"
+      },
+      {
+        "style": "outline-inverse",
+        "state": "hover",
+        "prop": "background",
+        "s2a": "rgb(255 255 255 / 8%)",
+        "staticColorWhite": null
+      },
+      {
+        "style": "outline-inverse",
+        "state": "active",
+        "prop": "background",
+        "s2a": "rgb(255 255 255 / 16%)",
+        "staticColorWhite": null
+      }
+    ]
+  }
+}

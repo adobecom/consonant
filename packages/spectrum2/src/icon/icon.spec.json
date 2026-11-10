@@ -68,7 +68,7 @@
     "root-inline-size@size=xl": "--swc-workflow-icon-extra-large",
     "root-block-size@size=xl": "--swc-workflow-icon-extra-large"
   },
-  "tier": "component",
+  "tier": "atom",
   "composedOf": [],
   "a11y": {
     "wcag": [
@@ -411,7 +411,7 @@
     }
   ],
   "provenance": {
-    "defs": "sha256:38d951429a4e3714613ecd0f4adb87e9fc11c5d62e2f9fd2602059f2f092b814",
+    "defs": "sha256:5f5a6972488de8fd258becb89684c8cc07bd066224e70ba252620580e255283d",
     "codeEvidence": "sha256:fb8796f875a4248de0e8ace45e51929d938f6a0f54841d438673f807e094e8cc",
     "figmaEvidence": null,
     "generator": "s2a-spec-transform@1"

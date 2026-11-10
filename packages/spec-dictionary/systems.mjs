@@ -41,6 +41,8 @@ function componentTier(src) {
   return map;
 }
 const COMPONENT_TIER = "tokens.component.css";
+// Tokens S2 does not have, written by us. See the file's own header.
+const LAYER_TIER = "tokens.layer.css";
 
 export const SYSTEMS = {
   s2a: {
@@ -62,7 +64,7 @@ export const SYSTEMS = {
     ns: "spectrum",
     tokenNs: "swc",
     tokensDir: join(ROOT, "packages", "spectrum2", "tokens"),
-    tokens() { return loadShippedTokens(this.tokensDir, { files: { [COMPONENT_TIER]: componentTier(this.src) }, extraChain: [COMPONENT_TIER] }); },
+    tokens() { return loadShippedTokens(this.tokensDir, { files: { [COMPONENT_TIER]: componentTier(this.src) }, extraChain: [COMPONENT_TIER, LAYER_TIER] }); },
     assets: join(ROOT, "packages", "spectrum2", "assets"),
     storybook: {
       title: "Spectrum", dir: "apps/storybook/stories/spectrum", renderer: "upstream",

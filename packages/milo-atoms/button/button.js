@@ -25,9 +25,11 @@ export default function decorateButton(scope, options = {}) {
     const cue = el.parentElement?.nodeName;
     // Unwrap the cue, as Milo does: <strong><a> becomes <a>.
     if (cue === 'STRONG' || cue === 'EM') el.parentElement.replaceWith(el);
+    // A composition can give each cue its own look: options.cues.EM.
+    const chosen = { ...options, ...options.cues?.[cue] };
     el.classList.add('s2a-button');
-    el.classList.add(options.style ?? CUES[cue] ?? 'solid');
-    if (options.state) el.classList.add(options.state);
+    el.classList.add(chosen.style ?? CUES[cue] ?? 'solid');
+    if (chosen.state) el.classList.add(chosen.state);
     // Parts: the text is the label; anything the author placed before or
     // after it is an icon.
     const label = document.createElement('span');

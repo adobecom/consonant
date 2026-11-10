@@ -1,0 +1,66 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<script>
+  const q = new URLSearchParams(location.search);
+  const build = /^[a-z]+$/.test(q.get('build') ?? '') ? q.get('build') : 'faithful';
+  document.documentElement.style.colorScheme = q.get('mode') === 'dark' ? 'dark' : 'light';
+  if (q.get('scale') === 'mobile') document.documentElement.dataset.s2Scale = 'mobile';
+  for (const f of ['button.tokens.css', 'button.css']) document.write(`<link rel="stylesheet" href="../out/${build}/${f}">`);
+</script>
+<style>
+  body { margin: 0; padding: 20px 16px; font: 13px/1.4 system-ui, sans-serif; background: Canvas; color: CanvasText; }
+  table { border-collapse: collapse; }
+  th { font-weight: 600; text-align: left; padding: 0 6px 10px; opacity: .7; }
+  td { padding: 7px 6px; white-space: nowrap; }
+  html { overflow-x: auto; }
+  td:first-child { padding-left: 0; opacity: .75; }
+  th.live { color: #3b63fb; opacity: 1; }
+  h3 { font-size: 13px; margin: 26px 0 10px; opacity: .7; font-weight: 600; }
+  .sizes { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
+</style>
+</head>
+<body>
+<table><thead><tr><th></th><th class="live">live</th><th>hover</th><th>active</th><th>focus</th><th>disabled</th></tr></thead><tbody id="rows"></tbody></table>
+<h3>Sizes, primary</h3>
+<div class="sizes" id="sizes"></div>
+<script type="module">
+  const q = new URLSearchParams(location.search);
+  const build = /^[a-z]+$/.test(q.get('build') ?? '') ? q.get('build') : 'faithful';
+  const { default: decorate } = await import(`../out/${build}/button.js`);
+  const make = (opts, state) => {
+    const td = document.createElement('td');
+    const a = document.createElement('a'); a.href = '#'; a.textContent = 'Label';
+    a.addEventListener('click', (e) => e.preventDefault());
+    const s = document.createElement('strong'); s.append(a); td.append(s);
+    decorate(td, opts);
+    if (state) a.dataset.state = state;
+    return td;
+  };
+  const rows = [['primary'], ['primary', 'outline'], ['secondary'], ['secondary', 'outline'], ['accent'], ['negative']];
+  const tbody = document.getElementById('rows');
+  for (const [variant, fillStyle] of rows) {
+    const tr = document.createElement('tr');
+    const label = document.createElement('td'); label.textContent = fillStyle ? `${variant} outline` : variant; tr.append(label);
+    for (const st of [null, 'hover', 'active', 'focus', 'disabled']) tr.append(make({ variant, fillStyle }, st));
+    tbody.append(tr);
+  }
+  const sizes = document.getElementById('sizes');
+  for (const size of ['s', 'm', 'l', 'xl']) {
+    const span = document.createElement('span');
+    const a = document.createElement('a'); a.href = '#'; a.textContent = `Size ${size.toUpperCase()}`;
+    a.addEventListener('click', (e) => e.preventDefault());
+    const s = document.createElement('strong'); s.append(a); span.append(s); sizes.append(span);
+    decorate(span, { variant: 'primary', size: size === 'm' ? undefined : size });
+  }
+  window.addEventListener('message', (e) => {
+    if (e.data?.type !== 'token') return;
+    document.documentElement.style.setProperty(e.data.name, e.data.value || null);
+    if (!e.data.value) document.documentElement.style.removeProperty(e.data.name);
+  });
+  const post = () => parent.postMessage({ type: 'height', build, h: document.body.scrollHeight }, '*');
+  post(); document.fonts.ready.then(post);
+</script>
+</body>
+</html>

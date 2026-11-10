@@ -428,6 +428,196 @@
                 "background-color": "{swc.negative.subtle.background.color.default}",
                 "color": "{swc.gray.1000}"
               }
+            },
+            {
+              "values": [
+                "true",
+                "gray"
+              ],
+              "tokens": {
+                "background-color": "{swc.gray.subtle.background.color.default}",
+                "color": "{swc.gray.1000}"
+              }
+            },
+            {
+              "values": [
+                "true",
+                "red"
+              ],
+              "tokens": {
+                "background-color": "{swc.red.subtle.background.color.default}",
+                "color": "{swc.gray.1000}"
+              }
+            },
+            {
+              "values": [
+                "true",
+                "orange"
+              ],
+              "tokens": {
+                "background-color": "{swc.orange.subtle.background.color.default}",
+                "color": "{swc.gray.1000}"
+              }
+            },
+            {
+              "values": [
+                "true",
+                "yellow"
+              ],
+              "tokens": {
+                "background-color": "{swc.yellow.subtle.background.color.default}",
+                "color": "{swc.gray.1000}"
+              }
+            },
+            {
+              "values": [
+                "true",
+                "chartreuse"
+              ],
+              "tokens": {
+                "background-color": "{swc.chartreuse.subtle.background.color.default}",
+                "color": "{swc.gray.1000}"
+              }
+            },
+            {
+              "values": [
+                "true",
+                "celery"
+              ],
+              "tokens": {
+                "background-color": "{swc.celery.subtle.background.color.default}",
+                "color": "{swc.gray.1000}"
+              }
+            },
+            {
+              "values": [
+                "true",
+                "green"
+              ],
+              "tokens": {
+                "background-color": "{swc.green.subtle.background.color.default}",
+                "color": "{swc.gray.1000}"
+              }
+            },
+            {
+              "values": [
+                "true",
+                "seafoam"
+              ],
+              "tokens": {
+                "background-color": "{swc.seafoam.subtle.background.color.default}",
+                "color": "{swc.gray.1000}"
+              }
+            },
+            {
+              "values": [
+                "true",
+                "cyan"
+              ],
+              "tokens": {
+                "background-color": "{swc.cyan.subtle.background.color.default}",
+                "color": "{swc.gray.1000}"
+              }
+            },
+            {
+              "values": [
+                "true",
+                "blue"
+              ],
+              "tokens": {
+                "background-color": "{swc.blue.subtle.background.color.default}",
+                "color": "{swc.gray.1000}"
+              }
+            },
+            {
+              "values": [
+                "true",
+                "indigo"
+              ],
+              "tokens": {
+                "background-color": "{swc.indigo.subtle.background.color.default}",
+                "color": "{swc.gray.1000}"
+              }
+            },
+            {
+              "values": [
+                "true",
+                "purple"
+              ],
+              "tokens": {
+                "background-color": "{swc.purple.subtle.background.color.default}",
+                "color": "{swc.gray.1000}"
+              }
+            },
+            {
+              "values": [
+                "true",
+                "fuchsia"
+              ],
+              "tokens": {
+                "background-color": "{swc.fuchsia.subtle.background.color.default}",
+                "color": "{swc.gray.1000}"
+              }
+            },
+            {
+              "values": [
+                "true",
+                "magenta"
+              ],
+              "tokens": {
+                "background-color": "{swc.magenta.subtle.background.color.default}",
+                "color": "{swc.gray.1000}"
+              }
+            },
+            {
+              "values": [
+                "true",
+                "pink"
+              ],
+              "tokens": {
+                "background-color": "{swc.pink.subtle.background.color.default}",
+                "color": "{swc.gray.1000}"
+              }
+            },
+            {
+              "values": [
+                "true",
+                "turquoise"
+              ],
+              "tokens": {
+                "background-color": "{swc.turquoise.subtle.background.color.default}",
+                "color": "{swc.gray.1000}"
+              }
+            },
+            {
+              "values": [
+                "true",
+                "brown"
+              ],
+              "tokens": {
+                "background-color": "{swc.brown.subtle.background.color.default}",
+                "color": "{swc.gray.1000}"
+              }
+            },
+            {
+              "values": [
+                "true",
+                "cinnamon"
+              ],
+              "tokens": {
+                "background-color": "{swc.cinnamon.subtle.background.color.default}",
+                "color": "{swc.gray.1000}"
+              }
+            },
+            {
+              "values": [
+                "true",
+                "silver"
+              ],
+              "tokens": {
+                "background-color": "{swc.silver.subtle.background.color.default}",
+                "color": "{swc.gray.1000}"
+              }
             }
           ]
         },
@@ -590,7 +780,7 @@
   },
   "provenance": {
     "version": 1,
-    "canonicalRevision": "sha256:4fa6c42f751c8632abfdf9d72f6544d99f6e7fd52ce59497402c369263f6a70e",
+    "canonicalRevision": "sha256:7d3916e437d9be3d22e554186b065131825757d72d4d0f59b579284ce9048f4d",
     "source": {
       "kind": "code",
       "adapter": "s2a-spec-transform@1",

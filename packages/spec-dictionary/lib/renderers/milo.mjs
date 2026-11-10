@@ -20,12 +20,35 @@
 // generated comment so nobody has to infer it from the code.
 import { stylesheet } from "./css.mjs";
 
+/** The command that re-renders this contract, written into its generated header. */
+const rerun = (ir, slug) => `npm run specs:render -- --slug=${slug} --target=milo${(ir.component.system ?? "s2a") === "s2a" ? "" : ` --system=${ir.component.system}`}`;
+
 const kebab = (s) => String(s).replace(/([a-z0-9])([A-Z])/g, "$1-$2").replace(/[^a-zA-Z0-9]+/g, "-").replace(/^-+|-+$/g, "").toLowerCase();
 
 /** Milo variants are classes on the block element, not attributes. */
-const variant = (sel, prop, value) => `${sel}.${kebab(value)}`;
+// A class cannot start with a digit (`.500` does not parse, so the whole rule is
+// dropped), so a numeric value carries its prop: Avatar's size 500 is `.size-500`.
+const valueClass = (prop, value) => (/^\d/.test(String(value)) ? `${kebab(prop)}-${kebab(value)}` : kebab(value));
+// A value is a class on the block. A boolean prop is a flag: true is the prop's own
+// class (`.subtle`), false is its absence. Writing the value made `.true`, which no
+// decorator or author ever adds, so every boolean rule silently matched nothing.
+const variant = (sel, prop, value) => (String(value) === "true" ? `${sel}.${kebab(prop)}`
+  : String(value) === "false" ? `${sel}:not(.${kebab(prop)})` : `${sel}.${valueClass(prop, value)}`);
 
 const variantProps = (ir) => ir.props.filter((p) => p.lever !== false && Array.isArray(p.enum) && p.enum.length);
+// Only booleans a style rule keys on are classes; a show-* toggle is content, not a class.
+const styledProps = (part, out = new Set()) => {
+  if (!part) return out;
+  for (const e of part.tokensByProp ?? []) out.add(e.prop);
+  for (const e of part.statesByProp ?? []) out.add(e.prop);
+  for (const e of part.tokensByCombination ?? []) e.props.forEach((p) => out.add(p));
+  for (const r of part["x-compound"] ?? []) Object.keys(r.when ?? {}).forEach((p) => out.add(p));
+  for (const c of Object.values(part.parts ?? {})) styledProps(c, out);
+  return out;
+};
+const flagProps = (ir) => { const styled = styledProps(ir.anatomy?.root); return ir.props.filter((p) => p.lever !== false && p.type === "boolean" && styled.has(p.name)); };
+const variantLines = (ir) => [...variantProps(ir).map((p) => ` *   ${p.name}: ${p.enum.map((v) => valueClass(p.name, v)).join(" | ")}`),
+  ...flagProps(ir).map((p) => ` *   ${kebab(p.name)}: add the class to turn it on`)].join("\n");
 const pascal = (s) => String(s).split(/[^a-z0-9]+/i).filter(Boolean).map((w) => w[0].toUpperCase() + w.slice(1)).join("");
 
 /**
@@ -42,7 +65,25 @@ const pascal = (s) => String(s).split(/[^a-z0-9]+/i).filter(Boolean).map((w) => 
  */
 export const ATOM_ARCHETYPES = new Set(["button", "badge / tag / chip", "checkbox / radio", "toggle / switch", "input / field", "helper text"]);
 export const isAtom = (ir) => ir.component.tier === "atom" || ATOM_ARCHETYPES.has(ir.component.archetype);
-const isAtomArchetype = (archetype) => ATOM_ARCHETYPES.has(archetype);
+const isAtomContract = (c) => c.tier === "atom" || ATOM_ARCHETYPES.has(c.archetype);
+
+/** Where one generated file imports another from: atoms of ours are promoted, another system's sit beside their contract. */
+const atomImport = (ir, c) => (ir.component.system ?? "s2a") === "s2a" ? `../../milo-atoms/${kebab(c.slug)}/${kebab(c.slug)}` : `../../${kebab(c.slug)}/milo/${kebab(c.slug)}`;
+
+/** Every atom this contract's slots name, with the options each slot passes. */
+function composedAtoms(ir, slug, contractFor) {
+  const out = [];
+  for (const part of ir.anatomy.parts ?? []) {
+    for (const accepted of part.slot?.accepts ?? []) {
+      if (accepted.startsWith("kind:")) continue;
+      const c = contractFor?.(accepted);
+      if (c && isAtomContract(c) && c.slug !== slug) out.push({ part: part.name, contract: c, options: part.slot["x-options"] ?? null, root: part.name === "root" });
+    }
+  }
+  return out;
+}
+const importsOf = (ir, atoms) => [...new Map(atoms.map((a) => [a.contract.slug, a.contract])).values()]
+  .map((c) => `import decorate${pascal(c.slug)} from '${atomImport(ir, c)}.js';`).join("\n");
 
 /**
  * What an author writes that means this atom, per archetype. Milo's convention
@@ -69,18 +110,20 @@ function cuesFor(ir) {
  * own element (it finds what the author wrote), or by anything that already
  * holds the element.
  */
-export function miloAtom(ir, slug) {
+export function miloAtom(ir, slug, { contractFor = null } = {}) {
   const atom = kebab(slug), name = pascal(slug), cls = `s2a-${atom}`;
-  const authored = AUTHORED[ir.component.archetype] ?? `.${atom}`;
+  const authored = ir.component.authored?.selector ?? AUTHORED[ir.component.archetype] ?? `.${atom}`;
+  if (ir.component.authored?.build === "select") return miloSelectAtom(ir, slug);
+  if (ir.component.authored?.build === "parts") return miloPartsAtom(ir, slug, contractFor);
   const cues = cuesFor(ir);
   const top = Object.entries(ir.anatomy.root.parts ?? {});
   const textPart = top.find(([, p]) => (p.slot?.accepts ?? []).includes("kind:text"))?.[0] ?? top.find(([n]) => /label|text/i.test(n))?.[0] ?? null;
   const iconParts = top.filter(([, p]) => (p.slot?.accepts ?? []).includes("kind:icon")).map(([n]) => n);
-  const variants = variantProps(ir).map((p) => ` *   ${p.name}: ${p.enum.join(" | ")}`).join("\n");
+  const variants = variantLines(ir);
   return `/*
  * ${ir.component.name} — atom, generated from ${slug}.contract.json by spec-dictionary.
  * Do not edit by hand; change the contract and re-run:
- *   npm run specs:render -- --slug=${slug} --target=milo
+ *   ${rerun(ir, slug)}
  *
  * An atom is never authored as rows. It is what the author already wrote,
  * upgraded in place — the shape of Milo's own decorateButtons(). A block calls
@@ -101,9 +144,11 @@ export default function decorate${name}(scope, options = {}) {
     const cue = el.parentElement?.nodeName;
     // Unwrap the cue, as Milo does: <strong><a> becomes <a>.
     if (cue === 'STRONG' || cue === 'EM') el.parentElement.replaceWith(el);
+    // A composition can give each cue its own look: options.cues.EM.
+    const chosen = { ...options, ...options.cues?.[cue] };
     el.classList.add('${cls}');
-${cues ? `    el.classList.add(options.${cues.prop} ?? CUES[cue] ?? '${cues.primary}');` : ""}
-${variantProps(ir).filter((p) => !cues || p.name !== cues.prop).map((p) => `    if (options.${p.name}) el.classList.add(options.${p.name});`).join("\n")}
+${cues ? `    el.classList.add(chosen.${cues.prop} ?? CUES[cue] ?? '${cues.primary}');` : ""}
+${variantProps(ir).filter((p) => !cues || p.name !== cues.prop).map((p) => `    if (chosen.${p.name}) el.classList.add(chosen.${p.name});`).join("\n")}${flagProps(ir).map((p) => `\n    if (chosen.${p.name}) el.classList.add('${kebab(p.name)}');`).join("")}
 ${textPart ? `    // Parts: the text is the ${textPart}; anything the author placed before or
     // after it is an icon.
     const label = document.createElement('span');
@@ -121,20 +166,193 @@ ${iconParts.length ? `    for (const icon of el.querySelectorAll(':scope > img, 
 `;
 }
 
-export function miloAtomStyles(ir, slug) {
+/**
+ * A choice the author writes as a list: a native <select> does the choosing, so
+ * keyboard, screen readers and mobile pickers all come free, and the contract
+ * only styles the trigger. A paragraph right after the list is the help text.
+ */
+function miloSelectAtom(ir, slug) {
+  const atom = kebab(slug), name = pascal(slug), cls = `s2a-${atom}`;
+  const has = new Set(ir.anatomy.parts.map((p) => p.name));
+  for (const part of ["field", "value", "chevron", "help-text"]) if (!has.has(part)) throw new Error(`${slug}: build "select" needs a ${part} part`);
+  const label = ir.props.find((p) => p.name === "label")?.default ?? "";
+  const variants = variantLines(ir);
+  return `/*
+ * ${ir.component.name} — atom, generated from ${slug}.contract.json by spec-dictionary.
+ * Do not edit by hand; change the contract and re-run:
+ *   ${rerun(ir, slug)}
+ *
+ * Authored markup this upgrades:  ${ir.component.authored.selector}, one item per option, optional <p> after it
+ * Variants are classes on the root:
+${variants}
+ */
+export const AUTHORED = '${ir.component.authored.selector}';
+
+export default function decorate${name}(scope, options = {}) {
+  const targets = scope.matches?.(AUTHORED) ? [scope] : [...scope.querySelectorAll(AUTHORED)];
+  return targets.map((list) => {
+    const root = document.createElement('div');
+    root.className = '${cls}';
+${variantProps(ir).map((p) => `    if (options.${p.name}) root.classList.add(options.${p.name});`).join("\n")}${flagProps(ir).map((p) => `\n    if (options.${p.name}) root.classList.add('${kebab(p.name)}');`).join("")}
+    const field = document.createElement('div');
+    field.className = 'field';
+    const select = document.createElement('select');
+    select.className = 'value';
+    // S2's design hides the visible label here, so the name has to come from somewhere.
+    select.setAttribute('aria-label', options.label ?? ${JSON.stringify(label)});
+    [...list.children].forEach((item) => select.add(new Option(item.textContent.trim())));
+    const chevron = document.createElement('span');
+    chevron.className = 'chevron';
+    chevron.setAttribute('aria-hidden', 'true');
+    field.append(select, chevron);
+    const help = list.nextElementSibling?.matches('p') ? list.nextElementSibling : null;
+    list.replaceWith(root);
+    root.append(field);
+    if (help) {
+      help.classList.add('help-text');
+      root.append(help);
+    }
+    root.classList.add('${cls}--ready');
+    return root;
+  });
+}
+`;
+}
+
+/** Labels a part's direct children: by x-match, else by position. Emitted as data so the code stays short. */
+const kidsOf = (part) => Object.entries(part.parts ?? {}).map(([n, k]) => ({ name: kebab(n), ...(k["x-match"] ? { match: k["x-match"] } : {}) }));
+const MARK = `function mark(parent, kids) {
+  const children = [...parent.children];
+  kids.forEach(({ name, match }, i) => {
+    const kid = match ? parent.querySelector(\`:scope > \${match}\`) : children[i];
+    kid?.classList.add(name);
+  });
+}`;
+const callsOf = (atoms, indent, rootVar) => atoms.map((a) => {
+  const target = a.root ? rootVar : `${rootVar}.querySelector('.${kebab(a.part)}')`;
+  return `${indent}if (${target}) decorate${pascal(a.contract.slug)}(${target}${a.options ? `, ${JSON.stringify(a.options)}` : ""});   // ${a.contract.name}`;
+}).join("\n");
+
+/** An atom made of other atoms: label what the author wrote, then call each one. */
+function miloPartsAtom(ir, slug, contractFor) {
+  const atom = kebab(slug), name = pascal(slug), cls = `s2a-${atom}`;
+  const atoms = composedAtoms(ir, slug, contractFor);
+  const imports = importsOf(ir, atoms);
+  return `/*
+ * ${ir.component.name} — atom, generated from ${slug}.contract.json by spec-dictionary.
+ * Do not edit by hand; change the contract and re-run:
+ *   ${rerun(ir, slug)}
+ *
+ * Authored markup this upgrades:  ${ir.component.authored.selector}
+ * Its children, each optional:
+${kidsOf(ir.anatomy.root).map((k) => ` *   ${k.match ?? "by position"}  ->  .${k.name}`).join("\n")}
+ */
+${imports ? imports + "\n\n" : ""}export const AUTHORED = '${ir.component.authored.selector}';
+const KIDS = ${JSON.stringify(kidsOf(ir.anatomy.root))};
+
+${MARK}
+
+export default function decorate${name}(scope) {
+  const targets = scope.matches?.(AUTHORED) ? [scope] : [...scope.querySelectorAll(AUTHORED)];
+  for (const el of targets) {
+    el.classList.add('${cls}');
+    mark(el, KIDS);
+${callsOf(atoms, "    ", "el")}
+    el.classList.add('${cls}--ready');
+  }
+  return targets;
+}
+`;
+}
+
+/**
+ * A block whose parts say which authored row each one is (x-row). A part with
+ * children and no x-row is a wrapper the block creates: a document can only hold
+ * a flat list of rows, and the card's surfaces group them.
+ */
+function layoutOf(parts) {
+  return Object.entries(parts ?? {}).map(([n, p]) => (p["x-row"] !== undefined
+    ? { row: kebab(n), ...(p["x-row"] === "inline" ? { inline: true } : {}), ...(p.parts ? { kids: kidsOf(p) } : {}) }
+    : { wrap: kebab(n), parts: layoutOf(p.parts) }));
+}
+const hasRows = (parts) => Object.values(parts ?? {}).some((p) => p["x-row"] !== undefined || hasRows(p.parts));
+const rowLines = (parts, out = []) => {
+  for (const [n, p] of Object.entries(parts ?? {})) {
+    if (p["x-row"] !== undefined) out.push(` *   row ${out.length + 1}  ->  .${kebab(n)}${p.slot ? `  (${p.slot.accepts.join(", ")})` : ""}`);
+    else rowLines(p.parts, out);
+  }
+  return out;
+};
+
+function miloRowsBlock(ir, slug, contractFor) {
+  const block = kebab(slug);
+  const atoms = composedAtoms(ir, slug, contractFor);
+  const imports = importsOf(ir, atoms);
+  return `/*
+ * ${ir.component.name} — generated from ${slug}.contract.json by spec-dictionary.
+ * Do not edit by hand; change the contract and re-run:
+ *   ${rerun(ir, slug)}
+ *
+ * Authored shape — one row per part, in this order:
+${rowLines(ir.anatomy.root.parts).join("\n")}
+ */
+${imports ? imports + "\n\n" : ""}const LAYOUT = ${JSON.stringify(layoutOf(ir.anatomy.root.parts))};
+
+${MARK}
+
+/** Rows into the contract's wrappers. A row the author left out is simply not there. */
+function place(specs, rows, parent, marks) {
+  for (const spec of specs) {
+    if (spec.wrap) {
+      const group = document.createElement('div');
+      group.className = spec.wrap;
+      place(spec.parts, rows, group, marks);
+      if (group.children.length) parent.append(group);
+    } else {
+      const row = rows.shift();
+      if (!row || (!row.textContent.trim() && !row.querySelector('picture, img, a, hr'))) continue;
+      // Franklin gives each row one cell; an inline row is one paragraph in it.
+      const cell = row.children.length === 1 ? row.firstElementChild : null;
+      if (cell?.nodeName === 'DIV') cell.replaceWith(...cell.childNodes);
+      const only = row.children.length === 1 ? row.firstElementChild : null;
+      if (spec.inline && only?.nodeName === 'P') only.replaceWith(...only.childNodes);
+      row.classList.add(spec.row);
+      parent.append(row);
+      if (spec.kids) marks.push([row, spec.kids]);
+    }
+  }
+}
+
+export default function init(el) {
+  const rows = [...el.querySelectorAll(':scope > div')];
+  const marks = [];
+  rows.forEach((row) => row.remove());
+  place(LAYOUT, rows, el, marks);
+${callsOf(atoms, "  ", "el")}
+  // After the atoms: a decorator can replace what it was given.
+  marks.forEach(([row, kids]) => mark(row, kids));
+  el.classList.add('${block}--ready');
+  return el;
+}
+`;
+}
+
+export function miloAtomStyles(ir, slug, { adapt = null } = {}) {
   const cls = `.s2a-${kebab(slug)}`;
   return stylesheet(ir, {
-    header: [`/* ${ir.component.name} — atom, generated from ${slug}.contract.json.\n * Applied by decorate${pascal(slug)}() to the element the author wrote.\n * Re-run: npm run specs:render -- --slug=${slug} --target=milo */`],
+    header: [`/* ${ir.component.name} — atom, generated from ${slug}.contract.json.\n * Applied by decorate${pascal(slug)}() to the element the author wrote.\n * Re-run: ${rerun(ir, slug)} */`],
     variant,
+    adapt,
     selectorFor: (part) => (part.name === "root" ? cls : `${cls} .${kebab(part.name)}`),
   });
 }
 
 export function miloBlock(ir, slug, { contractFor = null } = {}) {
+  if (hasRows(ir.anatomy.root.parts)) return miloRowsBlock(ir, slug, contractFor);
   const block = kebab(slug);
   const parts = Object.entries(ir.anatomy.root.parts ?? {});
   const rows = parts.map(([name], i) => ` *   row ${i + 1}  ->  .${kebab(name)}`).join("\n");
-  const variants = variantProps(ir).map((p) => ` *   ${p.name}: ${p.enum.join(" | ")}`).join("\n");
+  const variants = variantLines(ir);
 
   const assigns = parts.map(([name], i) =>
     `  rows[${i}]?.classList.add('${kebab(name)}');`).join("\n");
@@ -146,7 +364,7 @@ export function miloBlock(ir, slug, { contractFor = null } = {}) {
     for (const accepted of part.slot?.accepts ?? []) {
       if (accepted.startsWith("kind:")) continue;
       const c = contractFor?.(accepted);
-      if (c && isAtomArchetype(c.archetype) && c.slug !== slug) atoms.set(c.slug, c);
+      if (c && isAtomContract(c) && c.slug !== slug) atoms.set(c.slug, c);
     }
   }
   const imports = [...atoms.values()].map((c) => `import decorate${pascal(c.slug)} from '../../milo-atoms/${kebab(c.slug)}/${kebab(c.slug)}.js';`).join("\n");
@@ -155,7 +373,7 @@ export function miloBlock(ir, slug, { contractFor = null } = {}) {
   return `/*
  * ${ir.component.name} — generated from ${slug}.contract.json by spec-dictionary.
  * Do not edit by hand; change the contract and re-run:
- *   npm run specs:render -- --slug=${slug} --target=milo
+ *   ${rerun(ir, slug)}
  *
  * Authored shape — one row per part, in this order:
 ${rows || " *   (no parts; the block is a single row)"}
@@ -177,11 +395,12 @@ ${calls ? "\n" + calls + "\n" : ""}
 `;
 }
 
-export function miloStyles(ir, slug) {
+export function miloStyles(ir, slug, { adapt = null } = {}) {
   const block = `.${kebab(slug)}`;
   return stylesheet(ir, {
-    header: [`/* ${ir.component.name} — generated from ${slug}.contract.json.\n * Re-run: npm run specs:render -- --slug=${slug} --target=milo */`],
+    header: [`/* ${ir.component.name} — generated from ${slug}.contract.json.\n * Re-run: ${rerun(ir, slug)} */`],
     variant,
+    adapt,
     selectorFor: (part) => (part.name === "root" ? block : `${block} .${kebab(part.name)}`),
   });
 }
@@ -193,14 +412,18 @@ export const milo = {
   // With an IR the tier is known; without one (a clear) both are named.
   paths(slug, { ir = null } = {}) {
     const k = kebab(slug);
+    // Another system's contract never lands on top of our own atom of the same
+    // name. It renders beside its contract until it is promoted.
+    if (ir && (ir.component.system ?? "s2a") !== "s2a") return [`packages/spectrum2/out/${k}/milo/${k}.js`, `packages/spectrum2/out/${k}/milo/${k}.css`];
     const block = [`packages/milo-blocks/${k}/${k}.js`, `packages/milo-blocks/${k}/${k}.css`];
     const atom = [`packages/milo-atoms/${k}/${k}.js`, `packages/milo-atoms/${k}/${k}.css`];
     return ir ? (isAtom(ir) ? atom : block) : [...block, ...atom];
   },
-  files(ir, slug, { contractFor = null } = {}) {
+  files(ir, slug, { contractFor = null, adapt = null } = {}) {
+    if ((ir.component.system ?? "s2a") !== "s2a" && !adapt) throw new Error(`${slug}: Milo never loads ${ir.component.system}'s tokens; this render needs the token map`);
     const [js, css] = milo.paths(slug, { ir });
     return isAtom(ir)
-      ? { [js]: miloAtom(ir, slug), [css]: miloAtomStyles(ir, slug) }
-      : { [js]: miloBlock(ir, slug, { contractFor }), [css]: miloStyles(ir, slug) };
+      ? { [js]: miloAtom(ir, slug, { contractFor }), [css]: miloAtomStyles(ir, slug, { adapt }) }
+      : { [js]: miloBlock(ir, slug, { contractFor }), [css]: miloStyles(ir, slug, { adapt }) };
   },
 };

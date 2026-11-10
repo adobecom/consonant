@@ -483,6 +483,196 @@
                 "background-color": "{swc.negative.subtle.background.color.default}",
                 "color": "{swc.gray.1000}"
               }
+            },
+            {
+              "values": [
+                "true",
+                "gray"
+              ],
+              "tokens": {
+                "background-color": "{swc.gray.subtle.background.color.default}",
+                "color": "{swc.gray.1000}"
+              }
+            },
+            {
+              "values": [
+                "true",
+                "red"
+              ],
+              "tokens": {
+                "background-color": "{swc.red.subtle.background.color.default}",
+                "color": "{swc.gray.1000}"
+              }
+            },
+            {
+              "values": [
+                "true",
+                "orange"
+              ],
+              "tokens": {
+                "background-color": "{swc.orange.subtle.background.color.default}",
+                "color": "{swc.gray.1000}"
+              }
+            },
+            {
+              "values": [
+                "true",
+                "yellow"
+              ],
+              "tokens": {
+                "background-color": "{swc.yellow.subtle.background.color.default}",
+                "color": "{swc.gray.1000}"
+              }
+            },
+            {
+              "values": [
+                "true",
+                "chartreuse"
+              ],
+              "tokens": {
+                "background-color": "{swc.chartreuse.subtle.background.color.default}",
+                "color": "{swc.gray.1000}"
+              }
+            },
+            {
+              "values": [
+                "true",
+                "celery"
+              ],
+              "tokens": {
+                "background-color": "{swc.celery.subtle.background.color.default}",
+                "color": "{swc.gray.1000}"
+              }
+            },
+            {
+              "values": [
+                "true",
+                "green"
+              ],
+              "tokens": {
+                "background-color": "{swc.green.subtle.background.color.default}",
+                "color": "{swc.gray.1000}"
+              }
+            },
+            {
+              "values": [
+                "true",
+                "seafoam"
+              ],
+              "tokens": {
+                "background-color": "{swc.seafoam.subtle.background.color.default}",
+                "color": "{swc.gray.1000}"
+              }
+            },
+            {
+              "values": [
+                "true",
+                "cyan"
+              ],
+              "tokens": {
+                "background-color": "{swc.cyan.subtle.background.color.default}",
+                "color": "{swc.gray.1000}"
+              }
+            },
+            {
+              "values": [
+                "true",
+                "blue"
+              ],
+              "tokens": {
+                "background-color": "{swc.blue.subtle.background.color.default}",
+                "color": "{swc.gray.1000}"
+              }
+            },
+            {
+              "values": [
+                "true",
+                "indigo"
+              ],
+              "tokens": {
+                "background-color": "{swc.indigo.subtle.background.color.default}",
+                "color": "{swc.gray.1000}"
+              }
+            },
+            {
+              "values": [
+                "true",
+                "purple"
+              ],
+              "tokens": {
+                "background-color": "{swc.purple.subtle.background.color.default}",
+                "color": "{swc.gray.1000}"
+              }
+            },
+            {
+              "values": [
+                "true",
+                "fuchsia"
+              ],
+              "tokens": {
+                "background-color": "{swc.fuchsia.subtle.background.color.default}",
+                "color": "{swc.gray.1000}"
+              }
+            },
+            {
+              "values": [
+                "true",
+                "magenta"
+              ],
+              "tokens": {
+                "background-color": "{swc.magenta.subtle.background.color.default}",
+                "color": "{swc.gray.1000}"
+              }
+            },
+            {
+              "values": [
+                "true",
+                "pink"
+              ],
+              "tokens": {
+                "background-color": "{swc.pink.subtle.background.color.default}",
+                "color": "{swc.gray.1000}"
+              }
+            },
+            {
+              "values": [
+                "true",
+                "turquoise"
+              ],
+              "tokens": {
+                "background-color": "{swc.turquoise.subtle.background.color.default}",
+                "color": "{swc.gray.1000}"
+              }
+            },
+            {
+              "values": [
+                "true",
+                "brown"
+              ],
+              "tokens": {
+                "background-color": "{swc.brown.subtle.background.color.default}",
+                "color": "{swc.gray.1000}"
+              }
+            },
+            {
+              "values": [
+                "true",
+                "cinnamon"
+              ],
+              "tokens": {
+                "background-color": "{swc.cinnamon.subtle.background.color.default}",
+                "color": "{swc.gray.1000}"
+              }
+            },
+            {
+              "values": [
+                "true",
+                "silver"
+              ],
+              "tokens": {
+                "background-color": "{swc.silver.subtle.background.color.default}",
+                "color": "{swc.gray.1000}"
+              }
             }
           ]
         },
@@ -717,6 +907,17 @@
       "decision": "Spectrum's workflow SVGs paint with fill=\"var(--iconPrimary, #222)\" rather than currentColor, so with nothing defining that property every glyph fell back to #222 regardless of the colour around it. Setting --iconPrimary to currentColor on the icon part makes a glyph follow its component, and leaves the property available to anyone who wants a different colour.",
       "fix": "none. The alternative was rewriting 396 vendored SVGs, which would mean editing artwork we do not own.",
       "evidence": "All 396 entries in spectrum-icons.json carry var(--iconPrimary, #222); all 26 in our own s2a-icons.json use currentColor. Measured: the badge's text was #ffffff while its glyph painted #222222."
+    },
+    {
+      "id": "b-subtle-colour-rows",
+      "status": "decided",
+      "confidence": "high",
+      "owner": "Matt",
+      "question": "The 19 colour variants have subtle backgrounds in shipped code, set in a nested block. Were they missing from the defs?",
+      "chose": "add the 19 rows",
+      "decision": "Yes. The defs were curated on 2026-10-27, before nested rules were read. The 19 rows are added as a fresh draft reads them, in this file's token form. The 6 semantic rows are unchanged.",
+      "fix": "none",
+      "evidence": ".swc-Badge--subtle{&:where(.swc-Badge--<colour>){--swc-badge-background-color: var(--swc-<colour>-subtle-background-color-default)}} in the css`` template"
     }
   ]
 }

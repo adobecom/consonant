@@ -2,7 +2,7 @@
   "id": "s2a.button",
   "name": "Button",
   "slug": "button",
-  "tier": "component",
+  "tier": "atom",
   "status": "curated-draft",
   "description": "The primary action trigger. Layer one: composes Icon for its optional leading and trailing glyphs.",
   "props": [
@@ -86,7 +86,7 @@
       "mode": "prefer"
     }
   ],
-  "tokens": 75,
+  "tokens": 248,
   "a11y": {
     "role": "button",
     "wcag": [
@@ -105,5 +105,5 @@
     },
     "figma": "9308:53906"
   },
-  "openDecisions": 10
+  "openDecisions": 8
 }

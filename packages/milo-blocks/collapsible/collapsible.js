@@ -10,6 +10,7 @@
  * Variants are classes on the block element:
  *   size: default | lg
  *   style: default | control
+ *   open: add the class to turn it on
  */
 import decorateControlButton from '../../milo-atoms/control-button/control-button.js';
 

@@ -38,6 +38,9 @@ Status: **curated-draft** · root `swc-ButtonGroup` · import `@adobe/spectrum-w
 
 - ✅ decided `bg-rebuilt-from-code` `high confidence` (scaffold): Drafted from the implementation (@adobe/spectrum-wc/components/button-group): 9 rules, 5 declared props, 0 parts. The design file was not consulted. → For a shipped library the stylesheet and the type declarations are the contract. Every token, condition and state here is read from a rule; nothing is transcribed from the design file's layer tree. _Evidence: packages/spectrum2/src/button-group/button-group.js, packages/spectrum2/src/button-group/button-group.css, packages/spectrum2/src/button-group/button-group.d.ts_
   - The draft chose: code is the source; design is the check
+- ✅ decided `bg-size-s-gap` `high confidence` (Matt): Size S sets an 8px gap in shipped code. Was it in the defs? → No. Shipped code sets --swc-button-group-gap at size S and reads it through a private property, which the drafter does not follow. Raw px because shipped code has no token for it. _Evidence: :host([size="s"]){--swc-button-group-gap: 8px}_
+  - The draft chose: add 8px at size S
+  - If wrong: none
 
 ## State matrix
 
@@ -45,7 +48,7 @@ No Figma evidence published yet, so there is no state matrix. Extract the set an
 
 ## Provenance
 
-- defs: sha256:a3846872db6db4669ea8ef44c6d5103ed5dcb368906e64ba2ed8591004e22cef
+- defs: sha256:f8da13307c1eec4826800e144fc9e7ced4bbeb7880ce4a557c422b6a60ec975b
 - code evidence: sha256:d4f3109886cc89f9fa8eee4728d73891bb7eac322ba188dde424be963a9fc7cb
 - figma evidence: not published
 

@@ -9,7 +9,11 @@
     "name": ".root",
     "source": null,
     "element": null,
-    "bindings": {},
+    "bindings": {
+      "background-color": [
+        "swc/gray/200"
+      ]
+    },
     "slot": null,
     "children": []
   },
@@ -29,7 +33,11 @@
     {
       "name": ".swc-Divider",
       "selector": ".swc-Divider",
-      "bindings": {}
+      "bindings": {
+        "background-color": [
+          "swc/gray/200"
+        ]
+      }
     }
   ],
   "textStyles": []

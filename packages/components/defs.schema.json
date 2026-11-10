@@ -45,10 +45,11 @@
     "tier": {
       "enum": [
         "component",
-        "block"
+        "block",
+        "atom"
       ],
       "default": "component",
-      "description": "What this contract describes. A component is a single thing with its own anatomy. A block is an arrangement of other contracts \u2014 it is composed, so it must declare at least one slot. Absent means component, so every existing contract stays valid."
+      "description": "What this contract describes. A component is a single thing with its own anatomy. A block is an arrangement of other contracts \u2014 it is composed, so it must declare at least one slot. Absent means component, so every existing contract stays valid. An atom is a Milo decorator: upgraded in place from what the author wrote, never authored as rows."
     },
     "curated": {
       "type": "object",
@@ -271,6 +272,32 @@
             "type": "string",
             "description": "Required for internal: why this is not a component in its own right."
           }
+        }
+      }
+    },
+    "x-authored": {
+      "type": "object",
+      "required": [],
+      "additionalProperties": false,
+      "description": "Extension. What an author writes that means this atom in Milo, and how the decorator turns it into the anatomy.",
+      "properties": {
+        "selector": {
+          "type": "string"
+        },
+        "build": {
+          "enum": [
+            "select",
+            "parts"
+          ],
+          "description": "select: an authored list becomes a native select inside the anatomy. parts: direct children are labelled by each part's x-match, and composed atoms are called on them."
+        },
+        "sample": {
+          "type": "string",
+          "description": "What an author produces for this contract, as markup. {{icon:name}} and {{svg:name}} name art in the system's figma-icons. The Contract Book and the visual eval run the generated code over it."
+        },
+        "sampleOptions": {
+          "type": "object",
+          "description": "Options the sample passes the decorator, so it can show a chosen look."
         }
       }
     }
@@ -548,6 +575,10 @@
                   }
                 }
               }
+            },
+            "x-options": {
+              "type": "object",
+              "description": "Extension. What the parent passes to the atom's decorator in this slot: the size or variant this composition chose. `cues` maps an authoring cue (STRONG, EM) to its own options."
             }
           }
         },
@@ -665,6 +696,43 @@
             }
           },
           "description": "A state whose tokens depend on a variant \u2014 knockout's hover is not solid's hover. Use `states` when the state is the same across variants."
+        },
+        "x-compound": {
+          "type": "array",
+          "minItems": 1,
+          "description": "Extension, outside the Southleft contract shape. A rule that depends on any number of props and optionally a state, for libraries whose variants compound: secondary + outline + static white + disabled. tokensByCombination takes exactly two props and no state.",
+          "items": {
+            "type": "object",
+            "required": [
+              "when",
+              "tokens"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "when": {
+                "type": "object",
+                "minProperties": 1,
+                "additionalProperties": {
+                  "type": "string"
+                }
+              },
+              "state": {
+                "enum": [
+                  "hover",
+                  "active",
+                  "focus-visible",
+                  "disabled"
+                ]
+              },
+              "tokens": {
+                "type": "object",
+                "minProperties": 1,
+                "additionalProperties": {
+                  "type": "string"
+                }
+              }
+            }
+          }
         },
         "tokensByCombination": {
           "type": "array",
@@ -816,6 +884,17 @@
               "description": "The prop carrying the alt text, when the element's source is a prop rather than a manifest row."
             }
           }
+        },
+        "x-row": {
+          "enum": [
+            true,
+            "inline"
+          ],
+          "description": "Extension. This part takes the next authored row of a Milo block. inline: the row is one paragraph, so its children sit directly in the part. A part with child parts and no x-row is a wrapper the block creates around rows."
+        },
+        "x-match": {
+          "type": "string",
+          "description": "Extension. Which direct child of the parent part this is, as a selector. Absent means by position among the element children."
         }
       }
     },

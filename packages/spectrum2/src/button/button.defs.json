@@ -254,9 +254,10 @@
         "padding-block": "{swc.base.padding.vertical.medium}",
         "gap": "{swc.base.gap.medium}",
         "border-width": "{swc.border.width.200}",
-        "border-radius": "raw:16px",
+        "border-radius": "{swc.button.corner.radius.m}",
         "background-color": "{swc.neutral.background.color.default}",
-        "color": "{swc.gray.25}"
+        "color": "{swc.gray.25}",
+        "line-height": "{swc.line.height.font.size.100}"
       },
       "states": {
         "hover": {
@@ -269,13 +270,851 @@
         },
         "focus-visible": {
           "outline-color": "{swc.focus.indicator.color}",
-          "outline-width": "{swc.focus.indicator.thickness}"
+          "outline-width": "{swc.focus.indicator.thickness}",
+          "outline-style": "raw:solid",
+          "outline-offset": "{swc.border.width.200}"
         },
         "disabled": {
           "background-color": "{swc.disabled.background.color}",
           "color": "{swc.disabled.content.color}"
         }
       },
+      "x-compound": [
+        {
+          "when": {
+            "variant": "primary"
+          },
+          "tokens": {
+            "background-color": "{swc.gray.800}",
+            "color": "{swc.gray.25}",
+            "border-color": "raw:transparent"
+          }
+        },
+        {
+          "when": {
+            "variant": "primary"
+          },
+          "state": "hover",
+          "tokens": {
+            "background-color": "{swc.gray.900}",
+            "color": "{swc.gray.25}",
+            "border-color": "raw:transparent"
+          }
+        },
+        {
+          "when": {
+            "variant": "primary"
+          },
+          "state": "active",
+          "tokens": {
+            "background-color": "{swc.gray.900}",
+            "color": "{swc.gray.25}",
+            "border-color": "raw:transparent"
+          }
+        },
+        {
+          "when": {
+            "variant": "primary"
+          },
+          "state": "focus-visible",
+          "tokens": {
+            "background-color": "{swc.gray.900}",
+            "color": "{swc.gray.25}",
+            "border-color": "raw:transparent"
+          }
+        },
+        {
+          "when": {
+            "variant": "primary"
+          },
+          "state": "disabled",
+          "tokens": {
+            "background-color": "{swc.gray.100}",
+            "color": "{swc.gray.400}",
+            "border-color": "raw:transparent"
+          }
+        },
+        {
+          "when": {
+            "variant": "secondary"
+          },
+          "tokens": {
+            "background-color": "{swc.gray.100}",
+            "color": "{swc.gray.800}",
+            "border-color": "raw:transparent"
+          }
+        },
+        {
+          "when": {
+            "variant": "secondary"
+          },
+          "state": "hover",
+          "tokens": {
+            "background-color": "{swc.gray.200}",
+            "color": "{swc.gray.900}",
+            "border-color": "raw:transparent"
+          }
+        },
+        {
+          "when": {
+            "variant": "secondary"
+          },
+          "state": "active",
+          "tokens": {
+            "background-color": "{swc.gray.200}",
+            "color": "{swc.gray.900}",
+            "border-color": "raw:transparent"
+          }
+        },
+        {
+          "when": {
+            "variant": "secondary"
+          },
+          "state": "focus-visible",
+          "tokens": {
+            "background-color": "{swc.gray.200}",
+            "color": "{swc.gray.900}",
+            "border-color": "raw:transparent"
+          }
+        },
+        {
+          "when": {
+            "variant": "secondary"
+          },
+          "state": "disabled",
+          "tokens": {
+            "background-color": "{swc.gray.100}",
+            "color": "{swc.gray.400}",
+            "border-color": "raw:transparent"
+          }
+        },
+        {
+          "when": {
+            "variant": "accent"
+          },
+          "tokens": {
+            "background-color": "{swc.accent.background.color.default}",
+            "color": "{swc.transparent.static.white.1000}",
+            "border-color": "raw:transparent"
+          }
+        },
+        {
+          "when": {
+            "variant": "accent"
+          },
+          "state": "hover",
+          "tokens": {
+            "background-color": "{swc.accent.background.color.hover}",
+            "color": "{swc.transparent.static.white.1000}",
+            "border-color": "raw:transparent"
+          }
+        },
+        {
+          "when": {
+            "variant": "accent"
+          },
+          "state": "active",
+          "tokens": {
+            "background-color": "{swc.accent.background.color.down}",
+            "color": "{swc.transparent.static.white.1000}",
+            "border-color": "raw:transparent"
+          }
+        },
+        {
+          "when": {
+            "variant": "accent"
+          },
+          "state": "focus-visible",
+          "tokens": {
+            "background-color": "{swc.accent.background.color.key.focus}",
+            "color": "{swc.transparent.static.white.1000}",
+            "border-color": "raw:transparent"
+          }
+        },
+        {
+          "when": {
+            "variant": "accent"
+          },
+          "state": "disabled",
+          "tokens": {
+            "background-color": "{swc.gray.100}",
+            "color": "{swc.gray.400}",
+            "border-color": "raw:transparent"
+          }
+        },
+        {
+          "when": {
+            "variant": "negative"
+          },
+          "tokens": {
+            "background-color": "{swc.negative.background.color.default}",
+            "color": "{swc.transparent.static.white.1000}",
+            "border-color": "raw:transparent"
+          }
+        },
+        {
+          "when": {
+            "variant": "negative"
+          },
+          "state": "hover",
+          "tokens": {
+            "background-color": "{swc.negative.background.color.hover}",
+            "color": "{swc.transparent.static.white.1000}",
+            "border-color": "raw:transparent"
+          }
+        },
+        {
+          "when": {
+            "variant": "negative"
+          },
+          "state": "active",
+          "tokens": {
+            "background-color": "{swc.negative.background.color.down}",
+            "color": "{swc.transparent.static.white.1000}",
+            "border-color": "raw:transparent"
+          }
+        },
+        {
+          "when": {
+            "variant": "negative"
+          },
+          "state": "focus-visible",
+          "tokens": {
+            "background-color": "{swc.negative.background.color.key.focus}",
+            "color": "{swc.transparent.static.white.1000}",
+            "border-color": "raw:transparent"
+          }
+        },
+        {
+          "when": {
+            "variant": "negative"
+          },
+          "state": "disabled",
+          "tokens": {
+            "background-color": "{swc.gray.100}",
+            "color": "{swc.gray.400}",
+            "border-color": "raw:transparent"
+          }
+        },
+        {
+          "when": {
+            "variant": "primary",
+            "fillStyle": "outline"
+          },
+          "tokens": {
+            "background-color": "raw:transparent",
+            "color": "{swc.gray.800}",
+            "border-color": "{swc.gray.800}"
+          }
+        },
+        {
+          "when": {
+            "variant": "primary",
+            "fillStyle": "outline"
+          },
+          "state": "hover",
+          "tokens": {
+            "background-color": "{swc.gray.100}",
+            "color": "{swc.gray.900}",
+            "border-color": "{swc.gray.900}"
+          }
+        },
+        {
+          "when": {
+            "variant": "primary",
+            "fillStyle": "outline"
+          },
+          "state": "active",
+          "tokens": {
+            "background-color": "{swc.gray.100}",
+            "color": "{swc.gray.900}",
+            "border-color": "{swc.gray.900}"
+          }
+        },
+        {
+          "when": {
+            "variant": "primary",
+            "fillStyle": "outline"
+          },
+          "state": "focus-visible",
+          "tokens": {
+            "background-color": "{swc.gray.100}",
+            "color": "{swc.gray.900}",
+            "border-color": "{swc.gray.900}"
+          }
+        },
+        {
+          "when": {
+            "variant": "primary",
+            "fillStyle": "outline"
+          },
+          "state": "disabled",
+          "tokens": {
+            "background-color": "raw:transparent",
+            "color": "{swc.gray.400}",
+            "border-color": "{swc.gray.300}"
+          }
+        },
+        {
+          "when": {
+            "variant": "primary",
+            "staticColor": "white"
+          },
+          "tokens": {
+            "background-color": "{swc.transparent.static.white.900}",
+            "color": "{swc.transparent.static.black.1000}",
+            "border-color": "raw:transparent"
+          }
+        },
+        {
+          "when": {
+            "variant": "primary",
+            "staticColor": "white"
+          },
+          "state": "hover",
+          "tokens": {
+            "background-color": "{swc.transparent.static.white.950}",
+            "color": "{swc.transparent.static.black.1000}",
+            "border-color": "raw:transparent"
+          }
+        },
+        {
+          "when": {
+            "variant": "primary",
+            "staticColor": "white"
+          },
+          "state": "active",
+          "tokens": {
+            "background-color": "{swc.transparent.static.white.950}",
+            "color": "{swc.transparent.static.black.1000}",
+            "border-color": "raw:transparent"
+          }
+        },
+        {
+          "when": {
+            "variant": "primary",
+            "staticColor": "white"
+          },
+          "state": "focus-visible",
+          "tokens": {
+            "background-color": "{swc.transparent.static.white.950}",
+            "color": "{swc.transparent.static.black.1000}",
+            "border-color": "raw:transparent",
+            "outline-color": "{swc.transparent.static.white.1000}"
+          }
+        },
+        {
+          "when": {
+            "variant": "primary",
+            "staticColor": "white"
+          },
+          "state": "disabled",
+          "tokens": {
+            "background-color": "{swc.transparent.static.white.200}",
+            "color": "{swc.transparent.static.white.350}",
+            "border-color": "raw:transparent"
+          }
+        },
+        {
+          "when": {
+            "variant": "primary",
+            "fillStyle": "outline",
+            "staticColor": "white"
+          },
+          "tokens": {
+            "background-color": "{swc.transparent.static.white.0}",
+            "color": "{swc.transparent.static.white.900}",
+            "border-color": "{swc.transparent.static.white.900}"
+          }
+        },
+        {
+          "when": {
+            "variant": "primary",
+            "fillStyle": "outline",
+            "staticColor": "white"
+          },
+          "state": "hover",
+          "tokens": {
+            "background-color": "{swc.transparent.static.white.200}",
+            "color": "{swc.transparent.static.white.950}",
+            "border-color": "{swc.transparent.static.white.950}"
+          }
+        },
+        {
+          "when": {
+            "variant": "primary",
+            "fillStyle": "outline",
+            "staticColor": "white"
+          },
+          "state": "active",
+          "tokens": {
+            "background-color": "{swc.transparent.static.white.200}",
+            "color": "{swc.transparent.static.white.950}",
+            "border-color": "{swc.transparent.static.white.950}"
+          }
+        },
+        {
+          "when": {
+            "variant": "primary",
+            "fillStyle": "outline",
+            "staticColor": "white"
+          },
+          "state": "focus-visible",
+          "tokens": {
+            "background-color": "{swc.transparent.static.white.200}",
+            "color": "{swc.transparent.static.white.950}",
+            "border-color": "{swc.transparent.static.white.950}",
+            "outline-color": "{swc.transparent.static.white.1000}"
+          }
+        },
+        {
+          "when": {
+            "variant": "primary",
+            "fillStyle": "outline",
+            "staticColor": "white"
+          },
+          "state": "disabled",
+          "tokens": {
+            "background-color": "{swc.transparent.static.white.0}",
+            "color": "{swc.transparent.static.white.350}",
+            "border-color": "{swc.transparent.static.white.300}"
+          }
+        },
+        {
+          "when": {
+            "variant": "primary",
+            "staticColor": "black"
+          },
+          "tokens": {
+            "background-color": "{swc.transparent.static.black.900}",
+            "color": "{swc.transparent.static.white.1000}",
+            "border-color": "raw:transparent"
+          }
+        },
+        {
+          "when": {
+            "variant": "primary",
+            "staticColor": "black"
+          },
+          "state": "hover",
+          "tokens": {
+            "background-color": "{swc.transparent.static.black.950}",
+            "color": "{swc.transparent.static.white.1000}",
+            "border-color": "raw:transparent"
+          }
+        },
+        {
+          "when": {
+            "variant": "primary",
+            "staticColor": "black"
+          },
+          "state": "active",
+          "tokens": {
+            "background-color": "{swc.transparent.static.black.950}",
+            "color": "{swc.transparent.static.white.1000}",
+            "border-color": "raw:transparent"
+          }
+        },
+        {
+          "when": {
+            "variant": "primary",
+            "staticColor": "black"
+          },
+          "state": "focus-visible",
+          "tokens": {
+            "background-color": "{swc.transparent.static.black.950}",
+            "color": "{swc.transparent.static.white.1000}",
+            "border-color": "raw:transparent",
+            "outline-color": "{swc.transparent.static.black.1000}"
+          }
+        },
+        {
+          "when": {
+            "variant": "primary",
+            "staticColor": "black"
+          },
+          "state": "disabled",
+          "tokens": {
+            "background-color": "{swc.transparent.static.black.150}",
+            "color": "{swc.transparent.static.black.400}",
+            "border-color": "raw:transparent"
+          }
+        },
+        {
+          "when": {
+            "variant": "primary",
+            "fillStyle": "outline",
+            "staticColor": "black"
+          },
+          "tokens": {
+            "background-color": "{swc.transparent.static.black.0}",
+            "color": "{swc.transparent.static.black.900}",
+            "border-color": "{swc.transparent.static.black.900}"
+          }
+        },
+        {
+          "when": {
+            "variant": "primary",
+            "fillStyle": "outline",
+            "staticColor": "black"
+          },
+          "state": "hover",
+          "tokens": {
+            "background-color": "{swc.transparent.static.black.150}",
+            "color": "{swc.transparent.static.black.950}",
+            "border-color": "{swc.transparent.static.black.950}"
+          }
+        },
+        {
+          "when": {
+            "variant": "primary",
+            "fillStyle": "outline",
+            "staticColor": "black"
+          },
+          "state": "active",
+          "tokens": {
+            "background-color": "{swc.transparent.static.black.150}",
+            "color": "{swc.transparent.static.black.950}",
+            "border-color": "{swc.transparent.static.black.950}"
+          }
+        },
+        {
+          "when": {
+            "variant": "primary",
+            "fillStyle": "outline",
+            "staticColor": "black"
+          },
+          "state": "focus-visible",
+          "tokens": {
+            "background-color": "{swc.transparent.static.black.150}",
+            "color": "{swc.transparent.static.black.950}",
+            "border-color": "{swc.transparent.static.black.950}",
+            "outline-color": "{swc.transparent.static.black.1000}"
+          }
+        },
+        {
+          "when": {
+            "variant": "primary",
+            "fillStyle": "outline",
+            "staticColor": "black"
+          },
+          "state": "disabled",
+          "tokens": {
+            "background-color": "{swc.transparent.static.black.0}",
+            "color": "{swc.transparent.static.black.400}",
+            "border-color": "{swc.transparent.static.black.300}"
+          }
+        },
+        {
+          "when": {
+            "variant": "secondary",
+            "fillStyle": "outline"
+          },
+          "tokens": {
+            "background-color": "raw:transparent",
+            "color": "{swc.gray.800}",
+            "border-color": "{swc.gray.300}"
+          }
+        },
+        {
+          "when": {
+            "variant": "secondary",
+            "fillStyle": "outline"
+          },
+          "state": "hover",
+          "tokens": {
+            "background-color": "{swc.gray.100}",
+            "color": "{swc.gray.900}",
+            "border-color": "{swc.gray.400}"
+          }
+        },
+        {
+          "when": {
+            "variant": "secondary",
+            "fillStyle": "outline"
+          },
+          "state": "active",
+          "tokens": {
+            "background-color": "{swc.gray.100}",
+            "color": "{swc.gray.900}",
+            "border-color": "{swc.gray.400}"
+          }
+        },
+        {
+          "when": {
+            "variant": "secondary",
+            "fillStyle": "outline"
+          },
+          "state": "focus-visible",
+          "tokens": {
+            "background-color": "{swc.gray.100}",
+            "color": "{swc.gray.900}",
+            "border-color": "{swc.gray.400}"
+          }
+        },
+        {
+          "when": {
+            "variant": "secondary",
+            "fillStyle": "outline"
+          },
+          "state": "disabled",
+          "tokens": {
+            "background-color": "raw:transparent",
+            "color": "{swc.gray.400}",
+            "border-color": "{swc.gray.300}"
+          }
+        },
+        {
+          "when": {
+            "variant": "secondary",
+            "staticColor": "white"
+          },
+          "tokens": {
+            "background-color": "{swc.transparent.static.white.200}",
+            "color": "{swc.transparent.static.white.900}",
+            "border-color": "raw:transparent"
+          }
+        },
+        {
+          "when": {
+            "variant": "secondary",
+            "staticColor": "white"
+          },
+          "state": "hover",
+          "tokens": {
+            "background-color": "{swc.transparent.static.white.300}",
+            "color": "{swc.transparent.static.white.950}",
+            "border-color": "raw:transparent"
+          }
+        },
+        {
+          "when": {
+            "variant": "secondary",
+            "staticColor": "white"
+          },
+          "state": "active",
+          "tokens": {
+            "background-color": "{swc.transparent.static.white.300}",
+            "color": "{swc.transparent.static.white.950}",
+            "border-color": "raw:transparent"
+          }
+        },
+        {
+          "when": {
+            "variant": "secondary",
+            "staticColor": "white"
+          },
+          "state": "focus-visible",
+          "tokens": {
+            "background-color": "{swc.transparent.static.white.300}",
+            "color": "{swc.transparent.static.white.950}",
+            "border-color": "raw:transparent",
+            "outline-color": "{swc.transparent.static.white.1000}"
+          }
+        },
+        {
+          "when": {
+            "variant": "secondary",
+            "staticColor": "white"
+          },
+          "state": "disabled",
+          "tokens": {
+            "background-color": "{swc.transparent.static.white.200}",
+            "color": "{swc.transparent.static.white.350}",
+            "border-color": "raw:transparent"
+          }
+        },
+        {
+          "when": {
+            "variant": "secondary",
+            "fillStyle": "outline",
+            "staticColor": "white"
+          },
+          "tokens": {
+            "background-color": "{swc.transparent.static.white.0}",
+            "color": "{swc.transparent.static.white.900}",
+            "border-color": "{swc.transparent.static.white.300}"
+          }
+        },
+        {
+          "when": {
+            "variant": "secondary",
+            "fillStyle": "outline",
+            "staticColor": "white"
+          },
+          "state": "hover",
+          "tokens": {
+            "background-color": "{swc.transparent.static.white.200}",
+            "color": "{swc.transparent.static.white.950}",
+            "border-color": "{swc.transparent.static.white.350}"
+          }
+        },
+        {
+          "when": {
+            "variant": "secondary",
+            "fillStyle": "outline",
+            "staticColor": "white"
+          },
+          "state": "active",
+          "tokens": {
+            "background-color": "{swc.transparent.static.white.200}",
+            "color": "{swc.transparent.static.white.950}",
+            "border-color": "{swc.transparent.static.white.350}"
+          }
+        },
+        {
+          "when": {
+            "variant": "secondary",
+            "fillStyle": "outline",
+            "staticColor": "white"
+          },
+          "state": "focus-visible",
+          "tokens": {
+            "background-color": "{swc.transparent.static.white.200}",
+            "color": "{swc.transparent.static.white.950}",
+            "border-color": "{swc.transparent.static.white.350}",
+            "outline-color": "{swc.transparent.static.white.1000}"
+          }
+        },
+        {
+          "when": {
+            "variant": "secondary",
+            "fillStyle": "outline",
+            "staticColor": "white"
+          },
+          "state": "disabled",
+          "tokens": {
+            "background-color": "{swc.transparent.static.white.0}",
+            "color": "{swc.transparent.static.white.350}",
+            "border-color": "{swc.transparent.static.white.300}"
+          }
+        },
+        {
+          "when": {
+            "variant": "secondary",
+            "staticColor": "black"
+          },
+          "tokens": {
+            "background-color": "{swc.transparent.static.black.150}",
+            "color": "{swc.transparent.static.black.900}",
+            "border-color": "raw:transparent"
+          }
+        },
+        {
+          "when": {
+            "variant": "secondary",
+            "staticColor": "black"
+          },
+          "state": "hover",
+          "tokens": {
+            "background-color": "{swc.transparent.static.black.200}",
+            "color": "{swc.transparent.static.black.950}",
+            "border-color": "raw:transparent"
+          }
+        },
+        {
+          "when": {
+            "variant": "secondary",
+            "staticColor": "black"
+          },
+          "state": "active",
+          "tokens": {
+            "background-color": "{swc.transparent.static.black.200}",
+            "color": "{swc.transparent.static.black.950}",
+            "border-color": "raw:transparent"
+          }
+        },
+        {
+          "when": {
+            "variant": "secondary",
+            "staticColor": "black"
+          },
+          "state": "focus-visible",
+          "tokens": {
+            "background-color": "{swc.transparent.static.black.200}",
+            "color": "{swc.transparent.static.black.950}",
+            "border-color": "raw:transparent",
+            "outline-color": "{swc.transparent.static.black.1000}"
+          }
+        },
+        {
+          "when": {
+            "variant": "secondary",
+            "staticColor": "black"
+          },
+          "state": "disabled",
+          "tokens": {
+            "background-color": "{swc.transparent.static.black.150}",
+            "color": "{swc.transparent.static.black.400}",
+            "border-color": "raw:transparent"
+          }
+        },
+        {
+          "when": {
+            "variant": "secondary",
+            "fillStyle": "outline",
+            "staticColor": "black"
+          },
+          "tokens": {
+            "background-color": "{swc.transparent.static.black.0}",
+            "color": "{swc.transparent.static.black.900}",
+            "border-color": "{swc.transparent.static.black.300}"
+          }
+        },
+        {
+          "when": {
+            "variant": "secondary",
+            "fillStyle": "outline",
+            "staticColor": "black"
+          },
+          "state": "hover",
+          "tokens": {
+            "background-color": "{swc.transparent.static.black.150}",
+            "color": "{swc.transparent.static.black.950}",
+            "border-color": "{swc.transparent.static.black.400}"
+          }
+        },
+        {
+          "when": {
+            "variant": "secondary",
+            "fillStyle": "outline",
+            "staticColor": "black"
+          },
+          "state": "active",
+          "tokens": {
+            "background-color": "{swc.transparent.static.black.150}",
+            "color": "{swc.transparent.static.black.950}",
+            "border-color": "{swc.transparent.static.black.400}"
+          }
+        },
+        {
+          "when": {
+            "variant": "secondary",
+            "fillStyle": "outline",
+            "staticColor": "black"
+          },
+          "state": "focus-visible",
+          "tokens": {
+            "background-color": "{swc.transparent.static.black.150}",
+            "color": "{swc.transparent.static.black.950}",
+            "border-color": "{swc.transparent.static.black.400}",
+            "outline-color": "{swc.transparent.static.black.1000}"
+          }
+        },
+        {
+          "when": {
+            "variant": "secondary",
+            "fillStyle": "outline",
+            "staticColor": "black"
+          },
+          "state": "disabled",
+          "tokens": {
+            "background-color": "{swc.transparent.static.black.0}",
+            "color": "{swc.transparent.static.black.400}",
+            "border-color": "{swc.transparent.static.black.300}"
+          }
+        }
+      ],
       "parts": {
         "icon": {
           "selector": ".swc-Button-icon",
@@ -288,7 +1127,7 @@
             "acceptsMode": "prefer",
             "min": 0,
             "max": 1,
-            "notes": "Any workflow glyph, not one named component \u2014 upstream's slot takes whatever SVG is put in it. The default names a real entry in the spectrum-icons manifest so the slot can be exercised, which a slot with no default cannot be: the preview had nothing to draw and the control was a bare text box.",
+            "notes": "Any workflow glyph, not one named component — upstream's slot takes whatever SVG is put in it. The default names a real entry in the spectrum-icons manifest so the slot can be exercised, which a slot with no default cannot be: the preview had nothing to draw and the control was a bare text box.",
             "default": {
               "figma": "S2_Icon_Circle_20_N",
               "manifest": "spectrum-icons",
@@ -321,7 +1160,8 @@
               "--swc-button-padding-vertical": "{swc.base.padding.vertical.small}",
               "--swc-button-gap": "{swc.base.gap.small}",
               "--swc-button-icon-size": "{swc.workflow.icon.small}",
-              "border-radius": "raw:12px"
+              "border-radius": "{swc.button.corner.radius.s}",
+              "line-height": "{swc.line.height.font.size.75}"
             },
             "m": {
               "min-block-size": "{swc.component.height.100}",
@@ -335,7 +1175,8 @@
               "--swc-button-padding-vertical": "{swc.base.padding.vertical.medium}",
               "--swc-button-gap": "{swc.base.gap.medium}",
               "--swc-button-icon-size": "{swc.workflow.icon.medium}",
-              "border-radius": "raw:16px"
+              "border-radius": "{swc.button.corner.radius.m}",
+              "line-height": "{swc.line.height.font.size.100}"
             },
             "l": {
               "min-block-size": "{swc.component.height.200}",
@@ -349,7 +1190,8 @@
               "--swc-button-padding-vertical": "{swc.base.padding.vertical.large}",
               "--swc-button-gap": "{swc.base.gap.large}",
               "--swc-button-icon-size": "{swc.workflow.icon.large}",
-              "border-radius": "raw:20px"
+              "border-radius": "{swc.button.corner.radius.l}",
+              "line-height": "{swc.line.height.font.size.200}"
             },
             "xl": {
               "min-block-size": "{swc.component.height.300}",
@@ -363,7 +1205,8 @@
               "--swc-button-padding-vertical": "{swc.base.padding.vertical.extra-large}",
               "--swc-button-gap": "{swc.base.gap.extra-large}",
               "--swc-button-icon-size": "{swc.workflow.icon.extra-large}",
-              "border-radius": "raw:24px"
+              "border-radius": "{swc.button.corner.radius.xl}",
+              "line-height": "{swc.line.height.font.size.300}"
             }
           }
         },
@@ -578,13 +1421,13 @@
     },
     {
       "id": "bt-line-height",
-      "status": "open",
+      "status": "decided",
       "confidence": "high",
       "owner": "Matt",
       "question": "The design file and the implementation disagree about line height at two sizes.",
-      "chose": "Follow the implementation, which computes round(down, 1.3em, 1px)",
-      "fix": "Ask the Spectrum team which is canonical: the file's explicit per-size values give 16 and 22 at S and XL, the CSS gives 15 and 23. Medium and large agree.",
-      "evidence": "Figma Line height/Font size 75 = 16 vs computed 15; /300 = 22 vs computed 23."
+      "chose": "Bind Figma's per-size line height tokens",
+      "evidence": "Figma Line height/Font size 75 = 16 vs computed 15; /300 = 22 vs computed 23.",
+      "decision": "Bind the line height tokens Figma binds, 16, 18, 20 and 22 by size. Adobe's CSS computes 15 and 23 at S and XL, but we do not load its code and the tokens exist. This also makes XL 48 tall, as in Figma."
     },
     {
       "id": "bt-border-box",
@@ -594,7 +1437,7 @@
       "question": "Upstream pads inside a real 2px border; our renderer draws borders as an inset shadow, which takes no box space.",
       "chose": "Bind padding to the full token value and let the shadow border overlay it",
       "fix": "If the renderer ever emits real borders, subtract the border width here.",
-      "evidence": "measured: every size reproduces upstream's outer box exactly \u2014 44x24, 51x32, 62x40, 70x48.",
+      "evidence": "measured: every size reproduces upstream's outer box exactly — 44x24, 51x32, 62x40, 70x48.",
       "decision": "Padding is bound to the full token value because the renderer draws the border as an inset shadow, which consumes no box space. Measured: every size reproduces upstream's outer box exactly."
     },
     {
@@ -604,7 +1447,7 @@
       "owner": "Matt",
       "question": "Colour was bound to the palette (gray-800, blue-800, red-800) rather than the alias tier the design file uses.",
       "chose": "Bind the alias tier, matching what Dev Mode reports on the node",
-      "decision": "Figma's Alias/background/semantic/accent/default is --swc-accent-background-color-default. The two names differ in shape \u2014 the variant moves to the front, 'color' is inserted, 'semantic' is dropped \u2014 so a path-to-dash transform silently lands on the palette instead.",
+      "decision": "Figma's Alias/background/semantic/accent/default is --swc-accent-background-color-default. The two names differ in shape — the variant moves to the front, 'color' is inserted, 'semantic' is dropped — so a path-to-dash transform silently lands on the palette instead.",
       "fix": "none",
       "evidence": "blue-800 is #4b75ff; the accent alias is #3b63fb. The accent and negative buttons were rendering the wrong blue and red."
     },
@@ -630,13 +1473,13 @@
     },
     {
       "id": "bt-geometry",
-      "status": "open",
+      "status": "decided",
       "confidence": "high",
       "owner": "Matt",
       "question": "Upstream computes the radius as half the height with calc(), which the contract cannot express.",
-      "chose": "Record the four values the calc produces: 12, 16, 20 and 24",
-      "fix": "Add arithmetic to the token map, or ask for per-size radius tokens. A pill value renders identically but reports a number neither the design nor the implementation uses, which is worse in a contract than a literal.",
-      "evidence": "Figma Button radius is 12/16/20/24 across the four sizes and global-button.css computes calc(min-block-size / 2), which gives the same four."
+      "chose": "A component token per size, derived from the height",
+      "evidence": "Figma Button radius is 12/16/20/24 across the four sizes and global-button.css computes calc(min-block-size / 2), which gives the same four.",
+      "decision": "Radius is half the height, the rule Adobe's code calculates and S2's Figma types in. It lives once in tokens/tokens.layer.css, and eval:visual:milo compares the result with Figma's numbers. Icon-only buttons are not modelled yet."
     },
     {
       "id": "bt-filled-content",
@@ -657,7 +1500,7 @@
       "question": "The design builds the pending state from a progress circle the contract never mentioned.",
       "chose": "Declare it as internal and leave the pending visual out of the anatomy for now",
       "fix": "Contract the progress circle, then give Button a pending part that composes it. Until then a consumer driving `pending` gets a spinner this contract does not describe.",
-      "evidence": "The design evidence reports an instance of \".In-field progress circle\"; upstream renders .swc-PendingSpinner from PendingMixin. Only surfaced once design evidence existed \u2014 the code alone never showed it."
+      "evidence": "The design evidence reports an instance of \".In-field progress circle\"; upstream renders .swc-PendingSpinner from PendingMixin. Only surfaced once design evidence existed — the code alone never showed it."
     },
     {
       "id": "i-glyph-fill",
@@ -670,5 +1513,21 @@
       "fix": "none. The alternative was rewriting 396 vendored SVGs, which would mean editing artwork we do not own.",
       "evidence": "All 396 entries in spectrum-icons.json carry var(--iconPrimary, #222); all 26 in our own s2a-icons.json use currentColor. Measured: the badge's text was #ffffff while its glyph painted #222222."
     }
-  ]
+  ],
+  "tier": "atom",
+  "x-authored": {
+    "sample": "<strong><a href=\"#\">Get free app</a></strong> <em><a href=\"#\">Label</a></em>",
+    "sampleOptions": {
+      "size": "l",
+      "cues": {
+        "STRONG": {
+          "variant": "accent"
+        },
+        "EM": {
+          "variant": "secondary",
+          "fillStyle": "outline"
+        }
+      }
+    }
+  }
 }

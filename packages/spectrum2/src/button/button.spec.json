@@ -376,14 +376,17 @@
     "root-padding-block": "--swc-base-padding-vertical-medium",
     "root-gap": "--swc-base-gap-medium",
     "root-border-width": "--swc-border-width-200",
+    "root-border-radius": "--swc-button-corner-radius-m",
     "root-background-color": "--swc-neutral-background-color-default",
     "root-color": "--swc-gray-25",
+    "root-line-height": "--swc-line-height-font-size-100",
     "root-background-color:hover": "--swc-neutral-background-color-hover",
     "root-color:hover": "--swc-gray-25",
     "root-background-color:active": "--swc-neutral-background-color-down",
     "root-color:active": "--swc-gray-25",
     "root-outline-color:focus-visible": "--swc-focus-indicator-color",
     "root-outline-width:focus-visible": "--swc-focus-indicator-thickness",
+    "root-outline-offset:focus-visible": "--swc-border-width-200",
     "root-background-color:disabled": "--swc-disabled-background-color",
     "root-color:disabled": "--swc-disabled-content-color",
     "root-min-block-size@size=s": "--swc-component-height-75",
@@ -397,6 +400,8 @@
     "root---swc-button-padding-vertical@size=s": "--swc-base-padding-vertical-small",
     "root---swc-button-gap@size=s": "--swc-base-gap-small",
     "root---swc-button-icon-size@size=s": "--swc-workflow-icon-small",
+    "root-border-radius@size=s": "--swc-button-corner-radius-s",
+    "root-line-height@size=s": "--swc-line-height-font-size-75",
     "root-min-block-size@size=m": "--swc-component-height-100",
     "root-font-size@size=m": "--swc-font-size-100",
     "root-padding-inline@size=m": "--swc-base-padding-horizontal-medium",
@@ -408,6 +413,8 @@
     "root---swc-button-padding-vertical@size=m": "--swc-base-padding-vertical-medium",
     "root---swc-button-gap@size=m": "--swc-base-gap-medium",
     "root---swc-button-icon-size@size=m": "--swc-workflow-icon-medium",
+    "root-border-radius@size=m": "--swc-button-corner-radius-m",
+    "root-line-height@size=m": "--swc-line-height-font-size-100",
     "root-min-block-size@size=l": "--swc-component-height-200",
     "root-font-size@size=l": "--swc-font-size-200",
     "root-padding-inline@size=l": "--swc-base-padding-horizontal-large",
@@ -419,6 +426,8 @@
     "root---swc-button-padding-vertical@size=l": "--swc-base-padding-vertical-large",
     "root---swc-button-gap@size=l": "--swc-base-gap-large",
     "root---swc-button-icon-size@size=l": "--swc-workflow-icon-large",
+    "root-border-radius@size=l": "--swc-button-corner-radius-l",
+    "root-line-height@size=l": "--swc-line-height-font-size-200",
     "root-min-block-size@size=xl": "--swc-component-height-300",
     "root-font-size@size=xl": "--swc-font-size-300",
     "root-padding-inline@size=xl": "--swc-base-padding-horizontal-extra-large",
@@ -430,11 +439,13 @@
     "root---swc-button-padding-vertical@size=xl": "--swc-base-padding-vertical-extra-large",
     "root---swc-button-gap@size=xl": "--swc-base-gap-extra-large",
     "root---swc-button-icon-size@size=xl": "--swc-workflow-icon-extra-large",
+    "root-border-radius@size=xl": "--swc-button-corner-radius-xl",
+    "root-line-height@size=xl": "--swc-line-height-font-size-300",
     "root-background-color@variant=accent": "--swc-accent-background-color-default",
     "root-color@variant=accent": "--swc-transparent-static-white-1000",
     "root-background-color@variant=negative": "--swc-negative-background-color-default",
     "root-color@variant=negative": "--swc-transparent-static-white-1000",
-    "root-background-color@variant=primary": "--swc-neutral-background-color-default",
+    "root-background-color@variant=primary": "--swc-gray-800",
     "root-color@variant=primary": "--swc-gray-25",
     "root-background-color@variant=secondary": "--swc-gray-100",
     "root-color@variant=secondary": "--swc-gray-800",
@@ -442,9 +453,171 @@
     "root-color@variant=accent:hover": "--swc-transparent-static-white-1000",
     "root-color@variant=negative:hover": "--swc-transparent-static-white-1000",
     "root-color@variant=accent:active": "--swc-transparent-static-white-1000",
-    "root-color@variant=negative:active": "--swc-transparent-static-white-1000"
+    "root-color@variant=negative:active": "--swc-transparent-static-white-1000",
+    "root-background-color@variant=primary:hover": "--swc-gray-900",
+    "root-color@variant=primary:hover": "--swc-gray-25",
+    "root-background-color@variant=primary:active": "--swc-gray-900",
+    "root-color@variant=primary:active": "--swc-gray-25",
+    "root-background-color@variant=primary:focus-visible": "--swc-gray-900",
+    "root-color@variant=primary:focus-visible": "--swc-gray-25",
+    "root-background-color@variant=primary:disabled": "--swc-gray-100",
+    "root-color@variant=primary:disabled": "--swc-gray-400",
+    "root-background-color@variant=secondary:hover": "--swc-gray-200",
+    "root-color@variant=secondary:hover": "--swc-gray-900",
+    "root-background-color@variant=secondary:active": "--swc-gray-200",
+    "root-color@variant=secondary:active": "--swc-gray-900",
+    "root-background-color@variant=secondary:focus-visible": "--swc-gray-200",
+    "root-color@variant=secondary:focus-visible": "--swc-gray-900",
+    "root-background-color@variant=secondary:disabled": "--swc-gray-100",
+    "root-color@variant=secondary:disabled": "--swc-gray-400",
+    "root-background-color@variant=accent:hover": "--swc-accent-background-color-hover",
+    "root-background-color@variant=accent:active": "--swc-accent-background-color-down",
+    "root-background-color@variant=accent:focus-visible": "--swc-accent-background-color-key-focus",
+    "root-color@variant=accent:focus-visible": "--swc-transparent-static-white-1000",
+    "root-background-color@variant=accent:disabled": "--swc-gray-100",
+    "root-color@variant=accent:disabled": "--swc-gray-400",
+    "root-background-color@variant=negative:hover": "--swc-negative-background-color-hover",
+    "root-background-color@variant=negative:active": "--swc-negative-background-color-down",
+    "root-background-color@variant=negative:focus-visible": "--swc-negative-background-color-key-focus",
+    "root-color@variant=negative:focus-visible": "--swc-transparent-static-white-1000",
+    "root-background-color@variant=negative:disabled": "--swc-gray-100",
+    "root-color@variant=negative:disabled": "--swc-gray-400",
+    "root-color@variant=primary,fillStyle=outline": "--swc-gray-800",
+    "root-border-color@variant=primary,fillStyle=outline": "--swc-gray-800",
+    "root-background-color@variant=primary,fillStyle=outline:hover": "--swc-gray-100",
+    "root-color@variant=primary,fillStyle=outline:hover": "--swc-gray-900",
+    "root-border-color@variant=primary,fillStyle=outline:hover": "--swc-gray-900",
+    "root-background-color@variant=primary,fillStyle=outline:active": "--swc-gray-100",
+    "root-color@variant=primary,fillStyle=outline:active": "--swc-gray-900",
+    "root-border-color@variant=primary,fillStyle=outline:active": "--swc-gray-900",
+    "root-background-color@variant=primary,fillStyle=outline:focus-visible": "--swc-gray-100",
+    "root-color@variant=primary,fillStyle=outline:focus-visible": "--swc-gray-900",
+    "root-border-color@variant=primary,fillStyle=outline:focus-visible": "--swc-gray-900",
+    "root-color@variant=primary,fillStyle=outline:disabled": "--swc-gray-400",
+    "root-border-color@variant=primary,fillStyle=outline:disabled": "--swc-gray-300",
+    "root-background-color@variant=primary,staticColor=white": "--swc-transparent-static-white-900",
+    "root-color@variant=primary,staticColor=white": "--swc-transparent-static-black-1000",
+    "root-background-color@variant=primary,staticColor=white:hover": "--swc-transparent-static-white-950",
+    "root-color@variant=primary,staticColor=white:hover": "--swc-transparent-static-black-1000",
+    "root-background-color@variant=primary,staticColor=white:active": "--swc-transparent-static-white-950",
+    "root-color@variant=primary,staticColor=white:active": "--swc-transparent-static-black-1000",
+    "root-background-color@variant=primary,staticColor=white:focus-visible": "--swc-transparent-static-white-950",
+    "root-color@variant=primary,staticColor=white:focus-visible": "--swc-transparent-static-black-1000",
+    "root-outline-color@variant=primary,staticColor=white:focus-visible": "--swc-transparent-static-white-1000",
+    "root-background-color@variant=primary,staticColor=white:disabled": "--swc-transparent-static-white-200",
+    "root-color@variant=primary,staticColor=white:disabled": "--swc-transparent-static-white-350",
+    "root-background-color@variant=primary,fillStyle=outline,staticColor=white": "--swc-transparent-static-white-0",
+    "root-color@variant=primary,fillStyle=outline,staticColor=white": "--swc-transparent-static-white-900",
+    "root-border-color@variant=primary,fillStyle=outline,staticColor=white": "--swc-transparent-static-white-900",
+    "root-background-color@variant=primary,fillStyle=outline,staticColor=white:hover": "--swc-transparent-static-white-200",
+    "root-color@variant=primary,fillStyle=outline,staticColor=white:hover": "--swc-transparent-static-white-950",
+    "root-border-color@variant=primary,fillStyle=outline,staticColor=white:hover": "--swc-transparent-static-white-950",
+    "root-background-color@variant=primary,fillStyle=outline,staticColor=white:active": "--swc-transparent-static-white-200",
+    "root-color@variant=primary,fillStyle=outline,staticColor=white:active": "--swc-transparent-static-white-950",
+    "root-border-color@variant=primary,fillStyle=outline,staticColor=white:active": "--swc-transparent-static-white-950",
+    "root-background-color@variant=primary,fillStyle=outline,staticColor=white:focus-visible": "--swc-transparent-static-white-200",
+    "root-color@variant=primary,fillStyle=outline,staticColor=white:focus-visible": "--swc-transparent-static-white-950",
+    "root-border-color@variant=primary,fillStyle=outline,staticColor=white:focus-visible": "--swc-transparent-static-white-950",
+    "root-outline-color@variant=primary,fillStyle=outline,staticColor=white:focus-visible": "--swc-transparent-static-white-1000",
+    "root-background-color@variant=primary,fillStyle=outline,staticColor=white:disabled": "--swc-transparent-static-white-0",
+    "root-color@variant=primary,fillStyle=outline,staticColor=white:disabled": "--swc-transparent-static-white-350",
+    "root-border-color@variant=primary,fillStyle=outline,staticColor=white:disabled": "--swc-transparent-static-white-300",
+    "root-background-color@variant=primary,staticColor=black": "--swc-transparent-static-black-900",
+    "root-color@variant=primary,staticColor=black": "--swc-transparent-static-white-1000",
+    "root-background-color@variant=primary,staticColor=black:hover": "--swc-transparent-static-black-950",
+    "root-color@variant=primary,staticColor=black:hover": "--swc-transparent-static-white-1000",
+    "root-background-color@variant=primary,staticColor=black:active": "--swc-transparent-static-black-950",
+    "root-color@variant=primary,staticColor=black:active": "--swc-transparent-static-white-1000",
+    "root-background-color@variant=primary,staticColor=black:focus-visible": "--swc-transparent-static-black-950",
+    "root-color@variant=primary,staticColor=black:focus-visible": "--swc-transparent-static-white-1000",
+    "root-outline-color@variant=primary,staticColor=black:focus-visible": "--swc-transparent-static-black-1000",
+    "root-background-color@variant=primary,staticColor=black:disabled": "--swc-transparent-static-black-150",
+    "root-color@variant=primary,staticColor=black:disabled": "--swc-transparent-static-black-400",
+    "root-background-color@variant=primary,fillStyle=outline,staticColor=black": "--swc-transparent-static-black-0",
+    "root-color@variant=primary,fillStyle=outline,staticColor=black": "--swc-transparent-static-black-900",
+    "root-border-color@variant=primary,fillStyle=outline,staticColor=black": "--swc-transparent-static-black-900",
+    "root-background-color@variant=primary,fillStyle=outline,staticColor=black:hover": "--swc-transparent-static-black-150",
+    "root-color@variant=primary,fillStyle=outline,staticColor=black:hover": "--swc-transparent-static-black-950",
+    "root-border-color@variant=primary,fillStyle=outline,staticColor=black:hover": "--swc-transparent-static-black-950",
+    "root-background-color@variant=primary,fillStyle=outline,staticColor=black:active": "--swc-transparent-static-black-150",
+    "root-color@variant=primary,fillStyle=outline,staticColor=black:active": "--swc-transparent-static-black-950",
+    "root-border-color@variant=primary,fillStyle=outline,staticColor=black:active": "--swc-transparent-static-black-950",
+    "root-background-color@variant=primary,fillStyle=outline,staticColor=black:focus-visible": "--swc-transparent-static-black-150",
+    "root-color@variant=primary,fillStyle=outline,staticColor=black:focus-visible": "--swc-transparent-static-black-950",
+    "root-border-color@variant=primary,fillStyle=outline,staticColor=black:focus-visible": "--swc-transparent-static-black-950",
+    "root-outline-color@variant=primary,fillStyle=outline,staticColor=black:focus-visible": "--swc-transparent-static-black-1000",
+    "root-background-color@variant=primary,fillStyle=outline,staticColor=black:disabled": "--swc-transparent-static-black-0",
+    "root-color@variant=primary,fillStyle=outline,staticColor=black:disabled": "--swc-transparent-static-black-400",
+    "root-border-color@variant=primary,fillStyle=outline,staticColor=black:disabled": "--swc-transparent-static-black-300",
+    "root-color@variant=secondary,fillStyle=outline": "--swc-gray-800",
+    "root-border-color@variant=secondary,fillStyle=outline": "--swc-gray-300",
+    "root-background-color@variant=secondary,fillStyle=outline:hover": "--swc-gray-100",
+    "root-color@variant=secondary,fillStyle=outline:hover": "--swc-gray-900",
+    "root-border-color@variant=secondary,fillStyle=outline:hover": "--swc-gray-400",
+    "root-background-color@variant=secondary,fillStyle=outline:active": "--swc-gray-100",
+    "root-color@variant=secondary,fillStyle=outline:active": "--swc-gray-900",
+    "root-border-color@variant=secondary,fillStyle=outline:active": "--swc-gray-400",
+    "root-background-color@variant=secondary,fillStyle=outline:focus-visible": "--swc-gray-100",
+    "root-color@variant=secondary,fillStyle=outline:focus-visible": "--swc-gray-900",
+    "root-border-color@variant=secondary,fillStyle=outline:focus-visible": "--swc-gray-400",
+    "root-color@variant=secondary,fillStyle=outline:disabled": "--swc-gray-400",
+    "root-border-color@variant=secondary,fillStyle=outline:disabled": "--swc-gray-300",
+    "root-background-color@variant=secondary,staticColor=white": "--swc-transparent-static-white-200",
+    "root-color@variant=secondary,staticColor=white": "--swc-transparent-static-white-900",
+    "root-background-color@variant=secondary,staticColor=white:hover": "--swc-transparent-static-white-300",
+    "root-color@variant=secondary,staticColor=white:hover": "--swc-transparent-static-white-950",
+    "root-background-color@variant=secondary,staticColor=white:active": "--swc-transparent-static-white-300",
+    "root-color@variant=secondary,staticColor=white:active": "--swc-transparent-static-white-950",
+    "root-background-color@variant=secondary,staticColor=white:focus-visible": "--swc-transparent-static-white-300",
+    "root-color@variant=secondary,staticColor=white:focus-visible": "--swc-transparent-static-white-950",
+    "root-outline-color@variant=secondary,staticColor=white:focus-visible": "--swc-transparent-static-white-1000",
+    "root-background-color@variant=secondary,staticColor=white:disabled": "--swc-transparent-static-white-200",
+    "root-color@variant=secondary,staticColor=white:disabled": "--swc-transparent-static-white-350",
+    "root-background-color@variant=secondary,fillStyle=outline,staticColor=white": "--swc-transparent-static-white-0",
+    "root-color@variant=secondary,fillStyle=outline,staticColor=white": "--swc-transparent-static-white-900",
+    "root-border-color@variant=secondary,fillStyle=outline,staticColor=white": "--swc-transparent-static-white-300",
+    "root-background-color@variant=secondary,fillStyle=outline,staticColor=white:hover": "--swc-transparent-static-white-200",
+    "root-color@variant=secondary,fillStyle=outline,staticColor=white:hover": "--swc-transparent-static-white-950",
+    "root-border-color@variant=secondary,fillStyle=outline,staticColor=white:hover": "--swc-transparent-static-white-350",
+    "root-background-color@variant=secondary,fillStyle=outline,staticColor=white:active": "--swc-transparent-static-white-200",
+    "root-color@variant=secondary,fillStyle=outline,staticColor=white:active": "--swc-transparent-static-white-950",
+    "root-border-color@variant=secondary,fillStyle=outline,staticColor=white:active": "--swc-transparent-static-white-350",
+    "root-background-color@variant=secondary,fillStyle=outline,staticColor=white:focus-visible": "--swc-transparent-static-white-200",
+    "root-color@variant=secondary,fillStyle=outline,staticColor=white:focus-visible": "--swc-transparent-static-white-950",
+    "root-border-color@variant=secondary,fillStyle=outline,staticColor=white:focus-visible": "--swc-transparent-static-white-350",
+    "root-outline-color@variant=secondary,fillStyle=outline,staticColor=white:focus-visible": "--swc-transparent-static-white-1000",
+    "root-background-color@variant=secondary,fillStyle=outline,staticColor=white:disabled": "--swc-transparent-static-white-0",
+    "root-color@variant=secondary,fillStyle=outline,staticColor=white:disabled": "--swc-transparent-static-white-350",
+    "root-border-color@variant=secondary,fillStyle=outline,staticColor=white:disabled": "--swc-transparent-static-white-300",
+    "root-background-color@variant=secondary,staticColor=black": "--swc-transparent-static-black-150",
+    "root-color@variant=secondary,staticColor=black": "--swc-transparent-static-black-900",
+    "root-background-color@variant=secondary,staticColor=black:hover": "--swc-transparent-static-black-200",
+    "root-color@variant=secondary,staticColor=black:hover": "--swc-transparent-static-black-950",
+    "root-background-color@variant=secondary,staticColor=black:active": "--swc-transparent-static-black-200",
+    "root-color@variant=secondary,staticColor=black:active": "--swc-transparent-static-black-950",
+    "root-background-color@variant=secondary,staticColor=black:focus-visible": "--swc-transparent-static-black-200",
+    "root-color@variant=secondary,staticColor=black:focus-visible": "--swc-transparent-static-black-950",
+    "root-outline-color@variant=secondary,staticColor=black:focus-visible": "--swc-transparent-static-black-1000",
+    "root-background-color@variant=secondary,staticColor=black:disabled": "--swc-transparent-static-black-150",
+    "root-color@variant=secondary,staticColor=black:disabled": "--swc-transparent-static-black-400",
+    "root-background-color@variant=secondary,fillStyle=outline,staticColor=black": "--swc-transparent-static-black-0",
+    "root-color@variant=secondary,fillStyle=outline,staticColor=black": "--swc-transparent-static-black-900",
+    "root-border-color@variant=secondary,fillStyle=outline,staticColor=black": "--swc-transparent-static-black-300",
+    "root-background-color@variant=secondary,fillStyle=outline,staticColor=black:hover": "--swc-transparent-static-black-150",
+    "root-color@variant=secondary,fillStyle=outline,staticColor=black:hover": "--swc-transparent-static-black-950",
+    "root-border-color@variant=secondary,fillStyle=outline,staticColor=black:hover": "--swc-transparent-static-black-400",
+    "root-background-color@variant=secondary,fillStyle=outline,staticColor=black:active": "--swc-transparent-static-black-150",
+    "root-color@variant=secondary,fillStyle=outline,staticColor=black:active": "--swc-transparent-static-black-950",
+    "root-border-color@variant=secondary,fillStyle=outline,staticColor=black:active": "--swc-transparent-static-black-400",
+    "root-background-color@variant=secondary,fillStyle=outline,staticColor=black:focus-visible": "--swc-transparent-static-black-150",
+    "root-color@variant=secondary,fillStyle=outline,staticColor=black:focus-visible": "--swc-transparent-static-black-950",
+    "root-border-color@variant=secondary,fillStyle=outline,staticColor=black:focus-visible": "--swc-transparent-static-black-400",
+    "root-outline-color@variant=secondary,fillStyle=outline,staticColor=black:focus-visible": "--swc-transparent-static-black-1000",
+    "root-background-color@variant=secondary,fillStyle=outline,staticColor=black:disabled": "--swc-transparent-static-black-0",
+    "root-color@variant=secondary,fillStyle=outline,staticColor=black:disabled": "--swc-transparent-static-black-400",
+    "root-border-color@variant=secondary,fillStyle=outline,staticColor=black:disabled": "--swc-transparent-static-black-300"
   },
-  "tier": "component",
+  "tier": "atom",
   "composedOf": [],
   "a11y": {
     "role": "button",
@@ -625,9 +798,17 @@
         ]
       },
       "border-radius": {
-        "value": "raw:16px",
-        "raw": true,
-        "tokens": []
+        "value": "{swc.button.corner.radius.m}",
+        "raw": false,
+        "tokens": [
+          {
+            "ref": "{swc.button.corner.radius.m}",
+            "cssVar": "--swc-button-corner-radius-m",
+            "figma": "swc/button/corner/radius/m",
+            "shipped": true,
+            "value": "calc(var(--swc-theme--sizeM, 32px)\n    var(--swc-theme--sizeL, 40px) / 2)"
+          }
+        ]
       },
       "background-color": {
         "value": "{swc.neutral.background.color.default}",
@@ -652,6 +833,19 @@
             "figma": "swc/gray/25",
             "shipped": true,
             "value": "light-dark(rgb(255, 255, 255), rgb(17, 17, 17))"
+          }
+        ]
+      },
+      "line-height": {
+        "value": "{swc.line.height.font.size.100}",
+        "raw": false,
+        "tokens": [
+          {
+            "ref": "{swc.line.height.font.size.100}",
+            "cssVar": "--swc-line-height-font-size-100",
+            "figma": "swc/line/height/font/size/100",
+            "shipped": true,
+            "value": "var(--swc-theme--sizeM, 18px)\n    var(--swc-theme--sizeL, 22px)"
           }
         ]
       }
@@ -735,6 +929,24 @@
               "ref": "{swc.focus.indicator.thickness}",
               "cssVar": "--swc-focus-indicator-thickness",
               "figma": "swc/focus/indicator/thickness",
+              "shipped": true,
+              "value": "2px"
+            }
+          ]
+        },
+        "outline-style": {
+          "value": "raw:solid",
+          "raw": true,
+          "tokens": []
+        },
+        "outline-offset": {
+          "value": "{swc.border.width.200}",
+          "raw": false,
+          "tokens": [
+            {
+              "ref": "{swc.border.width.200}",
+              "cssVar": "--swc-border-width-200",
+              "figma": "swc/border/width/200",
               "shipped": true,
               "value": "2px"
             }
@@ -919,9 +1131,30 @@
               ]
             },
             "border-radius": {
-              "value": "raw:12px",
-              "raw": true,
-              "tokens": []
+              "value": "{swc.button.corner.radius.s}",
+              "raw": false,
+              "tokens": [
+                {
+                  "ref": "{swc.button.corner.radius.s}",
+                  "cssVar": "--swc-button-corner-radius-s",
+                  "figma": "swc/button/corner/radius/s",
+                  "shipped": true,
+                  "value": "calc(var(--swc-theme--sizeM, 24px)\n    var(--swc-theme--sizeL, 30px) / 2)"
+                }
+              ]
+            },
+            "line-height": {
+              "value": "{swc.line.height.font.size.75}",
+              "raw": false,
+              "tokens": [
+                {
+                  "ref": "{swc.line.height.font.size.75}",
+                  "cssVar": "--swc-line-height-font-size-75",
+                  "figma": "swc/line/height/font/size/75",
+                  "shipped": true,
+                  "value": "var(--swc-theme--sizeM, 16px)\n    var(--swc-theme--sizeL, 20px)"
+                }
+              ]
             }
           },
           "m": {
@@ -1069,9 +1302,30 @@
               ]
             },
             "border-radius": {
-              "value": "raw:16px",
-              "raw": true,
-              "tokens": []
+              "value": "{swc.button.corner.radius.m}",
+              "raw": false,
+              "tokens": [
+                {
+                  "ref": "{swc.button.corner.radius.m}",
+                  "cssVar": "--swc-button-corner-radius-m",
+                  "figma": "swc/button/corner/radius/m",
+                  "shipped": true,
+                  "value": "calc(var(--swc-theme--sizeM, 32px)\n    var(--swc-theme--sizeL, 40px) / 2)"
+                }
+              ]
+            },
+            "line-height": {
+              "value": "{swc.line.height.font.size.100}",
+              "raw": false,
+              "tokens": [
+                {
+                  "ref": "{swc.line.height.font.size.100}",
+                  "cssVar": "--swc-line-height-font-size-100",
+                  "figma": "swc/line/height/font/size/100",
+                  "shipped": true,
+                  "value": "var(--swc-theme--sizeM, 18px)\n    var(--swc-theme--sizeL, 22px)"
+                }
+              ]
             }
           },
           "l": {
@@ -1219,9 +1473,30 @@
               ]
             },
             "border-radius": {
-              "value": "raw:20px",
-              "raw": true,
-              "tokens": []
+              "value": "{swc.button.corner.radius.l}",
+              "raw": false,
+              "tokens": [
+                {
+                  "ref": "{swc.button.corner.radius.l}",
+                  "cssVar": "--swc-button-corner-radius-l",
+                  "figma": "swc/button/corner/radius/l",
+                  "shipped": true,
+                  "value": "calc(var(--swc-theme--sizeM, 40px)\n    var(--swc-theme--sizeL, 50px) / 2)"
+                }
+              ]
+            },
+            "line-height": {
+              "value": "{swc.line.height.font.size.200}",
+              "raw": false,
+              "tokens": [
+                {
+                  "ref": "{swc.line.height.font.size.200}",
+                  "cssVar": "--swc-line-height-font-size-200",
+                  "figma": "swc/line/height/font/size/200",
+                  "shipped": true,
+                  "value": "var(--swc-theme--sizeM, 20px)\n    var(--swc-theme--sizeL, 24px)"
+                }
+              ]
             }
           },
           "xl": {
@@ -1369,9 +1644,30 @@
               ]
             },
             "border-radius": {
-              "value": "raw:24px",
-              "raw": true,
-              "tokens": []
+              "value": "{swc.button.corner.radius.xl}",
+              "raw": false,
+              "tokens": [
+                {
+                  "ref": "{swc.button.corner.radius.xl}",
+                  "cssVar": "--swc-button-corner-radius-xl",
+                  "figma": "swc/button/corner/radius/xl",
+                  "shipped": true,
+                  "value": "calc(var(--swc-theme--sizeM, 48px)\n    var(--swc-theme--sizeL, 60px) / 2)"
+                }
+              ]
+            },
+            "line-height": {
+              "value": "{swc.line.height.font.size.300}",
+              "raw": false,
+              "tokens": [
+                {
+                  "ref": "{swc.line.height.font.size.300}",
+                  "cssVar": "--swc-line-height-font-size-300",
+                  "figma": "swc/line/height/font/size/300",
+                  "shipped": true,
+                  "value": "var(--swc-theme--sizeM, 22px)\n    var(--swc-theme--sizeL, 26px)"
+                }
+              ]
             }
           }
         }
@@ -1593,6 +1889,3106 @@
         }
       }
     ],
+    "x-compound": [
+      {
+        "when": {
+          "variant": "primary"
+        },
+        "tokens": {
+          "background-color": {
+            "value": "{swc.gray.800}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.gray.800}",
+                "cssVar": "--swc-gray-800",
+                "figma": "swc/gray/800",
+                "shipped": true,
+                "value": "light-dark(rgb(41, 41, 41), rgb(219, 219, 219))"
+              }
+            ]
+          },
+          "color": {
+            "value": "{swc.gray.25}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.gray.25}",
+                "cssVar": "--swc-gray-25",
+                "figma": "swc/gray/25",
+                "shipped": true,
+                "value": "light-dark(rgb(255, 255, 255), rgb(17, 17, 17))"
+              }
+            ]
+          },
+          "border-color": {
+            "value": "raw:transparent",
+            "raw": true,
+            "tokens": []
+          }
+        }
+      },
+      {
+        "when": {
+          "variant": "primary"
+        },
+        "state": "hover",
+        "tokens": {
+          "background-color": {
+            "value": "{swc.gray.900}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.gray.900}",
+                "cssVar": "--swc-gray-900",
+                "figma": "swc/gray/900",
+                "shipped": true,
+                "value": "light-dark(rgb(19, 19, 19), rgb(242, 242, 242))"
+              }
+            ]
+          },
+          "color": {
+            "value": "{swc.gray.25}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.gray.25}",
+                "cssVar": "--swc-gray-25",
+                "figma": "swc/gray/25",
+                "shipped": true,
+                "value": "light-dark(rgb(255, 255, 255), rgb(17, 17, 17))"
+              }
+            ]
+          },
+          "border-color": {
+            "value": "raw:transparent",
+            "raw": true,
+            "tokens": []
+          }
+        }
+      },
+      {
+        "when": {
+          "variant": "primary"
+        },
+        "state": "active",
+        "tokens": {
+          "background-color": {
+            "value": "{swc.gray.900}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.gray.900}",
+                "cssVar": "--swc-gray-900",
+                "figma": "swc/gray/900",
+                "shipped": true,
+                "value": "light-dark(rgb(19, 19, 19), rgb(242, 242, 242))"
+              }
+            ]
+          },
+          "color": {
+            "value": "{swc.gray.25}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.gray.25}",
+                "cssVar": "--swc-gray-25",
+                "figma": "swc/gray/25",
+                "shipped": true,
+                "value": "light-dark(rgb(255, 255, 255), rgb(17, 17, 17))"
+              }
+            ]
+          },
+          "border-color": {
+            "value": "raw:transparent",
+            "raw": true,
+            "tokens": []
+          }
+        }
+      },
+      {
+        "when": {
+          "variant": "primary"
+        },
+        "state": "focus-visible",
+        "tokens": {
+          "background-color": {
+            "value": "{swc.gray.900}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.gray.900}",
+                "cssVar": "--swc-gray-900",
+                "figma": "swc/gray/900",
+                "shipped": true,
+                "value": "light-dark(rgb(19, 19, 19), rgb(242, 242, 242))"
+              }
+            ]
+          },
+          "color": {
+            "value": "{swc.gray.25}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.gray.25}",
+                "cssVar": "--swc-gray-25",
+                "figma": "swc/gray/25",
+                "shipped": true,
+                "value": "light-dark(rgb(255, 255, 255), rgb(17, 17, 17))"
+              }
+            ]
+          },
+          "border-color": {
+            "value": "raw:transparent",
+            "raw": true,
+            "tokens": []
+          }
+        }
+      },
+      {
+        "when": {
+          "variant": "primary"
+        },
+        "state": "disabled",
+        "tokens": {
+          "background-color": {
+            "value": "{swc.gray.100}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.gray.100}",
+                "cssVar": "--swc-gray-100",
+                "figma": "swc/gray/100",
+                "shipped": true,
+                "value": "light-dark(rgb(233, 233, 233), rgb(44, 44, 44))"
+              }
+            ]
+          },
+          "color": {
+            "value": "{swc.gray.400}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.gray.400}",
+                "cssVar": "--swc-gray-400",
+                "figma": "swc/gray/400",
+                "shipped": true,
+                "value": "light-dark(rgb(198, 198, 198), rgb(68, 68, 68))"
+              }
+            ]
+          },
+          "border-color": {
+            "value": "raw:transparent",
+            "raw": true,
+            "tokens": []
+          }
+        }
+      },
+      {
+        "when": {
+          "variant": "secondary"
+        },
+        "tokens": {
+          "background-color": {
+            "value": "{swc.gray.100}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.gray.100}",
+                "cssVar": "--swc-gray-100",
+                "figma": "swc/gray/100",
+                "shipped": true,
+                "value": "light-dark(rgb(233, 233, 233), rgb(44, 44, 44))"
+              }
+            ]
+          },
+          "color": {
+            "value": "{swc.gray.800}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.gray.800}",
+                "cssVar": "--swc-gray-800",
+                "figma": "swc/gray/800",
+                "shipped": true,
+                "value": "light-dark(rgb(41, 41, 41), rgb(219, 219, 219))"
+              }
+            ]
+          },
+          "border-color": {
+            "value": "raw:transparent",
+            "raw": true,
+            "tokens": []
+          }
+        }
+      },
+      {
+        "when": {
+          "variant": "secondary"
+        },
+        "state": "hover",
+        "tokens": {
+          "background-color": {
+            "value": "{swc.gray.200}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.gray.200}",
+                "cssVar": "--swc-gray-200",
+                "figma": "swc/gray/200",
+                "shipped": true,
+                "value": "light-dark(rgb(225, 225, 225), rgb(50, 50, 50))"
+              }
+            ]
+          },
+          "color": {
+            "value": "{swc.gray.900}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.gray.900}",
+                "cssVar": "--swc-gray-900",
+                "figma": "swc/gray/900",
+                "shipped": true,
+                "value": "light-dark(rgb(19, 19, 19), rgb(242, 242, 242))"
+              }
+            ]
+          },
+          "border-color": {
+            "value": "raw:transparent",
+            "raw": true,
+            "tokens": []
+          }
+        }
+      },
+      {
+        "when": {
+          "variant": "secondary"
+        },
+        "state": "active",
+        "tokens": {
+          "background-color": {
+            "value": "{swc.gray.200}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.gray.200}",
+                "cssVar": "--swc-gray-200",
+                "figma": "swc/gray/200",
+                "shipped": true,
+                "value": "light-dark(rgb(225, 225, 225), rgb(50, 50, 50))"
+              }
+            ]
+          },
+          "color": {
+            "value": "{swc.gray.900}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.gray.900}",
+                "cssVar": "--swc-gray-900",
+                "figma": "swc/gray/900",
+                "shipped": true,
+                "value": "light-dark(rgb(19, 19, 19), rgb(242, 242, 242))"
+              }
+            ]
+          },
+          "border-color": {
+            "value": "raw:transparent",
+            "raw": true,
+            "tokens": []
+          }
+        }
+      },
+      {
+        "when": {
+          "variant": "secondary"
+        },
+        "state": "focus-visible",
+        "tokens": {
+          "background-color": {
+            "value": "{swc.gray.200}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.gray.200}",
+                "cssVar": "--swc-gray-200",
+                "figma": "swc/gray/200",
+                "shipped": true,
+                "value": "light-dark(rgb(225, 225, 225), rgb(50, 50, 50))"
+              }
+            ]
+          },
+          "color": {
+            "value": "{swc.gray.900}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.gray.900}",
+                "cssVar": "--swc-gray-900",
+                "figma": "swc/gray/900",
+                "shipped": true,
+                "value": "light-dark(rgb(19, 19, 19), rgb(242, 242, 242))"
+              }
+            ]
+          },
+          "border-color": {
+            "value": "raw:transparent",
+            "raw": true,
+            "tokens": []
+          }
+        }
+      },
+      {
+        "when": {
+          "variant": "secondary"
+        },
+        "state": "disabled",
+        "tokens": {
+          "background-color": {
+            "value": "{swc.gray.100}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.gray.100}",
+                "cssVar": "--swc-gray-100",
+                "figma": "swc/gray/100",
+                "shipped": true,
+                "value": "light-dark(rgb(233, 233, 233), rgb(44, 44, 44))"
+              }
+            ]
+          },
+          "color": {
+            "value": "{swc.gray.400}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.gray.400}",
+                "cssVar": "--swc-gray-400",
+                "figma": "swc/gray/400",
+                "shipped": true,
+                "value": "light-dark(rgb(198, 198, 198), rgb(68, 68, 68))"
+              }
+            ]
+          },
+          "border-color": {
+            "value": "raw:transparent",
+            "raw": true,
+            "tokens": []
+          }
+        }
+      },
+      {
+        "when": {
+          "variant": "accent"
+        },
+        "tokens": {
+          "background-color": {
+            "value": "{swc.accent.background.color.default}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.accent.background.color.default}",
+                "cssVar": "--swc-accent-background-color-default",
+                "figma": "swc/accent/background/color/default",
+                "shipped": true,
+                "value": "light-dark(\n    light-dark(rgb(59, 99, 251), rgb(86, 129, 255)),\n    light-dark(rgb(75, 117, 255), rgb(64, 105, 253))\n  )"
+              }
+            ]
+          },
+          "color": {
+            "value": "{swc.transparent.static.white.1000}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.white.1000}",
+                "cssVar": "--swc-transparent-static-white-1000",
+                "figma": "swc/transparent/static/white/1000",
+                "shipped": true,
+                "value": "rgb(255, 255, 255)"
+              }
+            ]
+          },
+          "border-color": {
+            "value": "raw:transparent",
+            "raw": true,
+            "tokens": []
+          }
+        }
+      },
+      {
+        "when": {
+          "variant": "accent"
+        },
+        "state": "hover",
+        "tokens": {
+          "background-color": {
+            "value": "{swc.accent.background.color.hover}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.accent.background.color.hover}",
+                "cssVar": "--swc-accent-background-color-hover",
+                "figma": "swc/accent/background/color/hover",
+                "shipped": true,
+                "value": "light-dark(\n    light-dark(rgb(39, 77, 234), rgb(105, 149, 254)),\n    light-dark(rgb(93, 137, 255), rgb(52, 91, 248))\n  )"
+              }
+            ]
+          },
+          "color": {
+            "value": "{swc.transparent.static.white.1000}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.white.1000}",
+                "cssVar": "--swc-transparent-static-white-1000",
+                "figma": "swc/transparent/static/white/1000",
+                "shipped": true,
+                "value": "rgb(255, 255, 255)"
+              }
+            ]
+          },
+          "border-color": {
+            "value": "raw:transparent",
+            "raw": true,
+            "tokens": []
+          }
+        }
+      },
+      {
+        "when": {
+          "variant": "accent"
+        },
+        "state": "active",
+        "tokens": {
+          "background-color": {
+            "value": "{swc.accent.background.color.down}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.accent.background.color.down}",
+                "cssVar": "--swc-accent-background-color-down",
+                "figma": "swc/accent/background/color/down",
+                "shipped": true,
+                "value": "light-dark(\n    light-dark(rgb(39, 77, 234), rgb(105, 149, 254)),\n    light-dark(rgb(93, 137, 255), rgb(52, 91, 248))\n  )"
+              }
+            ]
+          },
+          "color": {
+            "value": "{swc.transparent.static.white.1000}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.white.1000}",
+                "cssVar": "--swc-transparent-static-white-1000",
+                "figma": "swc/transparent/static/white/1000",
+                "shipped": true,
+                "value": "rgb(255, 255, 255)"
+              }
+            ]
+          },
+          "border-color": {
+            "value": "raw:transparent",
+            "raw": true,
+            "tokens": []
+          }
+        }
+      },
+      {
+        "when": {
+          "variant": "accent"
+        },
+        "state": "focus-visible",
+        "tokens": {
+          "background-color": {
+            "value": "{swc.accent.background.color.key.focus}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.accent.background.color.key.focus}",
+                "cssVar": "--swc-accent-background-color-key-focus",
+                "figma": "swc/accent/background/color/key/focus",
+                "shipped": true,
+                "value": "light-dark(\n    light-dark(rgb(39, 77, 234), rgb(105, 149, 254)),\n    light-dark(rgb(93, 137, 255), rgb(52, 91, 248))\n  )"
+              }
+            ]
+          },
+          "color": {
+            "value": "{swc.transparent.static.white.1000}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.white.1000}",
+                "cssVar": "--swc-transparent-static-white-1000",
+                "figma": "swc/transparent/static/white/1000",
+                "shipped": true,
+                "value": "rgb(255, 255, 255)"
+              }
+            ]
+          },
+          "border-color": {
+            "value": "raw:transparent",
+            "raw": true,
+            "tokens": []
+          }
+        }
+      },
+      {
+        "when": {
+          "variant": "accent"
+        },
+        "state": "disabled",
+        "tokens": {
+          "background-color": {
+            "value": "{swc.gray.100}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.gray.100}",
+                "cssVar": "--swc-gray-100",
+                "figma": "swc/gray/100",
+                "shipped": true,
+                "value": "light-dark(rgb(233, 233, 233), rgb(44, 44, 44))"
+              }
+            ]
+          },
+          "color": {
+            "value": "{swc.gray.400}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.gray.400}",
+                "cssVar": "--swc-gray-400",
+                "figma": "swc/gray/400",
+                "shipped": true,
+                "value": "light-dark(rgb(198, 198, 198), rgb(68, 68, 68))"
+              }
+            ]
+          },
+          "border-color": {
+            "value": "raw:transparent",
+            "raw": true,
+            "tokens": []
+          }
+        }
+      },
+      {
+        "when": {
+          "variant": "negative"
+        },
+        "tokens": {
+          "background-color": {
+            "value": "{swc.negative.background.color.default}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.negative.background.color.default}",
+                "cssVar": "--swc-negative-background-color-default",
+                "figma": "swc/negative/background/color/default",
+                "shipped": true,
+                "value": "light-dark(\n    light-dark(rgb(215, 50, 32), rgb(252, 67, 46)),\n    light-dark(rgb(240, 56, 35), rgb(223, 52, 34))\n  )"
+              }
+            ]
+          },
+          "color": {
+            "value": "{swc.transparent.static.white.1000}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.white.1000}",
+                "cssVar": "--swc-transparent-static-white-1000",
+                "figma": "swc/transparent/static/white/1000",
+                "shipped": true,
+                "value": "rgb(255, 255, 255)"
+              }
+            ]
+          },
+          "border-color": {
+            "value": "raw:transparent",
+            "raw": true,
+            "tokens": []
+          }
+        }
+      },
+      {
+        "when": {
+          "variant": "negative"
+        },
+        "state": "hover",
+        "tokens": {
+          "background-color": {
+            "value": "{swc.negative.background.color.hover}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.negative.background.color.hover}",
+                "cssVar": "--swc-negative-background-color-hover",
+                "figma": "swc/negative/background/color/hover",
+                "shipped": true,
+                "value": "light-dark(\n    light-dark(rgb(183, 40, 24), rgb(255, 103, 86)),\n    light-dark(rgb(255, 81, 61), rgb(205, 46, 29))\n  )"
+              }
+            ]
+          },
+          "color": {
+            "value": "{swc.transparent.static.white.1000}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.white.1000}",
+                "cssVar": "--swc-transparent-static-white-1000",
+                "figma": "swc/transparent/static/white/1000",
+                "shipped": true,
+                "value": "rgb(255, 255, 255)"
+              }
+            ]
+          },
+          "border-color": {
+            "value": "raw:transparent",
+            "raw": true,
+            "tokens": []
+          }
+        }
+      },
+      {
+        "when": {
+          "variant": "negative"
+        },
+        "state": "active",
+        "tokens": {
+          "background-color": {
+            "value": "{swc.negative.background.color.down}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.negative.background.color.down}",
+                "cssVar": "--swc-negative-background-color-down",
+                "figma": "swc/negative/background/color/down",
+                "shipped": true,
+                "value": "light-dark(\n    light-dark(rgb(183, 40, 24), rgb(255, 103, 86)),\n    light-dark(rgb(255, 81, 61), rgb(205, 46, 29))\n  )"
+              }
+            ]
+          },
+          "color": {
+            "value": "{swc.transparent.static.white.1000}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.white.1000}",
+                "cssVar": "--swc-transparent-static-white-1000",
+                "figma": "swc/transparent/static/white/1000",
+                "shipped": true,
+                "value": "rgb(255, 255, 255)"
+              }
+            ]
+          },
+          "border-color": {
+            "value": "raw:transparent",
+            "raw": true,
+            "tokens": []
+          }
+        }
+      },
+      {
+        "when": {
+          "variant": "negative"
+        },
+        "state": "focus-visible",
+        "tokens": {
+          "background-color": {
+            "value": "{swc.negative.background.color.key.focus}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.negative.background.color.key.focus}",
+                "cssVar": "--swc-negative-background-color-key-focus",
+                "figma": "swc/negative/background/color/key/focus",
+                "shipped": true,
+                "value": "light-dark(\n    light-dark(rgb(183, 40, 24), rgb(255, 103, 86)),\n    light-dark(rgb(255, 81, 61), rgb(205, 46, 29))\n  )"
+              }
+            ]
+          },
+          "color": {
+            "value": "{swc.transparent.static.white.1000}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.white.1000}",
+                "cssVar": "--swc-transparent-static-white-1000",
+                "figma": "swc/transparent/static/white/1000",
+                "shipped": true,
+                "value": "rgb(255, 255, 255)"
+              }
+            ]
+          },
+          "border-color": {
+            "value": "raw:transparent",
+            "raw": true,
+            "tokens": []
+          }
+        }
+      },
+      {
+        "when": {
+          "variant": "negative"
+        },
+        "state": "disabled",
+        "tokens": {
+          "background-color": {
+            "value": "{swc.gray.100}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.gray.100}",
+                "cssVar": "--swc-gray-100",
+                "figma": "swc/gray/100",
+                "shipped": true,
+                "value": "light-dark(rgb(233, 233, 233), rgb(44, 44, 44))"
+              }
+            ]
+          },
+          "color": {
+            "value": "{swc.gray.400}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.gray.400}",
+                "cssVar": "--swc-gray-400",
+                "figma": "swc/gray/400",
+                "shipped": true,
+                "value": "light-dark(rgb(198, 198, 198), rgb(68, 68, 68))"
+              }
+            ]
+          },
+          "border-color": {
+            "value": "raw:transparent",
+            "raw": true,
+            "tokens": []
+          }
+        }
+      },
+      {
+        "when": {
+          "variant": "primary",
+          "fillStyle": "outline"
+        },
+        "tokens": {
+          "background-color": {
+            "value": "raw:transparent",
+            "raw": true,
+            "tokens": []
+          },
+          "color": {
+            "value": "{swc.gray.800}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.gray.800}",
+                "cssVar": "--swc-gray-800",
+                "figma": "swc/gray/800",
+                "shipped": true,
+                "value": "light-dark(rgb(41, 41, 41), rgb(219, 219, 219))"
+              }
+            ]
+          },
+          "border-color": {
+            "value": "{swc.gray.800}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.gray.800}",
+                "cssVar": "--swc-gray-800",
+                "figma": "swc/gray/800",
+                "shipped": true,
+                "value": "light-dark(rgb(41, 41, 41), rgb(219, 219, 219))"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "when": {
+          "variant": "primary",
+          "fillStyle": "outline"
+        },
+        "state": "hover",
+        "tokens": {
+          "background-color": {
+            "value": "{swc.gray.100}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.gray.100}",
+                "cssVar": "--swc-gray-100",
+                "figma": "swc/gray/100",
+                "shipped": true,
+                "value": "light-dark(rgb(233, 233, 233), rgb(44, 44, 44))"
+              }
+            ]
+          },
+          "color": {
+            "value": "{swc.gray.900}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.gray.900}",
+                "cssVar": "--swc-gray-900",
+                "figma": "swc/gray/900",
+                "shipped": true,
+                "value": "light-dark(rgb(19, 19, 19), rgb(242, 242, 242))"
+              }
+            ]
+          },
+          "border-color": {
+            "value": "{swc.gray.900}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.gray.900}",
+                "cssVar": "--swc-gray-900",
+                "figma": "swc/gray/900",
+                "shipped": true,
+                "value": "light-dark(rgb(19, 19, 19), rgb(242, 242, 242))"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "when": {
+          "variant": "primary",
+          "fillStyle": "outline"
+        },
+        "state": "active",
+        "tokens": {
+          "background-color": {
+            "value": "{swc.gray.100}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.gray.100}",
+                "cssVar": "--swc-gray-100",
+                "figma": "swc/gray/100",
+                "shipped": true,
+                "value": "light-dark(rgb(233, 233, 233), rgb(44, 44, 44))"
+              }
+            ]
+          },
+          "color": {
+            "value": "{swc.gray.900}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.gray.900}",
+                "cssVar": "--swc-gray-900",
+                "figma": "swc/gray/900",
+                "shipped": true,
+                "value": "light-dark(rgb(19, 19, 19), rgb(242, 242, 242))"
+              }
+            ]
+          },
+          "border-color": {
+            "value": "{swc.gray.900}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.gray.900}",
+                "cssVar": "--swc-gray-900",
+                "figma": "swc/gray/900",
+                "shipped": true,
+                "value": "light-dark(rgb(19, 19, 19), rgb(242, 242, 242))"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "when": {
+          "variant": "primary",
+          "fillStyle": "outline"
+        },
+        "state": "focus-visible",
+        "tokens": {
+          "background-color": {
+            "value": "{swc.gray.100}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.gray.100}",
+                "cssVar": "--swc-gray-100",
+                "figma": "swc/gray/100",
+                "shipped": true,
+                "value": "light-dark(rgb(233, 233, 233), rgb(44, 44, 44))"
+              }
+            ]
+          },
+          "color": {
+            "value": "{swc.gray.900}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.gray.900}",
+                "cssVar": "--swc-gray-900",
+                "figma": "swc/gray/900",
+                "shipped": true,
+                "value": "light-dark(rgb(19, 19, 19), rgb(242, 242, 242))"
+              }
+            ]
+          },
+          "border-color": {
+            "value": "{swc.gray.900}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.gray.900}",
+                "cssVar": "--swc-gray-900",
+                "figma": "swc/gray/900",
+                "shipped": true,
+                "value": "light-dark(rgb(19, 19, 19), rgb(242, 242, 242))"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "when": {
+          "variant": "primary",
+          "fillStyle": "outline"
+        },
+        "state": "disabled",
+        "tokens": {
+          "background-color": {
+            "value": "raw:transparent",
+            "raw": true,
+            "tokens": []
+          },
+          "color": {
+            "value": "{swc.gray.400}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.gray.400}",
+                "cssVar": "--swc-gray-400",
+                "figma": "swc/gray/400",
+                "shipped": true,
+                "value": "light-dark(rgb(198, 198, 198), rgb(68, 68, 68))"
+              }
+            ]
+          },
+          "border-color": {
+            "value": "{swc.gray.300}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.gray.300}",
+                "cssVar": "--swc-gray-300",
+                "figma": "swc/gray/300",
+                "shipped": true,
+                "value": "light-dark(rgb(218, 218, 218), rgb(57, 57, 57))"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "when": {
+          "variant": "primary",
+          "staticColor": "white"
+        },
+        "tokens": {
+          "background-color": {
+            "value": "{swc.transparent.static.white.900}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.white.900}",
+                "cssVar": "--swc-transparent-static-white-900",
+                "figma": "swc/transparent/static/white/900",
+                "shipped": true,
+                "value": "rgba(255, 255, 255, 0.8)"
+              }
+            ]
+          },
+          "color": {
+            "value": "{swc.transparent.static.black.1000}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.black.1000}",
+                "cssVar": "--swc-transparent-static-black-1000",
+                "figma": "swc/transparent/static/black/1000",
+                "shipped": true,
+                "value": "rgb(0, 0, 0)"
+              }
+            ]
+          },
+          "border-color": {
+            "value": "raw:transparent",
+            "raw": true,
+            "tokens": []
+          }
+        }
+      },
+      {
+        "when": {
+          "variant": "primary",
+          "staticColor": "white"
+        },
+        "state": "hover",
+        "tokens": {
+          "background-color": {
+            "value": "{swc.transparent.static.white.950}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.white.950}",
+                "cssVar": "--swc-transparent-static-white-950",
+                "figma": "swc/transparent/static/white/950",
+                "shipped": true,
+                "value": "rgba(255, 255, 255, 0.96)"
+              }
+            ]
+          },
+          "color": {
+            "value": "{swc.transparent.static.black.1000}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.black.1000}",
+                "cssVar": "--swc-transparent-static-black-1000",
+                "figma": "swc/transparent/static/black/1000",
+                "shipped": true,
+                "value": "rgb(0, 0, 0)"
+              }
+            ]
+          },
+          "border-color": {
+            "value": "raw:transparent",
+            "raw": true,
+            "tokens": []
+          }
+        }
+      },
+      {
+        "when": {
+          "variant": "primary",
+          "staticColor": "white"
+        },
+        "state": "active",
+        "tokens": {
+          "background-color": {
+            "value": "{swc.transparent.static.white.950}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.white.950}",
+                "cssVar": "--swc-transparent-static-white-950",
+                "figma": "swc/transparent/static/white/950",
+                "shipped": true,
+                "value": "rgba(255, 255, 255, 0.96)"
+              }
+            ]
+          },
+          "color": {
+            "value": "{swc.transparent.static.black.1000}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.black.1000}",
+                "cssVar": "--swc-transparent-static-black-1000",
+                "figma": "swc/transparent/static/black/1000",
+                "shipped": true,
+                "value": "rgb(0, 0, 0)"
+              }
+            ]
+          },
+          "border-color": {
+            "value": "raw:transparent",
+            "raw": true,
+            "tokens": []
+          }
+        }
+      },
+      {
+        "when": {
+          "variant": "primary",
+          "staticColor": "white"
+        },
+        "state": "focus-visible",
+        "tokens": {
+          "background-color": {
+            "value": "{swc.transparent.static.white.950}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.white.950}",
+                "cssVar": "--swc-transparent-static-white-950",
+                "figma": "swc/transparent/static/white/950",
+                "shipped": true,
+                "value": "rgba(255, 255, 255, 0.96)"
+              }
+            ]
+          },
+          "color": {
+            "value": "{swc.transparent.static.black.1000}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.black.1000}",
+                "cssVar": "--swc-transparent-static-black-1000",
+                "figma": "swc/transparent/static/black/1000",
+                "shipped": true,
+                "value": "rgb(0, 0, 0)"
+              }
+            ]
+          },
+          "border-color": {
+            "value": "raw:transparent",
+            "raw": true,
+            "tokens": []
+          },
+          "outline-color": {
+            "value": "{swc.transparent.static.white.1000}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.white.1000}",
+                "cssVar": "--swc-transparent-static-white-1000",
+                "figma": "swc/transparent/static/white/1000",
+                "shipped": true,
+                "value": "rgb(255, 255, 255)"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "when": {
+          "variant": "primary",
+          "staticColor": "white"
+        },
+        "state": "disabled",
+        "tokens": {
+          "background-color": {
+            "value": "{swc.transparent.static.white.200}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.white.200}",
+                "cssVar": "--swc-transparent-static-white-200",
+                "figma": "swc/transparent/static/white/200",
+                "shipped": true,
+                "value": "rgba(255, 255, 255, 0.12)"
+              }
+            ]
+          },
+          "color": {
+            "value": "{swc.transparent.static.white.350}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.white.350}",
+                "cssVar": "--swc-transparent-static-white-350",
+                "figma": "swc/transparent/static/white/350",
+                "shipped": true,
+                "value": "rgba(255, 255, 255, 0.2)"
+              }
+            ]
+          },
+          "border-color": {
+            "value": "raw:transparent",
+            "raw": true,
+            "tokens": []
+          }
+        }
+      },
+      {
+        "when": {
+          "variant": "primary",
+          "fillStyle": "outline",
+          "staticColor": "white"
+        },
+        "tokens": {
+          "background-color": {
+            "value": "{swc.transparent.static.white.0}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.white.0}",
+                "cssVar": "--swc-transparent-static-white-0",
+                "figma": "swc/transparent/static/white/0",
+                "shipped": true,
+                "value": "rgba(255, 255, 255, 0)"
+              }
+            ]
+          },
+          "color": {
+            "value": "{swc.transparent.static.white.900}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.white.900}",
+                "cssVar": "--swc-transparent-static-white-900",
+                "figma": "swc/transparent/static/white/900",
+                "shipped": true,
+                "value": "rgba(255, 255, 255, 0.8)"
+              }
+            ]
+          },
+          "border-color": {
+            "value": "{swc.transparent.static.white.900}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.white.900}",
+                "cssVar": "--swc-transparent-static-white-900",
+                "figma": "swc/transparent/static/white/900",
+                "shipped": true,
+                "value": "rgba(255, 255, 255, 0.8)"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "when": {
+          "variant": "primary",
+          "fillStyle": "outline",
+          "staticColor": "white"
+        },
+        "state": "hover",
+        "tokens": {
+          "background-color": {
+            "value": "{swc.transparent.static.white.200}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.white.200}",
+                "cssVar": "--swc-transparent-static-white-200",
+                "figma": "swc/transparent/static/white/200",
+                "shipped": true,
+                "value": "rgba(255, 255, 255, 0.12)"
+              }
+            ]
+          },
+          "color": {
+            "value": "{swc.transparent.static.white.950}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.white.950}",
+                "cssVar": "--swc-transparent-static-white-950",
+                "figma": "swc/transparent/static/white/950",
+                "shipped": true,
+                "value": "rgba(255, 255, 255, 0.96)"
+              }
+            ]
+          },
+          "border-color": {
+            "value": "{swc.transparent.static.white.950}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.white.950}",
+                "cssVar": "--swc-transparent-static-white-950",
+                "figma": "swc/transparent/static/white/950",
+                "shipped": true,
+                "value": "rgba(255, 255, 255, 0.96)"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "when": {
+          "variant": "primary",
+          "fillStyle": "outline",
+          "staticColor": "white"
+        },
+        "state": "active",
+        "tokens": {
+          "background-color": {
+            "value": "{swc.transparent.static.white.200}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.white.200}",
+                "cssVar": "--swc-transparent-static-white-200",
+                "figma": "swc/transparent/static/white/200",
+                "shipped": true,
+                "value": "rgba(255, 255, 255, 0.12)"
+              }
+            ]
+          },
+          "color": {
+            "value": "{swc.transparent.static.white.950}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.white.950}",
+                "cssVar": "--swc-transparent-static-white-950",
+                "figma": "swc/transparent/static/white/950",
+                "shipped": true,
+                "value": "rgba(255, 255, 255, 0.96)"
+              }
+            ]
+          },
+          "border-color": {
+            "value": "{swc.transparent.static.white.950}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.white.950}",
+                "cssVar": "--swc-transparent-static-white-950",
+                "figma": "swc/transparent/static/white/950",
+                "shipped": true,
+                "value": "rgba(255, 255, 255, 0.96)"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "when": {
+          "variant": "primary",
+          "fillStyle": "outline",
+          "staticColor": "white"
+        },
+        "state": "focus-visible",
+        "tokens": {
+          "background-color": {
+            "value": "{swc.transparent.static.white.200}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.white.200}",
+                "cssVar": "--swc-transparent-static-white-200",
+                "figma": "swc/transparent/static/white/200",
+                "shipped": true,
+                "value": "rgba(255, 255, 255, 0.12)"
+              }
+            ]
+          },
+          "color": {
+            "value": "{swc.transparent.static.white.950}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.white.950}",
+                "cssVar": "--swc-transparent-static-white-950",
+                "figma": "swc/transparent/static/white/950",
+                "shipped": true,
+                "value": "rgba(255, 255, 255, 0.96)"
+              }
+            ]
+          },
+          "border-color": {
+            "value": "{swc.transparent.static.white.950}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.white.950}",
+                "cssVar": "--swc-transparent-static-white-950",
+                "figma": "swc/transparent/static/white/950",
+                "shipped": true,
+                "value": "rgba(255, 255, 255, 0.96)"
+              }
+            ]
+          },
+          "outline-color": {
+            "value": "{swc.transparent.static.white.1000}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.white.1000}",
+                "cssVar": "--swc-transparent-static-white-1000",
+                "figma": "swc/transparent/static/white/1000",
+                "shipped": true,
+                "value": "rgb(255, 255, 255)"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "when": {
+          "variant": "primary",
+          "fillStyle": "outline",
+          "staticColor": "white"
+        },
+        "state": "disabled",
+        "tokens": {
+          "background-color": {
+            "value": "{swc.transparent.static.white.0}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.white.0}",
+                "cssVar": "--swc-transparent-static-white-0",
+                "figma": "swc/transparent/static/white/0",
+                "shipped": true,
+                "value": "rgba(255, 255, 255, 0)"
+              }
+            ]
+          },
+          "color": {
+            "value": "{swc.transparent.static.white.350}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.white.350}",
+                "cssVar": "--swc-transparent-static-white-350",
+                "figma": "swc/transparent/static/white/350",
+                "shipped": true,
+                "value": "rgba(255, 255, 255, 0.2)"
+              }
+            ]
+          },
+          "border-color": {
+            "value": "{swc.transparent.static.white.300}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.white.300}",
+                "cssVar": "--swc-transparent-static-white-300",
+                "figma": "swc/transparent/static/white/300",
+                "shipped": true,
+                "value": "rgba(255, 255, 255, 0.16)"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "when": {
+          "variant": "primary",
+          "staticColor": "black"
+        },
+        "tokens": {
+          "background-color": {
+            "value": "{swc.transparent.static.black.900}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.black.900}",
+                "cssVar": "--swc-transparent-static-black-900",
+                "figma": "swc/transparent/static/black/900",
+                "shipped": true,
+                "value": "rgba(0, 0, 0, 0.8)"
+              }
+            ]
+          },
+          "color": {
+            "value": "{swc.transparent.static.white.1000}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.white.1000}",
+                "cssVar": "--swc-transparent-static-white-1000",
+                "figma": "swc/transparent/static/white/1000",
+                "shipped": true,
+                "value": "rgb(255, 255, 255)"
+              }
+            ]
+          },
+          "border-color": {
+            "value": "raw:transparent",
+            "raw": true,
+            "tokens": []
+          }
+        }
+      },
+      {
+        "when": {
+          "variant": "primary",
+          "staticColor": "black"
+        },
+        "state": "hover",
+        "tokens": {
+          "background-color": {
+            "value": "{swc.transparent.static.black.950}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.black.950}",
+                "cssVar": "--swc-transparent-static-black-950",
+                "figma": "swc/transparent/static/black/950",
+                "shipped": true,
+                "value": "rgba(0, 0, 0, 0.96)"
+              }
+            ]
+          },
+          "color": {
+            "value": "{swc.transparent.static.white.1000}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.white.1000}",
+                "cssVar": "--swc-transparent-static-white-1000",
+                "figma": "swc/transparent/static/white/1000",
+                "shipped": true,
+                "value": "rgb(255, 255, 255)"
+              }
+            ]
+          },
+          "border-color": {
+            "value": "raw:transparent",
+            "raw": true,
+            "tokens": []
+          }
+        }
+      },
+      {
+        "when": {
+          "variant": "primary",
+          "staticColor": "black"
+        },
+        "state": "active",
+        "tokens": {
+          "background-color": {
+            "value": "{swc.transparent.static.black.950}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.black.950}",
+                "cssVar": "--swc-transparent-static-black-950",
+                "figma": "swc/transparent/static/black/950",
+                "shipped": true,
+                "value": "rgba(0, 0, 0, 0.96)"
+              }
+            ]
+          },
+          "color": {
+            "value": "{swc.transparent.static.white.1000}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.white.1000}",
+                "cssVar": "--swc-transparent-static-white-1000",
+                "figma": "swc/transparent/static/white/1000",
+                "shipped": true,
+                "value": "rgb(255, 255, 255)"
+              }
+            ]
+          },
+          "border-color": {
+            "value": "raw:transparent",
+            "raw": true,
+            "tokens": []
+          }
+        }
+      },
+      {
+        "when": {
+          "variant": "primary",
+          "staticColor": "black"
+        },
+        "state": "focus-visible",
+        "tokens": {
+          "background-color": {
+            "value": "{swc.transparent.static.black.950}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.black.950}",
+                "cssVar": "--swc-transparent-static-black-950",
+                "figma": "swc/transparent/static/black/950",
+                "shipped": true,
+                "value": "rgba(0, 0, 0, 0.96)"
+              }
+            ]
+          },
+          "color": {
+            "value": "{swc.transparent.static.white.1000}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.white.1000}",
+                "cssVar": "--swc-transparent-static-white-1000",
+                "figma": "swc/transparent/static/white/1000",
+                "shipped": true,
+                "value": "rgb(255, 255, 255)"
+              }
+            ]
+          },
+          "border-color": {
+            "value": "raw:transparent",
+            "raw": true,
+            "tokens": []
+          },
+          "outline-color": {
+            "value": "{swc.transparent.static.black.1000}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.black.1000}",
+                "cssVar": "--swc-transparent-static-black-1000",
+                "figma": "swc/transparent/static/black/1000",
+                "shipped": true,
+                "value": "rgb(0, 0, 0)"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "when": {
+          "variant": "primary",
+          "staticColor": "black"
+        },
+        "state": "disabled",
+        "tokens": {
+          "background-color": {
+            "value": "{swc.transparent.static.black.150}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.black.150}",
+                "cssVar": "--swc-transparent-static-black-150",
+                "figma": "swc/transparent/static/black/150",
+                "shipped": true,
+                "value": "rgba(0, 0, 0, 0.08)"
+              }
+            ]
+          },
+          "color": {
+            "value": "{swc.transparent.static.black.400}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.black.400}",
+                "cssVar": "--swc-transparent-static-black-400",
+                "figma": "swc/transparent/static/black/400",
+                "shipped": true,
+                "value": "rgba(0, 0, 0, 0.24)"
+              }
+            ]
+          },
+          "border-color": {
+            "value": "raw:transparent",
+            "raw": true,
+            "tokens": []
+          }
+        }
+      },
+      {
+        "when": {
+          "variant": "primary",
+          "fillStyle": "outline",
+          "staticColor": "black"
+        },
+        "tokens": {
+          "background-color": {
+            "value": "{swc.transparent.static.black.0}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.black.0}",
+                "cssVar": "--swc-transparent-static-black-0",
+                "figma": "swc/transparent/static/black/0",
+                "shipped": true,
+                "value": "rgba(0, 0, 0, 0)"
+              }
+            ]
+          },
+          "color": {
+            "value": "{swc.transparent.static.black.900}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.black.900}",
+                "cssVar": "--swc-transparent-static-black-900",
+                "figma": "swc/transparent/static/black/900",
+                "shipped": true,
+                "value": "rgba(0, 0, 0, 0.8)"
+              }
+            ]
+          },
+          "border-color": {
+            "value": "{swc.transparent.static.black.900}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.black.900}",
+                "cssVar": "--swc-transparent-static-black-900",
+                "figma": "swc/transparent/static/black/900",
+                "shipped": true,
+                "value": "rgba(0, 0, 0, 0.8)"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "when": {
+          "variant": "primary",
+          "fillStyle": "outline",
+          "staticColor": "black"
+        },
+        "state": "hover",
+        "tokens": {
+          "background-color": {
+            "value": "{swc.transparent.static.black.150}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.black.150}",
+                "cssVar": "--swc-transparent-static-black-150",
+                "figma": "swc/transparent/static/black/150",
+                "shipped": true,
+                "value": "rgba(0, 0, 0, 0.08)"
+              }
+            ]
+          },
+          "color": {
+            "value": "{swc.transparent.static.black.950}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.black.950}",
+                "cssVar": "--swc-transparent-static-black-950",
+                "figma": "swc/transparent/static/black/950",
+                "shipped": true,
+                "value": "rgba(0, 0, 0, 0.96)"
+              }
+            ]
+          },
+          "border-color": {
+            "value": "{swc.transparent.static.black.950}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.black.950}",
+                "cssVar": "--swc-transparent-static-black-950",
+                "figma": "swc/transparent/static/black/950",
+                "shipped": true,
+                "value": "rgba(0, 0, 0, 0.96)"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "when": {
+          "variant": "primary",
+          "fillStyle": "outline",
+          "staticColor": "black"
+        },
+        "state": "active",
+        "tokens": {
+          "background-color": {
+            "value": "{swc.transparent.static.black.150}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.black.150}",
+                "cssVar": "--swc-transparent-static-black-150",
+                "figma": "swc/transparent/static/black/150",
+                "shipped": true,
+                "value": "rgba(0, 0, 0, 0.08)"
+              }
+            ]
+          },
+          "color": {
+            "value": "{swc.transparent.static.black.950}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.black.950}",
+                "cssVar": "--swc-transparent-static-black-950",
+                "figma": "swc/transparent/static/black/950",
+                "shipped": true,
+                "value": "rgba(0, 0, 0, 0.96)"
+              }
+            ]
+          },
+          "border-color": {
+            "value": "{swc.transparent.static.black.950}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.black.950}",
+                "cssVar": "--swc-transparent-static-black-950",
+                "figma": "swc/transparent/static/black/950",
+                "shipped": true,
+                "value": "rgba(0, 0, 0, 0.96)"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "when": {
+          "variant": "primary",
+          "fillStyle": "outline",
+          "staticColor": "black"
+        },
+        "state": "focus-visible",
+        "tokens": {
+          "background-color": {
+            "value": "{swc.transparent.static.black.150}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.black.150}",
+                "cssVar": "--swc-transparent-static-black-150",
+                "figma": "swc/transparent/static/black/150",
+                "shipped": true,
+                "value": "rgba(0, 0, 0, 0.08)"
+              }
+            ]
+          },
+          "color": {
+            "value": "{swc.transparent.static.black.950}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.black.950}",
+                "cssVar": "--swc-transparent-static-black-950",
+                "figma": "swc/transparent/static/black/950",
+                "shipped": true,
+                "value": "rgba(0, 0, 0, 0.96)"
+              }
+            ]
+          },
+          "border-color": {
+            "value": "{swc.transparent.static.black.950}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.black.950}",
+                "cssVar": "--swc-transparent-static-black-950",
+                "figma": "swc/transparent/static/black/950",
+                "shipped": true,
+                "value": "rgba(0, 0, 0, 0.96)"
+              }
+            ]
+          },
+          "outline-color": {
+            "value": "{swc.transparent.static.black.1000}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.black.1000}",
+                "cssVar": "--swc-transparent-static-black-1000",
+                "figma": "swc/transparent/static/black/1000",
+                "shipped": true,
+                "value": "rgb(0, 0, 0)"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "when": {
+          "variant": "primary",
+          "fillStyle": "outline",
+          "staticColor": "black"
+        },
+        "state": "disabled",
+        "tokens": {
+          "background-color": {
+            "value": "{swc.transparent.static.black.0}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.black.0}",
+                "cssVar": "--swc-transparent-static-black-0",
+                "figma": "swc/transparent/static/black/0",
+                "shipped": true,
+                "value": "rgba(0, 0, 0, 0)"
+              }
+            ]
+          },
+          "color": {
+            "value": "{swc.transparent.static.black.400}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.black.400}",
+                "cssVar": "--swc-transparent-static-black-400",
+                "figma": "swc/transparent/static/black/400",
+                "shipped": true,
+                "value": "rgba(0, 0, 0, 0.24)"
+              }
+            ]
+          },
+          "border-color": {
+            "value": "{swc.transparent.static.black.300}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.black.300}",
+                "cssVar": "--swc-transparent-static-black-300",
+                "figma": "swc/transparent/static/black/300",
+                "shipped": true,
+                "value": "rgba(0, 0, 0, 0.16)"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "when": {
+          "variant": "secondary",
+          "fillStyle": "outline"
+        },
+        "tokens": {
+          "background-color": {
+            "value": "raw:transparent",
+            "raw": true,
+            "tokens": []
+          },
+          "color": {
+            "value": "{swc.gray.800}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.gray.800}",
+                "cssVar": "--swc-gray-800",
+                "figma": "swc/gray/800",
+                "shipped": true,
+                "value": "light-dark(rgb(41, 41, 41), rgb(219, 219, 219))"
+              }
+            ]
+          },
+          "border-color": {
+            "value": "{swc.gray.300}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.gray.300}",
+                "cssVar": "--swc-gray-300",
+                "figma": "swc/gray/300",
+                "shipped": true,
+                "value": "light-dark(rgb(218, 218, 218), rgb(57, 57, 57))"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "when": {
+          "variant": "secondary",
+          "fillStyle": "outline"
+        },
+        "state": "hover",
+        "tokens": {
+          "background-color": {
+            "value": "{swc.gray.100}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.gray.100}",
+                "cssVar": "--swc-gray-100",
+                "figma": "swc/gray/100",
+                "shipped": true,
+                "value": "light-dark(rgb(233, 233, 233), rgb(44, 44, 44))"
+              }
+            ]
+          },
+          "color": {
+            "value": "{swc.gray.900}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.gray.900}",
+                "cssVar": "--swc-gray-900",
+                "figma": "swc/gray/900",
+                "shipped": true,
+                "value": "light-dark(rgb(19, 19, 19), rgb(242, 242, 242))"
+              }
+            ]
+          },
+          "border-color": {
+            "value": "{swc.gray.400}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.gray.400}",
+                "cssVar": "--swc-gray-400",
+                "figma": "swc/gray/400",
+                "shipped": true,
+                "value": "light-dark(rgb(198, 198, 198), rgb(68, 68, 68))"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "when": {
+          "variant": "secondary",
+          "fillStyle": "outline"
+        },
+        "state": "active",
+        "tokens": {
+          "background-color": {
+            "value": "{swc.gray.100}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.gray.100}",
+                "cssVar": "--swc-gray-100",
+                "figma": "swc/gray/100",
+                "shipped": true,
+                "value": "light-dark(rgb(233, 233, 233), rgb(44, 44, 44))"
+              }
+            ]
+          },
+          "color": {
+            "value": "{swc.gray.900}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.gray.900}",
+                "cssVar": "--swc-gray-900",
+                "figma": "swc/gray/900",
+                "shipped": true,
+                "value": "light-dark(rgb(19, 19, 19), rgb(242, 242, 242))"
+              }
+            ]
+          },
+          "border-color": {
+            "value": "{swc.gray.400}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.gray.400}",
+                "cssVar": "--swc-gray-400",
+                "figma": "swc/gray/400",
+                "shipped": true,
+                "value": "light-dark(rgb(198, 198, 198), rgb(68, 68, 68))"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "when": {
+          "variant": "secondary",
+          "fillStyle": "outline"
+        },
+        "state": "focus-visible",
+        "tokens": {
+          "background-color": {
+            "value": "{swc.gray.100}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.gray.100}",
+                "cssVar": "--swc-gray-100",
+                "figma": "swc/gray/100",
+                "shipped": true,
+                "value": "light-dark(rgb(233, 233, 233), rgb(44, 44, 44))"
+              }
+            ]
+          },
+          "color": {
+            "value": "{swc.gray.900}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.gray.900}",
+                "cssVar": "--swc-gray-900",
+                "figma": "swc/gray/900",
+                "shipped": true,
+                "value": "light-dark(rgb(19, 19, 19), rgb(242, 242, 242))"
+              }
+            ]
+          },
+          "border-color": {
+            "value": "{swc.gray.400}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.gray.400}",
+                "cssVar": "--swc-gray-400",
+                "figma": "swc/gray/400",
+                "shipped": true,
+                "value": "light-dark(rgb(198, 198, 198), rgb(68, 68, 68))"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "when": {
+          "variant": "secondary",
+          "fillStyle": "outline"
+        },
+        "state": "disabled",
+        "tokens": {
+          "background-color": {
+            "value": "raw:transparent",
+            "raw": true,
+            "tokens": []
+          },
+          "color": {
+            "value": "{swc.gray.400}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.gray.400}",
+                "cssVar": "--swc-gray-400",
+                "figma": "swc/gray/400",
+                "shipped": true,
+                "value": "light-dark(rgb(198, 198, 198), rgb(68, 68, 68))"
+              }
+            ]
+          },
+          "border-color": {
+            "value": "{swc.gray.300}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.gray.300}",
+                "cssVar": "--swc-gray-300",
+                "figma": "swc/gray/300",
+                "shipped": true,
+                "value": "light-dark(rgb(218, 218, 218), rgb(57, 57, 57))"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "when": {
+          "variant": "secondary",
+          "staticColor": "white"
+        },
+        "tokens": {
+          "background-color": {
+            "value": "{swc.transparent.static.white.200}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.white.200}",
+                "cssVar": "--swc-transparent-static-white-200",
+                "figma": "swc/transparent/static/white/200",
+                "shipped": true,
+                "value": "rgba(255, 255, 255, 0.12)"
+              }
+            ]
+          },
+          "color": {
+            "value": "{swc.transparent.static.white.900}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.white.900}",
+                "cssVar": "--swc-transparent-static-white-900",
+                "figma": "swc/transparent/static/white/900",
+                "shipped": true,
+                "value": "rgba(255, 255, 255, 0.8)"
+              }
+            ]
+          },
+          "border-color": {
+            "value": "raw:transparent",
+            "raw": true,
+            "tokens": []
+          }
+        }
+      },
+      {
+        "when": {
+          "variant": "secondary",
+          "staticColor": "white"
+        },
+        "state": "hover",
+        "tokens": {
+          "background-color": {
+            "value": "{swc.transparent.static.white.300}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.white.300}",
+                "cssVar": "--swc-transparent-static-white-300",
+                "figma": "swc/transparent/static/white/300",
+                "shipped": true,
+                "value": "rgba(255, 255, 255, 0.16)"
+              }
+            ]
+          },
+          "color": {
+            "value": "{swc.transparent.static.white.950}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.white.950}",
+                "cssVar": "--swc-transparent-static-white-950",
+                "figma": "swc/transparent/static/white/950",
+                "shipped": true,
+                "value": "rgba(255, 255, 255, 0.96)"
+              }
+            ]
+          },
+          "border-color": {
+            "value": "raw:transparent",
+            "raw": true,
+            "tokens": []
+          }
+        }
+      },
+      {
+        "when": {
+          "variant": "secondary",
+          "staticColor": "white"
+        },
+        "state": "active",
+        "tokens": {
+          "background-color": {
+            "value": "{swc.transparent.static.white.300}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.white.300}",
+                "cssVar": "--swc-transparent-static-white-300",
+                "figma": "swc/transparent/static/white/300",
+                "shipped": true,
+                "value": "rgba(255, 255, 255, 0.16)"
+              }
+            ]
+          },
+          "color": {
+            "value": "{swc.transparent.static.white.950}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.white.950}",
+                "cssVar": "--swc-transparent-static-white-950",
+                "figma": "swc/transparent/static/white/950",
+                "shipped": true,
+                "value": "rgba(255, 255, 255, 0.96)"
+              }
+            ]
+          },
+          "border-color": {
+            "value": "raw:transparent",
+            "raw": true,
+            "tokens": []
+          }
+        }
+      },
+      {
+        "when": {
+          "variant": "secondary",
+          "staticColor": "white"
+        },
+        "state": "focus-visible",
+        "tokens": {
+          "background-color": {
+            "value": "{swc.transparent.static.white.300}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.white.300}",
+                "cssVar": "--swc-transparent-static-white-300",
+                "figma": "swc/transparent/static/white/300",
+                "shipped": true,
+                "value": "rgba(255, 255, 255, 0.16)"
+              }
+            ]
+          },
+          "color": {
+            "value": "{swc.transparent.static.white.950}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.white.950}",
+                "cssVar": "--swc-transparent-static-white-950",
+                "figma": "swc/transparent/static/white/950",
+                "shipped": true,
+                "value": "rgba(255, 255, 255, 0.96)"
+              }
+            ]
+          },
+          "border-color": {
+            "value": "raw:transparent",
+            "raw": true,
+            "tokens": []
+          },
+          "outline-color": {
+            "value": "{swc.transparent.static.white.1000}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.white.1000}",
+                "cssVar": "--swc-transparent-static-white-1000",
+                "figma": "swc/transparent/static/white/1000",
+                "shipped": true,
+                "value": "rgb(255, 255, 255)"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "when": {
+          "variant": "secondary",
+          "staticColor": "white"
+        },
+        "state": "disabled",
+        "tokens": {
+          "background-color": {
+            "value": "{swc.transparent.static.white.200}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.white.200}",
+                "cssVar": "--swc-transparent-static-white-200",
+                "figma": "swc/transparent/static/white/200",
+                "shipped": true,
+                "value": "rgba(255, 255, 255, 0.12)"
+              }
+            ]
+          },
+          "color": {
+            "value": "{swc.transparent.static.white.350}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.white.350}",
+                "cssVar": "--swc-transparent-static-white-350",
+                "figma": "swc/transparent/static/white/350",
+                "shipped": true,
+                "value": "rgba(255, 255, 255, 0.2)"
+              }
+            ]
+          },
+          "border-color": {
+            "value": "raw:transparent",
+            "raw": true,
+            "tokens": []
+          }
+        }
+      },
+      {
+        "when": {
+          "variant": "secondary",
+          "fillStyle": "outline",
+          "staticColor": "white"
+        },
+        "tokens": {
+          "background-color": {
+            "value": "{swc.transparent.static.white.0}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.white.0}",
+                "cssVar": "--swc-transparent-static-white-0",
+                "figma": "swc/transparent/static/white/0",
+                "shipped": true,
+                "value": "rgba(255, 255, 255, 0)"
+              }
+            ]
+          },
+          "color": {
+            "value": "{swc.transparent.static.white.900}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.white.900}",
+                "cssVar": "--swc-transparent-static-white-900",
+                "figma": "swc/transparent/static/white/900",
+                "shipped": true,
+                "value": "rgba(255, 255, 255, 0.8)"
+              }
+            ]
+          },
+          "border-color": {
+            "value": "{swc.transparent.static.white.300}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.white.300}",
+                "cssVar": "--swc-transparent-static-white-300",
+                "figma": "swc/transparent/static/white/300",
+                "shipped": true,
+                "value": "rgba(255, 255, 255, 0.16)"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "when": {
+          "variant": "secondary",
+          "fillStyle": "outline",
+          "staticColor": "white"
+        },
+        "state": "hover",
+        "tokens": {
+          "background-color": {
+            "value": "{swc.transparent.static.white.200}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.white.200}",
+                "cssVar": "--swc-transparent-static-white-200",
+                "figma": "swc/transparent/static/white/200",
+                "shipped": true,
+                "value": "rgba(255, 255, 255, 0.12)"
+              }
+            ]
+          },
+          "color": {
+            "value": "{swc.transparent.static.white.950}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.white.950}",
+                "cssVar": "--swc-transparent-static-white-950",
+                "figma": "swc/transparent/static/white/950",
+                "shipped": true,
+                "value": "rgba(255, 255, 255, 0.96)"
+              }
+            ]
+          },
+          "border-color": {
+            "value": "{swc.transparent.static.white.350}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.white.350}",
+                "cssVar": "--swc-transparent-static-white-350",
+                "figma": "swc/transparent/static/white/350",
+                "shipped": true,
+                "value": "rgba(255, 255, 255, 0.2)"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "when": {
+          "variant": "secondary",
+          "fillStyle": "outline",
+          "staticColor": "white"
+        },
+        "state": "active",
+        "tokens": {
+          "background-color": {
+            "value": "{swc.transparent.static.white.200}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.white.200}",
+                "cssVar": "--swc-transparent-static-white-200",
+                "figma": "swc/transparent/static/white/200",
+                "shipped": true,
+                "value": "rgba(255, 255, 255, 0.12)"
+              }
+            ]
+          },
+          "color": {
+            "value": "{swc.transparent.static.white.950}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.white.950}",
+                "cssVar": "--swc-transparent-static-white-950",
+                "figma": "swc/transparent/static/white/950",
+                "shipped": true,
+                "value": "rgba(255, 255, 255, 0.96)"
+              }
+            ]
+          },
+          "border-color": {
+            "value": "{swc.transparent.static.white.350}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.white.350}",
+                "cssVar": "--swc-transparent-static-white-350",
+                "figma": "swc/transparent/static/white/350",
+                "shipped": true,
+                "value": "rgba(255, 255, 255, 0.2)"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "when": {
+          "variant": "secondary",
+          "fillStyle": "outline",
+          "staticColor": "white"
+        },
+        "state": "focus-visible",
+        "tokens": {
+          "background-color": {
+            "value": "{swc.transparent.static.white.200}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.white.200}",
+                "cssVar": "--swc-transparent-static-white-200",
+                "figma": "swc/transparent/static/white/200",
+                "shipped": true,
+                "value": "rgba(255, 255, 255, 0.12)"
+              }
+            ]
+          },
+          "color": {
+            "value": "{swc.transparent.static.white.950}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.white.950}",
+                "cssVar": "--swc-transparent-static-white-950",
+                "figma": "swc/transparent/static/white/950",
+                "shipped": true,
+                "value": "rgba(255, 255, 255, 0.96)"
+              }
+            ]
+          },
+          "border-color": {
+            "value": "{swc.transparent.static.white.350}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.white.350}",
+                "cssVar": "--swc-transparent-static-white-350",
+                "figma": "swc/transparent/static/white/350",
+                "shipped": true,
+                "value": "rgba(255, 255, 255, 0.2)"
+              }
+            ]
+          },
+          "outline-color": {
+            "value": "{swc.transparent.static.white.1000}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.white.1000}",
+                "cssVar": "--swc-transparent-static-white-1000",
+                "figma": "swc/transparent/static/white/1000",
+                "shipped": true,
+                "value": "rgb(255, 255, 255)"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "when": {
+          "variant": "secondary",
+          "fillStyle": "outline",
+          "staticColor": "white"
+        },
+        "state": "disabled",
+        "tokens": {
+          "background-color": {
+            "value": "{swc.transparent.static.white.0}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.white.0}",
+                "cssVar": "--swc-transparent-static-white-0",
+                "figma": "swc/transparent/static/white/0",
+                "shipped": true,
+                "value": "rgba(255, 255, 255, 0)"
+              }
+            ]
+          },
+          "color": {
+            "value": "{swc.transparent.static.white.350}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.white.350}",
+                "cssVar": "--swc-transparent-static-white-350",
+                "figma": "swc/transparent/static/white/350",
+                "shipped": true,
+                "value": "rgba(255, 255, 255, 0.2)"
+              }
+            ]
+          },
+          "border-color": {
+            "value": "{swc.transparent.static.white.300}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.white.300}",
+                "cssVar": "--swc-transparent-static-white-300",
+                "figma": "swc/transparent/static/white/300",
+                "shipped": true,
+                "value": "rgba(255, 255, 255, 0.16)"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "when": {
+          "variant": "secondary",
+          "staticColor": "black"
+        },
+        "tokens": {
+          "background-color": {
+            "value": "{swc.transparent.static.black.150}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.black.150}",
+                "cssVar": "--swc-transparent-static-black-150",
+                "figma": "swc/transparent/static/black/150",
+                "shipped": true,
+                "value": "rgba(0, 0, 0, 0.08)"
+              }
+            ]
+          },
+          "color": {
+            "value": "{swc.transparent.static.black.900}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.black.900}",
+                "cssVar": "--swc-transparent-static-black-900",
+                "figma": "swc/transparent/static/black/900",
+                "shipped": true,
+                "value": "rgba(0, 0, 0, 0.8)"
+              }
+            ]
+          },
+          "border-color": {
+            "value": "raw:transparent",
+            "raw": true,
+            "tokens": []
+          }
+        }
+      },
+      {
+        "when": {
+          "variant": "secondary",
+          "staticColor": "black"
+        },
+        "state": "hover",
+        "tokens": {
+          "background-color": {
+            "value": "{swc.transparent.static.black.200}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.black.200}",
+                "cssVar": "--swc-transparent-static-black-200",
+                "figma": "swc/transparent/static/black/200",
+                "shipped": true,
+                "value": "rgba(0, 0, 0, 0.12)"
+              }
+            ]
+          },
+          "color": {
+            "value": "{swc.transparent.static.black.950}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.black.950}",
+                "cssVar": "--swc-transparent-static-black-950",
+                "figma": "swc/transparent/static/black/950",
+                "shipped": true,
+                "value": "rgba(0, 0, 0, 0.96)"
+              }
+            ]
+          },
+          "border-color": {
+            "value": "raw:transparent",
+            "raw": true,
+            "tokens": []
+          }
+        }
+      },
+      {
+        "when": {
+          "variant": "secondary",
+          "staticColor": "black"
+        },
+        "state": "active",
+        "tokens": {
+          "background-color": {
+            "value": "{swc.transparent.static.black.200}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.black.200}",
+                "cssVar": "--swc-transparent-static-black-200",
+                "figma": "swc/transparent/static/black/200",
+                "shipped": true,
+                "value": "rgba(0, 0, 0, 0.12)"
+              }
+            ]
+          },
+          "color": {
+            "value": "{swc.transparent.static.black.950}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.black.950}",
+                "cssVar": "--swc-transparent-static-black-950",
+                "figma": "swc/transparent/static/black/950",
+                "shipped": true,
+                "value": "rgba(0, 0, 0, 0.96)"
+              }
+            ]
+          },
+          "border-color": {
+            "value": "raw:transparent",
+            "raw": true,
+            "tokens": []
+          }
+        }
+      },
+      {
+        "when": {
+          "variant": "secondary",
+          "staticColor": "black"
+        },
+        "state": "focus-visible",
+        "tokens": {
+          "background-color": {
+            "value": "{swc.transparent.static.black.200}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.black.200}",
+                "cssVar": "--swc-transparent-static-black-200",
+                "figma": "swc/transparent/static/black/200",
+                "shipped": true,
+                "value": "rgba(0, 0, 0, 0.12)"
+              }
+            ]
+          },
+          "color": {
+            "value": "{swc.transparent.static.black.950}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.black.950}",
+                "cssVar": "--swc-transparent-static-black-950",
+                "figma": "swc/transparent/static/black/950",
+                "shipped": true,
+                "value": "rgba(0, 0, 0, 0.96)"
+              }
+            ]
+          },
+          "border-color": {
+            "value": "raw:transparent",
+            "raw": true,
+            "tokens": []
+          },
+          "outline-color": {
+            "value": "{swc.transparent.static.black.1000}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.black.1000}",
+                "cssVar": "--swc-transparent-static-black-1000",
+                "figma": "swc/transparent/static/black/1000",
+                "shipped": true,
+                "value": "rgb(0, 0, 0)"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "when": {
+          "variant": "secondary",
+          "staticColor": "black"
+        },
+        "state": "disabled",
+        "tokens": {
+          "background-color": {
+            "value": "{swc.transparent.static.black.150}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.black.150}",
+                "cssVar": "--swc-transparent-static-black-150",
+                "figma": "swc/transparent/static/black/150",
+                "shipped": true,
+                "value": "rgba(0, 0, 0, 0.08)"
+              }
+            ]
+          },
+          "color": {
+            "value": "{swc.transparent.static.black.400}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.black.400}",
+                "cssVar": "--swc-transparent-static-black-400",
+                "figma": "swc/transparent/static/black/400",
+                "shipped": true,
+                "value": "rgba(0, 0, 0, 0.24)"
+              }
+            ]
+          },
+          "border-color": {
+            "value": "raw:transparent",
+            "raw": true,
+            "tokens": []
+          }
+        }
+      },
+      {
+        "when": {
+          "variant": "secondary",
+          "fillStyle": "outline",
+          "staticColor": "black"
+        },
+        "tokens": {
+          "background-color": {
+            "value": "{swc.transparent.static.black.0}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.black.0}",
+                "cssVar": "--swc-transparent-static-black-0",
+                "figma": "swc/transparent/static/black/0",
+                "shipped": true,
+                "value": "rgba(0, 0, 0, 0)"
+              }
+            ]
+          },
+          "color": {
+            "value": "{swc.transparent.static.black.900}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.black.900}",
+                "cssVar": "--swc-transparent-static-black-900",
+                "figma": "swc/transparent/static/black/900",
+                "shipped": true,
+                "value": "rgba(0, 0, 0, 0.8)"
+              }
+            ]
+          },
+          "border-color": {
+            "value": "{swc.transparent.static.black.300}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.black.300}",
+                "cssVar": "--swc-transparent-static-black-300",
+                "figma": "swc/transparent/static/black/300",
+                "shipped": true,
+                "value": "rgba(0, 0, 0, 0.16)"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "when": {
+          "variant": "secondary",
+          "fillStyle": "outline",
+          "staticColor": "black"
+        },
+        "state": "hover",
+        "tokens": {
+          "background-color": {
+            "value": "{swc.transparent.static.black.150}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.black.150}",
+                "cssVar": "--swc-transparent-static-black-150",
+                "figma": "swc/transparent/static/black/150",
+                "shipped": true,
+                "value": "rgba(0, 0, 0, 0.08)"
+              }
+            ]
+          },
+          "color": {
+            "value": "{swc.transparent.static.black.950}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.black.950}",
+                "cssVar": "--swc-transparent-static-black-950",
+                "figma": "swc/transparent/static/black/950",
+                "shipped": true,
+                "value": "rgba(0, 0, 0, 0.96)"
+              }
+            ]
+          },
+          "border-color": {
+            "value": "{swc.transparent.static.black.400}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.black.400}",
+                "cssVar": "--swc-transparent-static-black-400",
+                "figma": "swc/transparent/static/black/400",
+                "shipped": true,
+                "value": "rgba(0, 0, 0, 0.24)"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "when": {
+          "variant": "secondary",
+          "fillStyle": "outline",
+          "staticColor": "black"
+        },
+        "state": "active",
+        "tokens": {
+          "background-color": {
+            "value": "{swc.transparent.static.black.150}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.black.150}",
+                "cssVar": "--swc-transparent-static-black-150",
+                "figma": "swc/transparent/static/black/150",
+                "shipped": true,
+                "value": "rgba(0, 0, 0, 0.08)"
+              }
+            ]
+          },
+          "color": {
+            "value": "{swc.transparent.static.black.950}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.black.950}",
+                "cssVar": "--swc-transparent-static-black-950",
+                "figma": "swc/transparent/static/black/950",
+                "shipped": true,
+                "value": "rgba(0, 0, 0, 0.96)"
+              }
+            ]
+          },
+          "border-color": {
+            "value": "{swc.transparent.static.black.400}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.black.400}",
+                "cssVar": "--swc-transparent-static-black-400",
+                "figma": "swc/transparent/static/black/400",
+                "shipped": true,
+                "value": "rgba(0, 0, 0, 0.24)"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "when": {
+          "variant": "secondary",
+          "fillStyle": "outline",
+          "staticColor": "black"
+        },
+        "state": "focus-visible",
+        "tokens": {
+          "background-color": {
+            "value": "{swc.transparent.static.black.150}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.black.150}",
+                "cssVar": "--swc-transparent-static-black-150",
+                "figma": "swc/transparent/static/black/150",
+                "shipped": true,
+                "value": "rgba(0, 0, 0, 0.08)"
+              }
+            ]
+          },
+          "color": {
+            "value": "{swc.transparent.static.black.950}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.black.950}",
+                "cssVar": "--swc-transparent-static-black-950",
+                "figma": "swc/transparent/static/black/950",
+                "shipped": true,
+                "value": "rgba(0, 0, 0, 0.96)"
+              }
+            ]
+          },
+          "border-color": {
+            "value": "{swc.transparent.static.black.400}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.black.400}",
+                "cssVar": "--swc-transparent-static-black-400",
+                "figma": "swc/transparent/static/black/400",
+                "shipped": true,
+                "value": "rgba(0, 0, 0, 0.24)"
+              }
+            ]
+          },
+          "outline-color": {
+            "value": "{swc.transparent.static.black.1000}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.black.1000}",
+                "cssVar": "--swc-transparent-static-black-1000",
+                "figma": "swc/transparent/static/black/1000",
+                "shipped": true,
+                "value": "rgb(0, 0, 0)"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "when": {
+          "variant": "secondary",
+          "fillStyle": "outline",
+          "staticColor": "black"
+        },
+        "state": "disabled",
+        "tokens": {
+          "background-color": {
+            "value": "{swc.transparent.static.black.0}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.black.0}",
+                "cssVar": "--swc-transparent-static-black-0",
+                "figma": "swc/transparent/static/black/0",
+                "shipped": true,
+                "value": "rgba(0, 0, 0, 0)"
+              }
+            ]
+          },
+          "color": {
+            "value": "{swc.transparent.static.black.400}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.black.400}",
+                "cssVar": "--swc-transparent-static-black-400",
+                "figma": "swc/transparent/static/black/400",
+                "shipped": true,
+                "value": "rgba(0, 0, 0, 0.24)"
+              }
+            ]
+          },
+          "border-color": {
+            "value": "{swc.transparent.static.black.300}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{swc.transparent.static.black.300}",
+                "cssVar": "--swc-transparent-static-black-300",
+                "figma": "swc/transparent/static/black/300",
+                "shipped": true,
+                "value": "rgba(0, 0, 0, 0.16)"
+              }
+            ]
+          }
+        }
+      }
+    ],
     "parts": {
       "icon": {
         "selector": ".swc-Button-icon",
@@ -1737,13 +5133,13 @@
     },
     {
       "id": "bt-line-height",
-      "status": "open",
+      "status": "decided",
       "confidence": "high",
       "owner": "Matt",
       "question": "The design file and the implementation disagree about line height at two sizes.",
-      "chose": "Follow the implementation, which computes round(down, 1.3em, 1px)",
-      "fix": "Ask the Spectrum team which is canonical: the file's explicit per-size values give 16 and 22 at S and XL, the CSS gives 15 and 23. Medium and large agree.",
-      "evidence": "Figma Line height/Font size 75 = 16 vs computed 15; /300 = 22 vs computed 23."
+      "chose": "Bind Figma's per-size line height tokens",
+      "evidence": "Figma Line height/Font size 75 = 16 vs computed 15; /300 = 22 vs computed 23.",
+      "decision": "Bind the line height tokens Figma binds, 16, 18, 20 and 22 by size. Adobe's CSS computes 15 and 23 at S and XL, but we do not load its code and the tokens exist. This also makes XL 48 tall, as in Figma."
     },
     {
       "id": "bt-border-box",
@@ -1789,13 +5185,13 @@
     },
     {
       "id": "bt-geometry",
-      "status": "open",
+      "status": "decided",
       "confidence": "high",
       "owner": "Matt",
       "question": "Upstream computes the radius as half the height with calc(), which the contract cannot express.",
-      "chose": "Record the four values the calc produces: 12, 16, 20 and 24",
-      "fix": "Add arithmetic to the token map, or ask for per-size radius tokens. A pill value renders identically but reports a number neither the design nor the implementation uses, which is worse in a contract than a literal.",
-      "evidence": "Figma Button radius is 12/16/20/24 across the four sizes and global-button.css computes calc(min-block-size / 2), which gives the same four."
+      "chose": "A component token per size, derived from the height",
+      "evidence": "Figma Button radius is 12/16/20/24 across the four sizes and global-button.css computes calc(min-block-size / 2), which gives the same four.",
+      "decision": "Radius is half the height, the rule Adobe's code calculates and S2's Figma types in. It lives once in tokens/tokens.layer.css, and eval:visual:milo compares the result with Figma's numbers. Icon-only buttons are not modelled yet."
     },
     {
       "id": "bt-filled-content",
@@ -1831,7 +5227,7 @@
     }
   ],
   "provenance": {
-    "defs": "sha256:cda9100188d908c971c79baa9385fce216acca9f7e64b5ab8d256a8d50e67f7e",
+    "defs": "sha256:c66a784068e5cd57c1b6a6643a9c578272c8e3deccc088fd4c3da8951d682267",
     "codeEvidence": "sha256:be2dcdae83a47514d51409b3d378d59db043363a38edb50abc3ca652db692d81",
     "figmaEvidence": "sha256:6c73ea63aabb980e51e9b8b5a812d741aaf68f3b8b6ccfa7ef21f5dbcb142c8d",
     "generator": "s2a-spec-transform@1"

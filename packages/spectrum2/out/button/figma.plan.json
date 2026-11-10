@@ -34,11 +34,17 @@
       "border-width": [
         "swc/border/width/200"
       ],
+      "border-radius": [
+        "swc/button/corner/radius/m"
+      ],
       "background-color": [
         "swc/neutral/background/color/default"
       ],
       "color": [
         "swc/gray/25"
+      ],
+      "line-height": [
+        "swc/line/height/font/size/100"
       ]
     },
     "slot": null,
@@ -196,11 +202,17 @@
         "border-width": [
           "swc/border/width/200"
         ],
+        "border-radius": [
+          "swc/button/corner/radius/m"
+        ],
         "background-color": [
           "swc/neutral/background/color/default"
         ],
         "color": [
           "swc/gray/25"
+        ],
+        "line-height": [
+          "swc/line/height/font/size/100"
         ]
       }
     },

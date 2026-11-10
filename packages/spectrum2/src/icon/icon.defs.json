@@ -164,7 +164,7 @@
       "status": "open",
       "confidence": "high",
       "owner": "Matt",
-      "question": "Every rule in the icon stylesheet is :host or ::slotted \u2014 there is not one class in it.",
+      "question": "Every rule in the icon stylesheet is :host or ::slotted — there is not one class in it.",
       "chose": "Declare swc-Icon as the root class and re-express the host rules on it",
       "fix": "If the generated component becomes a custom element, drop the class and inherit the host rules.",
       "evidence": "icon-base.css is :host, :host([size]), and svg,::slotted(*) only. The class is ours, which is why the anatomy cannot be checked against the stylesheet."
@@ -191,5 +191,13 @@
       "fix": "none. The alternative was rewriting 396 vendored SVGs, which would mean editing artwork we do not own.",
       "evidence": "All 396 entries in spectrum-icons.json carry var(--iconPrimary, #222); all 26 in our own s2a-icons.json use currentColor. Measured: the badge's text was #ffffff while its glyph painted #222222."
     }
-  ]
+  ],
+  "tier": "atom",
+  "x-authored": {
+    "selector": "span.icon",
+    "sample": "{{icon:lock}} {{icon:acrobat-pdf-edit}}",
+    "sampleOptions": {
+      "size": "l"
+    }
+  }
 }

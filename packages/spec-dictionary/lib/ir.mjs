@@ -58,6 +58,9 @@ function resolveConditionals(part, tokens) {
       ...(e.notes ? { notes: e.notes } : {}),
     }));
   }
+  if (part["x-compound"]?.length) {
+    out["x-compound"] = part["x-compound"].map((r) => ({ when: r.when, ...(r.state ? { state: r.state } : {}), tokens: resolveTokenMap(r.tokens, tokens) }));
+  }
   return out;
 }
 
@@ -68,6 +71,7 @@ export function allTokenNodes(part) {
   for (const e of part.tokensByProp ?? []) for (const m of Object.values(e.map)) nodes.push(...Object.values(m));
   for (const e of part.statesByProp ?? []) for (const m of Object.values(e.map)) nodes.push(...Object.values(m));
   for (const e of part.tokensByCombination ?? []) for (const r of e.rows) nodes.push(...Object.values(r.tokens));
+  for (const r of part["x-compound"] ?? []) nodes.push(...Object.values(r.tokens));
   return nodes;
 }
 
@@ -85,6 +89,9 @@ function resolveTree(part, name, tokens) {
   // sees it can only emit an empty element.
   if (part.asset) out.asset = part.asset;
   if (part.notes) out.notes = part.notes;
+  // How a Milo author's markup maps onto this part (see renderers/milo.mjs).
+  if (part["x-row"] !== undefined) out["x-row"] = part["x-row"];
+  if (part["x-match"]) out["x-match"] = part["x-match"];
   if (part.parts) out.parts = Object.fromEntries(Object.entries(part.parts).map(([n, c]) => [n, resolveTree(c, n, tokens)]));
   return out;
 }
@@ -170,6 +177,12 @@ export function buildIR({ defs, code, figma = null, tokens, generator, system = 
         if (node.tokens.length && !node.raw) tokenBindings[`${name}-${cssProp}@${e.props.map((p, i) => `${p}=${r.values[i] ?? "*"}`).join(",")}`] = node.tokens[0].cssVar;
       }
     }
+    for (const r of conditional["x-compound"] ?? []) {
+      const at = Object.entries(r.when).map(([k, v]) => `${k}=${v}`).join(",") + (r.state ? `:${r.state}` : "");
+      for (const [cssProp, node] of Object.entries(r.tokens)) {
+        if (node.tokens.length && !node.raw) tokenBindings[`${name}-${cssProp}@${at}`] = node.tokens[0].cssVar;
+      }
+    }
     if (part.slot) for (const a of part.slot.accepts) composed.add(a);
     parts.push({ path, name, selector: part.selector, figma: part.figma ?? null, element: part.element ?? null, layout: part.layout ?? null, tokens: resolvedTokens, ...conditional, slot: part.slot ?? null, asset: part.asset ?? null, notes: part.notes ?? null });
   });
@@ -199,7 +212,7 @@ export function buildIR({ defs, code, figma = null, tokens, generator, system = 
 
   return {
     generator,
-    component: { name: defs.component, slug: defs.slug, system, description: defs.description ?? null, status: defs.status, version: defs.version ?? null, archetype: defs.archetype ?? null, tier: defs.tier ?? "component", cssClass: defs.anchors.code.cssClass, storybookId: code?.component?.spec?.storybookId ?? null },
+    component: { name: defs.component, slug: defs.slug, system, description: defs.description ?? null, status: defs.status, version: defs.version ?? null, archetype: defs.archetype ?? null, tier: defs.tier ?? "component", authored: defs["x-authored"] ?? null, cssClass: defs.anchors.code.cssClass, storybookId: code?.component?.spec?.storybookId ?? null },
     anchors: { figma: figmaBlock.anchors, code: { importPath: defs.anchors.code.importPath, export: defs.anchors.code.export, controller: defs.anchors.code.controller ?? null, cssClass: defs.anchors.code.cssClass } },
     figmaEvidence: figmaBlock.evidence,
     props, variants,

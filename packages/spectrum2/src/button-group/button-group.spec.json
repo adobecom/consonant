@@ -162,6 +162,23 @@
     },
     "tokensByProp": [
       {
+        "prop": "size",
+        "map": {
+          "s": {
+            "row-gap": {
+              "value": "raw:8px",
+              "raw": true,
+              "tokens": []
+            },
+            "column-gap": {
+              "value": "raw:8px",
+              "raw": true,
+              "tokens": []
+            }
+          }
+        }
+      },
+      {
         "prop": "align",
         "map": {
           "center": {
@@ -276,10 +293,21 @@
       "confidence": "high",
       "decision": "For a shipped library the stylesheet and the type declarations are the contract. Every token, condition and state here is read from a rule; nothing is transcribed from the design file's layer tree.",
       "evidence": "packages/spectrum2/src/button-group/button-group.js, packages/spectrum2/src/button-group/button-group.css, packages/spectrum2/src/button-group/button-group.d.ts"
+    },
+    {
+      "id": "bg-size-s-gap",
+      "status": "decided",
+      "confidence": "high",
+      "owner": "Matt",
+      "question": "Size S sets an 8px gap in shipped code. Was it in the defs?",
+      "chose": "add 8px at size S",
+      "decision": "No. Shipped code sets --swc-button-group-gap at size S and reads it through a private property, which the drafter does not follow. Raw px because shipped code has no token for it.",
+      "fix": "none",
+      "evidence": ":host([size=\"s\"]){--swc-button-group-gap: 8px}"
     }
   ],
   "provenance": {
-    "defs": "sha256:a3846872db6db4669ea8ef44c6d5103ed5dcb368906e64ba2ed8591004e22cef",
+    "defs": "sha256:f8da13307c1eec4826800e144fc9e7ced4bbeb7880ce4a557c422b6a60ec975b",
     "codeEvidence": "sha256:d4f3109886cc89f9fa8eee4728d73891bb7eac322ba188dde424be963a9fc7cb",
     "figmaEvidence": null,
     "generator": "s2a-spec-transform@1"

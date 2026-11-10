@@ -1,0 +1,44 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<script>
+  const q = new URLSearchParams(location.search);
+  const ok = (v) => /^[a-z-]+$/.test(v ?? '');
+  const slug = ok(q.get('slug')) ? q.get('slug') : 'avatar';
+  const build = ok(q.get('build')) ? q.get('build') : 'faithful';
+  document.documentElement.style.colorScheme = q.get('mode') === 'dark' ? 'dark' : 'light';
+  if (q.get('scale') === 'mobile') document.documentElement.dataset.s2Scale = 'mobile';
+  for (const f of [`${slug}.tokens.css`, `${slug}.css`]) document.write(`<link rel="stylesheet" href="../out/${slug}-${build}/${f}">`);
+</script>
+<style>
+  body { margin: 0; padding: 20px 16px; font: 13px/1.4 system-ui, sans-serif; background: Canvas; color: CanvasText; }
+  .case { display: grid; grid-template-columns: 140px 1fr; gap: 12px; align-items: center; padding: 8px 0; }
+  .case > span { opacity: .75; }
+</style>
+</head>
+<body>
+<div id="cases"></div>
+<script type="module">
+  const q = new URLSearchParams(location.search);
+  const ok = (v) => /^[a-z-]+$/.test(v ?? '');
+  const slug = ok(q.get('slug')) ? q.get('slug') : 'avatar';
+  const build = ok(q.get('build')) ? q.get('build') : 'faithful';
+  const lib = await import(`../out/${slug}-${build}/${slug}.js`);
+  const { FIXTURES } = await import('./fixtures.js');
+  const fx = FIXTURES[slug]; const list = document.getElementById('cases');
+  for (const c of fx.cases) {
+    const row = document.createElement('div'); row.className = 'case';
+    const label = document.createElement('span'); label.textContent = fx.label(c);
+    const host = document.createElement('div'); row.append(label, host); list.append(row);
+    fx.mount(lib, c, host);
+  }
+  window.addEventListener('message', (e) => {
+    if (e.data?.type !== 'token') return;
+    if (e.data.value) document.documentElement.style.setProperty(e.data.name, e.data.value); else document.documentElement.style.removeProperty(e.data.name);
+  });
+  const post = () => parent.postMessage({ type: 'height', build, h: document.body.scrollHeight }, '*');
+  post(); document.fonts.ready.then(post);
+</script>
+</body>
+</html>

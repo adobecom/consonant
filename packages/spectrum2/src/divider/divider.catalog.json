@@ -2,7 +2,7 @@
   "id": "s2a.divider",
   "name": "Divider",
   "slug": "divider",
-  "tier": "component",
+  "tier": "atom",
   "status": "curated-draft",
   "description": "Divider, as the implementation ships it.",
   "props": [
@@ -26,7 +26,7 @@
     "root"
   ],
   "slots": [],
-  "tokens": 1,
+  "tokens": 6,
   "a11y": null,
   "anchors": {
     "code": {

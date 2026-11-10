@@ -18,7 +18,7 @@ const BOOK = process.env.BOOK_URL ?? "http://localhost:6007";
 const FILE = "https://www.figma.com/design/xHBWBBIe2eo5vwoCeNrC4Q/S2---Web";
 // Icon is absent on purpose: Spectrum publishes no Icon component set, which
 // the contract records as its own decision.
-const SETS = { badge: "9225-2307", button: "9308-53906" };
+const SETS = { badge: "9225-2307", button: "9308-53906", picker: "10109-92114", "list-view-item": "10108-5873" };
 
 let failed = 0;
 for (const [slug, nodeId] of Object.entries(SETS)) {

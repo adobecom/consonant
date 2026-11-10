@@ -1,0 +1,62 @@
+/* Icon — atom, generated from icon.contract.json.
+ * Applied by decorateIcon() to the element the author wrote.
+ * Re-run: npm run specs:render -- --slug=icon --target=milo --system=spectrum */
+
+.s2a-icon [hidden],
+.s2a-icon[hidden] {
+  display: none !important;
+}
+
+.s2a-icon {
+  box-sizing: border-box;
+  display: block;
+  inline-size: var(--s2-workflow-icon-medium);
+  block-size: var(--s2-workflow-icon-medium);
+  color: currentColor;
+}
+
+.s2a-icon.xs {
+  inline-size: var(--s2-workflow-icon-extra-small);
+  block-size: var(--s2-workflow-icon-extra-small);
+}
+
+.s2a-icon.s {
+  inline-size: var(--s2-workflow-icon-small);
+  block-size: var(--s2-workflow-icon-small);
+}
+
+.s2a-icon.m {
+  inline-size: var(--s2-workflow-icon-medium);
+  block-size: var(--s2-workflow-icon-medium);
+}
+
+.s2a-icon.l {
+  inline-size: var(--s2-workflow-icon-large);
+  block-size: var(--s2-workflow-icon-large);
+}
+
+.s2a-icon.xl {
+  inline-size: var(--s2-workflow-icon-extra-large);
+  block-size: var(--s2-workflow-icon-extra-large);
+}
+
+.s2a-icon .glyph {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+  fill: currentColor;
+  --iconPrimary: currentColor;
+}
+
+.s2a-icon .glyph {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.s2a-icon .glyph > svg,
+.s2a-icon .glyph > [data-open-state] > svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}

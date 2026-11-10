@@ -25,9 +25,11 @@ export default function decorateLink(scope, options = {}) {
     const cue = el.parentElement?.nodeName;
     // Unwrap the cue, as Milo does: <strong><a> becomes <a>.
     if (cue === 'STRONG' || cue === 'EM') el.parentElement.replaceWith(el);
+    // A composition can give each cue its own look: options.cues.EM.
+    const chosen = { ...options, ...options.cues?.[cue] };
     el.classList.add('s2a-link');
-    el.classList.add(options.kind ?? CUES[cue] ?? 'action');
-    if (options.emphasis) el.classList.add(options.emphasis);
+    el.classList.add(chosen.kind ?? CUES[cue] ?? 'action');
+    if (chosen.emphasis) el.classList.add(chosen.emphasis);
     // Parts: the text is the label-wrap; anything the author placed before or
     // after it is an icon.
     const label = document.createElement('span');

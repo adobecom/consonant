@@ -1,0 +1,40 @@
+{
+  "$comment": "Shared Avatar bindings, used by every theme. Avatar binds its shape as a raw 50% and its outline to the palette; these make both reachable. Defaults are Spectrum's own values.",
+  "component": "avatar",
+  "bindings": [
+    {
+      "where": {},
+      "prop": "border-radius",
+      "token": "theme-avatar-radius",
+      "reason": "Spectrum hard-codes a circle. A brand may want rounded squares."
+    },
+    {
+      "part": "image",
+      "where": {},
+      "prop": "border-radius",
+      "token": "theme-avatar-radius",
+      "reason": "The image is clipped to the same shape."
+    },
+    {
+      "part": "image",
+      "where": {
+        "outline": "true"
+      },
+      "prop": "outline-color",
+      "token": "theme-avatar-outline",
+      "reason": "Spectrum binds the outline ring to gray-25, used far beyond Avatar."
+    }
+  ],
+  "defaults": [
+    {
+      "name": "theme-avatar-radius",
+      "value": "50%",
+      "reason": "Spectrum's circle. Default; a theme overrides it to change this."
+    },
+    {
+      "name": "theme-avatar-outline",
+      "ref": "gray-25",
+      "reason": "Spectrum's outline ring. Default; a theme overrides it to change this."
+    }
+  ]
+}

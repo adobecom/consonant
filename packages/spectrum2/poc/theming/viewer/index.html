@@ -1,0 +1,102 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Theming viewer</title>
+<style>
+  :root { --ink:#1a1c20; --body:#3a3d44; --muted:#8a8f98; --paper:#f4f3ef; --accent:#1473e6; --line:#e3e1db; }
+  body { margin:0; padding:24px 24px 48px; font:15px/1.5 Inter, system-ui, sans-serif; color:var(--ink); background:#fff; }
+  h1 { font-size:26px; margin:0 0 4px; }
+  p.lede { color:var(--body); margin:0 0 18px; max-width:70ch; }
+  .bar { display:flex; gap:20px; flex-wrap:wrap; align-items:center; margin-bottom:18px; padding:12px 14px; background:var(--paper); border-radius:12px; }
+  .seg { display:inline-flex; border:1px solid var(--line); border-radius:999px; overflow:hidden; background:#fff; }
+  .seg button { border:0; background:none; padding:6px 14px; font:inherit; cursor:pointer; color:var(--body); }
+  .seg button[aria-pressed="true"] { background:var(--ink); color:#fff; }
+  .seg button:focus-visible, select:focus-visible, input:focus-visible { outline:2px solid var(--accent); outline-offset:2px; }
+  label.ctl { display:inline-flex; gap:8px; align-items:center; color:var(--body); }
+  .cols { display:grid; grid-template-columns:repeat(auto-fit, minmax(440px, 1fr)); gap:20px; }
+  .col h2 { font-size:17px; margin:0 0 2px; }
+  .col .sub { color:var(--muted); font-size:13px; margin:0 0 8px; }
+  iframe { width:100%; border:1px solid var(--line); border-radius:12px; display:block; height:520px; }
+  section.changes { margin-top:28px; display:grid; grid-template-columns:repeat(auto-fit, minmax(320px,1fr)); gap:20px; }
+  .card { background:var(--paper); border-radius:16px; padding:16px 18px; }
+  .card h3 { margin:0 0 10px; font-size:15px; }
+  .card ul { margin:0; padding-left:18px; color:var(--body); font-size:13.5px; }
+  .card li { margin-bottom:6px; }
+  code { font:12.5px "Source Code Pro", ui-monospace, monospace; background:#fff; padding:1px 5px; border-radius:4px; }
+</style>
+</head>
+<body>
+<h1 id="h1">Button: plain Spectrum, the stand-in theme and a playful theme</h1>
+<p class="lede" id="lede">All three columns are the same generated Milo button, built from one contract. The left reads Spectrum Design Data 3.8.2 as shipped. The middle adds the stand-in theme. The right is a playful theme on the same shared bindings, to test whether they work for a second brand. The first column is live, so hover, press and tab into it. The rest are forced states.</p>
+<div class="bar">
+  <span class="seg" id="component"><button aria-pressed="true" data-v="button">Button</button><button aria-pressed="false" data-v="badge">Badge</button><button aria-pressed="false" data-v="avatar">Avatar</button><button aria-pressed="false" data-v="divider">Divider</button><button aria-pressed="false" data-v="button-group">Button group</button><button aria-pressed="false" data-v="icon">Icon</button></span>
+  <span class="seg" id="mode"><button aria-pressed="true" data-v="light">Light</button><button aria-pressed="false" data-v="dark">Dark</button></span>
+  <span class="seg" id="scale"><button aria-pressed="true" data-v="desktop">Desktop</button><button aria-pressed="false" data-v="mobile">Mobile</button></span>
+  <label class="ctl">Simulate a token change
+    <select id="tok">
+      <option value="--s2-blue-900">blue-900 (accent fill)</option>
+      <option value="--s2-red-900">red-900 (negative fill)</option>
+      <option value="--s2-gray-1000">gray-1000 (stand-in primary, outline borders)</option>
+      <option value="--s2-gray-800">gray-800 (plain primary)</option>
+      <option value="--s2-accent-background-color-default">accent-background-color-default (accent badge)</option>
+      <option value="--s2-celery-background-color-default">celery-background-color-default (celery badge)</option>
+    </select>
+    <input type="color" id="val" value="#7a3cff">
+    <button id="apply" class="seg" style="padding:6px 12px;cursor:pointer">Apply to all</button>
+    <button id="reset" class="seg" style="padding:6px 12px;cursor:pointer">Reset</button>
+  </label>
+</div>
+<div class="cols">
+  <div class="col"><h2>Plain Spectrum</h2><p class="sub">out/faithful</p><iframe id="f-faithful" title="Plain Spectrum button"></iframe></div>
+  <div class="col"><h2>Stand-in theme</h2><p class="sub">out/themed, themes/stand-in.json</p><iframe id="f-themed" title="Themed button"></iframe></div>
+  <div class="col"><h2>Playful theme</h2><p class="sub">out/playful, themes/playful.json</p><iframe id="f-playful" title="Playful theme"></iframe></div>
+</div>
+<div class="bar" style="margin-top:28px"><label class="ctl">Show the changes in
+  <span class="seg" id="which"><button aria-pressed="true" data-v="stand-in">Stand-in theme</button><button aria-pressed="false" data-v="playful">Playful theme</button></span></label></div>
+<section class="changes" id="changes"></section>
+<script type="module">
+  const state = { component: 'button', mode: 'light', scale: 'desktop', which: 'stand-in' };
+  const frames = { faithful: document.getElementById('f-faithful'), themed: document.getElementById('f-themed'), playful: document.getElementById('f-playful') };
+  const copy = {
+    button: ['Button: plain Spectrum, the stand-in theme and a playful theme', 'All three columns are the same generated Milo button, built from one contract. The left reads Spectrum Design Data 3.8.2 as shipped. The middle adds the stand-in theme. The right is a playful theme on the same shared bindings, to test whether they work for a second brand. The first column is live, so hover, press and tab into it. The rest are forced states.'],
+    badge: ['Badge: the same two themes, a second component', 'The same themes on Badge, through the same pipeline. Badge\'s colours already bind to semantic tokens, so the themes reach them with no colour bindings. Its shared bindings, in themes/bindings-badge.json, cover only the font and the corner radius at each size.'],
+  };
+  const load = () => {
+    const page = { button: 'frame.html', badge: 'frame-badge.html' }[state.component] ?? `frame-component.html`;
+    for (const [b, f] of Object.entries(frames)) f.src = `${page}?slug=${state.component}&build=${b}&mode=${state.mode}&scale=${state.scale}`;
+    const c = copy[state.component] ?? [`${state.component[0].toUpperCase()}${state.component.slice(1).replace('-', ' ')}: the same themes`, `The same themes on ${state.component.replace('-', ' ')}, through the same pipeline. Its shared bindings are in themes/bindings-${state.component}.json; each role token defaults to Spectrum's own value, so a theme sets only what it changes.`];
+    document.getElementById('h1').textContent = c[0]; document.getElementById('lede').textContent = c[1];
+  };
+  for (const id of ['component', 'mode', 'scale']) document.getElementById(id).addEventListener('click', (e) => {
+    const v = e.target.dataset.v; if (!v) return; state[id] = v;
+    for (const b of e.currentTarget.querySelectorAll('button')) b.setAttribute('aria-pressed', String(b.dataset.v === v));
+    load(); if (id === 'component') show(state.which);
+  });
+  addEventListener('message', (e) => { if (e.data?.type === 'height') frames[e.data.build].style.height = (e.data.h + 8) + 'px'; });
+  const send = (value) => { for (const f of Object.values(frames)) f.contentWindow.postMessage({ type: 'token', name: document.getElementById('tok').value, value }, '*'); };
+  document.getElementById('apply').onclick = () => send(document.getElementById('val').value);
+  document.getElementById('reset').onclick = () => load();
+  load();
+  const li = (t) => `<li>${t}</li>`;
+  const card = (title, items) => `<div class="card"><h3>${title}</h3><ul>${items.join('')}</ul></div>`;
+  const show = async (file) => {
+    const o = await (await fetch(`../themes/${file}.json`)).json();
+    const bsrc = await (await fetch(`../themes/bindings-${state.component}.json`)).json();
+    const shared = `bindings-${state.component}.json, shared by every theme`;
+    document.getElementById('changes').innerHTML = [
+      card(`Overrides, ${o.overrides.length}`, o.overrides.map((x) => li(`<code>${x.name}</code>${x.mode ? ' ' + x.mode : ''} to <code>${x.to ?? x.value ?? ''}</code>. ${x.reason ?? ''}`))),
+      card(`New tokens, ${o.newTokens.length}`, o.newTokens.map((x) => li(`<code>${x.name}</code>. ${x.reason ?? ''}`))),
+      card(`${state.component === 'badge' ? 'Badge' : 'Button'} bindings, ${bsrc.bindings.length}${shared ? ', ' + shared : ''}`, bsrc.bindings.map((x) => li(`${Object.values(x.where).join(' ') || 'every size'}${x.state ? ' ' + x.state : ''} <code>${x.prop}</code> to <code>${x.token}</code>`))),
+      card(`Not applied, ${o.notApplied.length}`, o.notApplied.map((x) => li(`${x.what} ${x.why}`))),
+    ].join('');
+  };
+  document.getElementById('which').addEventListener('click', (e) => {
+    const v = e.target.dataset.v; if (!v) return;
+    for (const b of e.currentTarget.querySelectorAll('button')) b.setAttribute('aria-pressed', String(b.dataset.v === v));
+    state.which = v; show(v);
+  });
+  show('stand-in');
+</script>
+</body>
+</html>
