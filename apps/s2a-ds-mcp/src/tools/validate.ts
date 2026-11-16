@@ -227,7 +227,7 @@ export function registerValidateTools(server: McpServer, dsRoot: string): void {
     "Check that props passed to a component match its known API. Returns errors for unknown props and warnings for likely wrong values.",
     {
       component: z.string().describe("Component name or slug"),
-      props: z.record(z.unknown()).describe("Props object to validate, e.g. { state: 'resting', label: 'Hello' }"),
+      props: z.record(z.string(), z.unknown()).describe("Props object to validate, e.g. { state: 'resting', label: 'Hello' }"),
     },
     async ({ component, props }) => {
       try {
