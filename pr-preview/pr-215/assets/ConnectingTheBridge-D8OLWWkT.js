@@ -1,4 +1,4 @@
-import{n as e}from"./rolldown-runtime-DkW27tQK.js";import{A as t,M as n,a as r,j as i,o as a}from"./blocks-DnLocmG-.js";function o(e){let t={code:`code`,h1:`h1`,h2:`h2`,h3:`h3`,p:`p`,pre:`pre`,strong:`strong`,...i(),...e.components};return(0,c.jsxs)(c.Fragment,{children:[(0,c.jsx)(r,{title:`Getting Started/Connecting the Bridge`}),`
+import{n as e}from"./rolldown-runtime-DkW27tQK.js";import{A as t,M as n,a as r,j as i,o as a}from"./blocks-CfKUTCAG.js";function o(e){let t={code:`code`,h1:`h1`,h2:`h2`,h3:`h3`,p:`p`,pre:`pre`,strong:`strong`,...i(),...e.components};return(0,c.jsxs)(c.Fragment,{children:[(0,c.jsx)(r,{title:`Getting Started/Connecting the Bridge`}),`
 `,(0,c.jsx)(t.h1,{id:`connecting-the-bridge-claude-code--figma`,children:`Connecting the Bridge (Claude Code ↔ Figma)`}),`
 `,(0,c.jsxs)(t.p,{children:[`The `,(0,c.jsx)(t.strong,{children:`S2A Toolkit`}),` plugin can connect to `,(0,c.jsx)(t.strong,{children:`Claude Code`}),` (or any MCP client) so an
 AI assistant can read and drive your Figma file — the same `,(0,c.jsx)(t.code,{children:`figma_execute`}),`
