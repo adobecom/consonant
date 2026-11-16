@@ -1,4 +1,4 @@
-import{n as e}from"./rolldown-runtime-DkW27tQK.js";import{A as t,M as n,a as r,j as i,o as a}from"./blocks-8TZw3tGX.js";function o(e){let t={a:`a`,blockquote:`blockquote`,code:`code`,h1:`h1`,h2:`h2`,hr:`hr`,li:`li`,ol:`ol`,p:`p`,pre:`pre`,strong:`strong`,...i(),...e.components};return(0,c.jsxs)(c.Fragment,{children:[(0,c.jsx)(r,{title:`Getting Started/Installing Tokens`}),`
+import{n as e}from"./rolldown-runtime-DkW27tQK.js";import{A as t,M as n,a as r,j as i,o as a}from"./blocks-DiOM4Mx_.js";function o(e){let t={a:`a`,blockquote:`blockquote`,code:`code`,h1:`h1`,h2:`h2`,hr:`hr`,li:`li`,ol:`ol`,p:`p`,pre:`pre`,strong:`strong`,...i(),...e.components};return(0,c.jsxs)(c.Fragment,{children:[(0,c.jsx)(r,{title:`Getting Started/Installing Tokens`}),`
 `,(0,c.jsx)(t.h1,{id:`installing-s2a-tokens`,children:`Installing S2A Tokens`}),`
 `,(0,c.jsxs)(t.p,{children:[`The S2A design tokens ship as CSS custom properties (prefix `,(0,c.jsx)(t.code,{children:`--s2a-`}),`) in the
 `,(0,c.jsx)(t.strong,{children:(0,c.jsx)(t.code,{children:`@adobecom/s2a-tokens`})}),` package. There are two ways to consume them — pick based
